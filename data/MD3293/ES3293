@@ -1,0 +1,951 @@
+* Encoding: windows-1252.
+DATA LIST FILE= 'DA3293'
+/ESTUDIO 1-4 CUES 5-9 CCAA 10-11 PROV 12-13 MUN 14-16 CAPITAL 17 TAMUNI 18 ENTREV 19-21 TIPO_TEL 22
+SEXO 23 EDAD 24-25 A0 26 A0a 27 P1 28 P1A 29-30 P1B 31-33 P2 34 P3_1 35 P3_2 36 P3_3 37 P3_4 38
+P4 39 P5 40-41 P5A 42-43 P6 44 P7 45 P8_1 46 P8_2 47 P8_3 48 P8_4 49 P9 50-51 P9A 52-53 P9B 54
+P10_1 55-56 P10_2 57-58 P10_3 59-60 P10IMPRESA 61 P10DIGITAL 62 P10TV 63 P10RADIO 64 P10A 65-66
+P10B 67-68 P10C 69-70 P10D 71-72 P11_1 73 P11_2 74 P11_3 75 P11_4 76 P11_5 77 P11_7 78 P11_9 79
+P12_1 80 P12_2 81 P12_3 82 P12_4 83 P12_5 84 P12_6 85 P12_7 86 P12_9 87 P13_1 88 P13_2 89 P13_3 90
+P13_4 91 P13_5 92 P14 93 P14A_11 94 P14A_12 95 P14A_2 96 P14A_21 97 P14A_1 98 P14A_18 99 P14A_95 100
+P14A_98 101 P14A_99 102 P15 103 P15A_11 104 P15A_12 105 P15A_2 106 P15A_21 107 P15A_1 108 P15A_18 109
+P15A_95 110 P15A_98 111 P15A_99 112 P16 113 P16A_11 114 P16A_12 115 P16A_2 116 P16A_21 117 P16A_1 118
+P16A_18 119 P16A_95 120 P16A_98 121 P16A_99 122 P17_1 123 P17_2 124 P17_3 125 P18 126 P18A 127
+P18B 128 P19 129 P19A01 130-131 P19A02 132-133 P20 134-135 P20A_1 136-137 P20A_2 138-139 P21 140
+P21A 141 P21B_1 142-143 P21B_2 144-145 P21C 146-147 P22 148 P23 149 P24_1 150-151 P24_2 152-153
+P24_3 154-155 P24_4 156-157 P24_5 158-159 P24_6 160-161 P24_7 162-163 PARTICIPACIONA 164 RECUVOTOA 165-166
+P26_1 167-168 P26_2 169-170 P26_3 171-172 P26_4 173-174 P26_5 175-176 P26_6 177-178 P27 179
+P28 180 P29 181-182 PARTICIPACIONG 183 RECUVOTOG 184-185 ESCIDEOL 186-187 ESCIDEOLPAR_1 188-189
+ESCIDEOLPAR_2 190-191 ESCIDEOLPAR_3 192-193 ESCIDEOLPAR_4 194-195 ESCIDEOLPAR_5 196-197 ESCIDEOLPAR_6 198-199
+ESCIDEOLPAR_7 200-201 ESCUELA 202 NIVELESTENTREV 203-204 RELIGION 205 FRECUENCIARELI 206 ESTADOCIVIL 207
+SITLAB 208 CNO11 209-210 RELALAB 211 CLASESOCIAL 212-213 IA_I501 214-216 IA_I502 217-219 IA_I503 220-222
+IA_I504 223-225 IA_I505 226-228 IA_I506 229-231 IA_I507 232-234 IA_I508 235-237 IA_I509 238-240
+IA_I510 241-243 IA_I511 244-246 IA_I512 247-249 IA_I513 250-252 IA_I514 253-255 IA_I515 256-258
+IA_I516 259-261 IA_I517 262-264 IA_I518 265-267 IA_I519 268-270 IA_I520 271-273 IA_I521 274-276
+IA_I522 277-279 IA_I523 280-282 IA_I524 283-285 IA_I525 286-288 IA_I526 289-291 IA_I528 295-297
+IA_I529 298-300 IA_I530 301-303 IA_I531 304-306 IA_I532 307-309 IA_I533 310-312 IA_I534 313-315
+IA_I535 316-318 IA_I536 319-321 IA_I537 322-324 IA_OBS0 325-326 IA_OBS1 327-328 IA_OBS2 329-330
+IA_E1_DIA 331-332 IA_E1_MES 333-334 IA_E1_ANYO 335-336 IA_E2 337 IA_E3 338-340 IA_E4 341 IA_VALIDA 342
+IA_APLAZADA 343 IA_MODIFICADA 344 IA_SUPERVISADA 345 IA_C2 346 IA_C2A 347 IA_C2B_1 348 IA_C2B_2 349
+IA_C2B_3 350 IA_C2B_4 351 IA_C2B_5 352 IA_C2B_6 353 IA_C2B_7 354 IA_C2B_8 355 IA_C2B_9 356 IA_C2B_10 357
+IA_C2B_11 358 IA_C2B_12 359 IA_C2B_13 360 IA_C2B_14 361 IA_C3 362 IA_C4 363-365 P19ACOM 366-369
+RVAUTO20 370-371 RVAUTO16 372-373 RECUERDO 374-375 ESTUDIOS 376 CLASESUB 377 PESO 378-384(5)
+PESOPR01 385-401(5) PESOPR20 402-408(5) PESOPR48 409-415(5) .
+
+VARIABLE LABELS
+ESTUDIO 'Código de estudio'
+/CUES 'Nº de cuestionario'
+/CCAA 'Comunidad autónoma'
+/PROV 'Provincia'
+/MUN 'Municipio'
+/CAPITAL 'Capital'
+/TAMUNI 'Tamaño de municipio'
+/ENTREV 'Entrevistador/a'
+/TIPO_TEL 'Tipo de teléfono'
+/SEXO 'Sexo de la persona entrevistada'
+/EDAD 'Edad de la persona entrevistada'
+/A0 'Empadronamiento en el municipio con derecho a votar en las elecciones autonómicas del País Vasco de 2020'
+/A0a 'Nacionalidad de la persona entrevistada'
+/P1 'Lugar de nacimiento'
+/P1A 'Lugar de nacimiento (comunidad autónoma)'
+/P1B 'Lugar de nacimiento (país)'
+/P2 'Lengua materna de la persona entrevistada'
+/P3_1 'Lo entiende'
+/P3_2 'Lo habla con fluidez'
+/P3_3 'Lo lee'
+/P3_4 'Lo escribe correctamente'
+/P4 'Valoración de la situación general de la comunidad autónoma (País Vasco)'
+/P5 'Autodefinición de su ideología política'
+/P5A 'Autodefinición de su ideología política (2ª opción)'
+/P6 'Grado de interés por la política'
+/P7 'Grado de interés por la campaña electoral de las elecciones autonómicas del País Vasco de 2020'
+/P8_1 'Informarse sobre los programas y propuestas de cada partido o coalición'
+/P8_2 'Conocer mejor a los/as candidatos/as'
+/P8_3 'Ver las diferencias que existen entre unos partidos y otros'
+/P8_4 'Decidir su voto'
+/P9 'Tema más más debatido en la campaña electoral de las elecciones autonómicas del País Vasco de 2020'
+/P9A 'Partido político más cercano a la posición personal respecto al tema debatido durante la campaña electoral de las elecciones autonómicas del País Vasco de 2020'
+/P9B 'Grado de importancia para la persona entrevistada del tema más debatido en la campaña electoral de las elecciones autonómicas del País Vasco de 2020'
+/P10_1 'Primer lugar'
+/P10_2 'Segundo lugar'
+/P10_3 'Tercer lugar'
+/P10IMPRESA 'Lee prensa impresa'
+/P10DIGITAL 'Lee prensa digital'
+/P10TV 'Ve televisión'
+/P10RADIO 'Escucha radio'
+/P10A 'Periódico en formato impreso preferido para seguir la información política y electoral durante la campaña electoral de las elecciones autonómicas del País Vasco de 2020'
+/P10B 'Periódico en formato digital preferido para seguir la información política y electoral durante la campaña electoral de las elecciones autonómicas del País Vasco de 2020'
+/P10C 'Cadena de televisión preferida para seguir la información política y electoral durante la campaña electoral de las elecciones autonómicas del País Vasco de 2020'
+/P10D 'Emisora de radio preferida para seguir la información política y electoral durante la campaña electoral de las elecciones autonómicas del País Vasco de 2020'
+/P11_1 'Facebook'
+/P11_2 'Twitter'
+/P11_3 'LinkedIn'
+/P11_4 'Instagram'
+/P11_5 'Otras redes sociales (Hi5, Google+, etc.)'
+/P11_7 'Ninguna'
+/P11_9 'N.C.'
+/P12_1 'En páginas de medios de comunicación (periódicos, radios...)'
+/P12_2 'En páginas de partidos o candidatos/as'
+/P12_3 'En páginas de organizaciones ciudadanas o movimientos cívicos'
+/P12_4 'En blogs y foros de debate'
+/P12_5 'En redes sociales (Facebook, Twitter, etc.)'
+/P12_6 'En otro tipo de páginas web'
+/P12_7 'En ninguno'
+/P12_9 'N.C.'
+/P13_1 'Vio por televisión o escuchó por la radio algún debate o entrevistas con candidatos/as'
+/P13_2 'Vio o escuchó algún espacio de propaganda electoral de algún partido o coalición política'
+/P13_3 'Leyó o echó un vistazo a cartas, folletos o programas de algún partido o coalición política'
+/P13_4 'Trabajó como voluntario/a en la campaña de algún partido o candidato/a'
+/P13_5 'Asistió a un mitin o reunión de algún partido'
+/P14 'Contacto de algún partido político para pedir el voto durante la campaña electoral de las elecciones autonómicas del País Vasco de 2020'
+/P14A_11 'EAJ-PNV'
+/P14A_12 'EH Bildu'
+/P14A_2 'PSE-EE-PSOE'
+/P14A_21 'Elkarrekin Podemos'
+/P14A_1 'PP+C''s'
+/P14A_18 'VOX'
+/P14A_95 'Otro'
+/P14A_98 'No recuerda'
+/P14A_99 'N.C.'
+/P15 'Envío personal de mensajes electrónicos en relación con algún partido político en las elecciones autonómicas del País Vasco de 2020'
+/P15A_11 'EAJ-PNV'
+/P15A_12 'EH Bildu'
+/P15A_2 'PSE-EE-PSOE'
+/P15A_21 'Elkarrekin Podemos'
+/P15A_1 'PP+C''s'
+/P15A_18 'VOX'
+/P15A_95 'Otro'
+/P15A_98 'No recuerda'
+/P15A_99 'N.C.'
+/P16 'Recepción de mensajes electrónicos en relación con algún partido político en las elecciones autonómicas del País Vasco de 2020'
+/P16A_11 'EAJ-PNV'
+/P16A_12 'EH Bildu'
+/P16A_2 'PSE-EE-PSOE'
+/P16A_21 'Elkarrekin Podemos'
+/P16A_1 'PP+C''s'
+/P16A_18 'VOX'
+/P16A_95 'Otro'
+/P16A_98 'No recuerda'
+/P16A_99 'N.C.'
+/P17_1 'En casa, con su familia'
+/P17_2 'Con sus amigos/as'
+/P17_3 'En su lugar de trabajo o centro de estudios'
+/P18 'Conocimiento de los resultados de sondeos electorales durante la campaña electoral de las elecciones autonómicas del País Vasco de 2020'
+/P18A 'Grado de influencia personal de los sondeos de las elecciones autonómicas del País Vasco de 2020'
+/P18B 'Sentido en que le influyeron los resultados de los sondeos de las elecciones autonómicas del País Vasco de 2020'
+/P19 'Decisión respecto al voto en las elecciones autonómicas del País Vasco de 2020'
+/P19A01 'Partidos políticos entre los que se duda el voto en las elecciones autonómicas del País Vasco de 2020 (2)'
+/P19A02 'Partidos políticos entre los que se duda el voto en las elecciones autonómicas del País Vasco de 2020 (2)'
+/P20 'Recuerdo de voto en las elecciones autonómicas del País Vasco de 2020'
+/P20A_1 'Primer lugar'
+/P20A_2 'Segundo lugar'
+/P21 'Participación electoral en las elecciones autonómicas del País Vasco de 2020'
+/P21A 'Momento de la decisión de no votar en las elecciones autonómicas del País Vasco de 2020'
+/P21B_1 'Primer lugar'
+/P21B_2 'Segundo lugar'
+/P21C 'Razones que impidieron votar en las elecciones autonómicas del País Vasco de 2020'
+/P22 'Momento de la decisión de voto en las elecciones autonómicas del País Vasco de 2020'
+/P23 'Decisión respecto al voto en las elecciones autonómicas del País Vasco de 2020 de haber conocido antes los resultados'
+/P24_1 'EAJ-PNV'
+/P24_2 'EH Bildu'
+/P24_3 'PSE-EE-PSOE'
+/P24_4 'Elkarrekin Podemos'
+/P24_5 'PP'
+/P24_6 'Ciudadanos'
+/P24_7 'VOX'
+/PARTICIPACIONA 'Participación electoral en las elecciones autonómicas del País Vasco de 2016'
+/RECUVOTOA 'Recuerdo de voto en las elecciones autonómicas del País Vasco de 2016 de los votantes'
+/P26_1 'Íñigo Urkullu'
+/P26_2 'Maddalen Iriarte'
+/P26_3 'Idoia Mendia'
+/P26_4 'Miren Gorrotxategi'
+/P26_5 'Carlos Iturgaiz'
+/P26_6 'Amaia Martínez'
+/P27 'Preferencia entre diferentes alternativas de organización territorial del Estado en España'
+/P28 'Sentimiento nacionalista del País Vasco'
+/P29 'Escala de nacionalismo (1-10) del País Vasco'
+/PARTICIPACIONG 'Participación electoral en las elecciones generales de noviembre de 2019'
+/RECUVOTOG 'Recuerdo de voto en las elecciones generales de noviembre de 2019 de los votantes'
+/ESCIDEOL 'Escala de autoubicación ideológica (1-10)'
+/ESCIDEOLPAR_1 'EAJ-PNV'
+/ESCIDEOLPAR_2 'EH Bildu'
+/ESCIDEOLPAR_3 'PSE-EE-PSOE'
+/ESCIDEOLPAR_4 'Elkarrekin Podemos'
+/ESCIDEOLPAR_5 'PP'
+/ESCIDEOLPAR_6 'Ciudadanos'
+/ESCIDEOLPAR_7 'VOX'
+/ESCUELA 'Escolarización de la persona entrevistada'
+/NIVELESTENTREV 'Nivel de estudios alcanzado por la persona entrevistada'
+/RELIGION 'Religiosidad de la persona entrevistada'
+/FRECUENCIARELI 'Frecuencia de asistencia a oficios religiosos'
+/ESTADOCIVIL 'Estado civil de la persona entrevistada'
+/SITLAB 'Situación laboral de la persona entrevistada'
+/CNO11 'Ocupación de la persona entrevistada'
+/RELALAB 'Situación profesional de la persona entrevistada'
+/CLASESOCIAL 'Clase social subjetiva de la persona entrevistada'
+/IA_I501 'Dificultad de acceso al edificio, casa, urbanización, etc.'
+/IA_I502 'Viviendas en las que no hay nadie'
+/IA_I503 'Viviendas en las que se niegan a recibir ninguna explicación'
+/IA_I504 'Negativas de hombres a realizar la entrevista'
+/IA_I505 'Negativas de mujeres a realizar la entrevista'
+/IA_I506 'Contactos fallidos por no cumplir cuotas'
+/IA_I507 'Contactos fallidos por no ser una vivienda (oficinas, consultas medicas, etc.)'
+/IA_I508 'Viviendas de población extranjera'
+/IA_I509 '01.  No quiere colaborar'
+/IA_I510 '02.  Falta de tiempo. Está muy ocupado/a'
+/IA_I511 '03.  Falta de interés por hacer una encuesta'
+/IA_I512 '04.  Desconfianza hacia las encuestas'
+/IA_I513 '05.  Desconfianza hacia el CIS'
+/IA_I514 '06.  Rehúsa porque su pareja/familia/hogar no quiere'
+/IA_I515 '07.  Lo considera una pérdida de tiempo'
+/IA_I516 '08.  No sabe lo suficiente/nada del tema, demasiado difícil'
+/IA_I517 '09.  El tema no le interesa'
+/IA_I518 '10.  Resulta demasiado larga'
+/IA_I519 '11.  No le gusta el ordenador'
+/IA_I520 '96. Otras'
+/IA_I521 '99. No contesta'
+/IA_I522 '00. Error al iniciar'
+/IA_I523 'Teléfono apagado/fuera de cobertura'
+/IA_I524 'Negativas a realizar la entrevista'
+/IA_I525 'Interrupción llamada'
+/IA_I526 'Dificutad con el idioma'
+/IA_I528 'Contacto fallido por no ser una vivienda/persona'
+/IA_I529 'Contacto fallido por no ser elegible'
+/IA_I530 'Incapacidad para responder/ininteligible'
+/IA_I531 'Otras'
+/IA_I532 'No le gusta dar información por teléfono'
+/IA_I533 'No tiene la garantía de la privaciad de sus datos'
+/IA_I534 'Difitultad con el idioma'
+/IA_I535 'Incapacidad para responder/ininteligile'
+/IA_I536 'No elegible'
+/IA_I537 'Provincia no seleccionable'
+/IA_OBS0 'Mostrar tarjeta'
+/IA_OBS1 'Pregunta incómoda'
+/IA_OBS2 'Pregunta explicada'
+/IA_E1_DIA 'Fecha de realización (día)'
+/IA_E1_MES 'Fecha de realización (mes)'
+/IA_E1_ANYO 'Fecha de realización (año)'
+/IA_E2 'Día de la semana que se realiza la entrevista'
+/IA_E3 'Duración de la entrevista en minutos'
+/IA_E4 'Hora de realización'
+/IA_VALIDA 'Entrevista válida'
+/IA_APLAZADA 'Entrevista con aplazamientos'
+/IA_MODIFICADA 'Entrevista modificada'
+/IA_SUPERVISADA 'Entrevista supervisada'
+/IA_C2 'Valoración de la supervisión'
+/IA_C2A 'Resultado supervisión'
+/IA_C2B_1 'Motivos entrevista incorrecta: Dirección inexistente (no existe número en la calle, piso, etc.)'
+/IA_C2B_2 'Motivos entrevista incorrecta: Dirección ilocalizable (faltan datos: número, piso, letra, etc...)'
+/IA_C2B_3 'Motivos entrevista incorrecta: No coinciden datos personales y no ha sido realizada en la dirección que se hace constar'
+/IA_C2B_4 'Motivos entrevista incorrecta: Negativa que ofrece dudas. Coinciden datos personales pero niegan haber realizado la entrevista'
+/IA_C2B_5 'Motivos entrevista incorrecta: Realizada a una persona, recogiendo los datos de otra'
+/IA_C2B_6 'Motivos entrevista incorrecta: Realizada cambiando género del entrevistado'
+/IA_C2B_7 'Motivos entrevista incorrecta: Cambio de edad por otra de un tramo contiguo'
+/IA_C2B_8 'Motivos entrevista incorrecta: Cambio de edad por otra de un tramo no contiguo'
+/IA_C2B_9 'Motivos entrevista incorrecta: Realizada fuera de la vivienda pero vive en la sección electoral'
+/IA_C2B_10 'Motivos entrevista incorrecta: Realizada fuera de la vivienda, y no vive en la sección electoral'
+/IA_C2B_11 'Motivos entrevista incorrecta: Realizada en dirección que no corresponde a la sección electoral'
+/IA_C2B_12 'Motivos entrevista incorrecta: Realizada, pero no respeta las normas de ruta'
+/IA_C2B_13 'Motivos entrevista incorrecta: Se detecta que no ha hecho todas las preguntas'
+/IA_C2B_14 'Motivos entrevista incorrecta: Negativa que ofrece dudas: no coincide la dirección ni datos personales. Posibilidad de error en el teléfono'
+/IA_C3 'Resultado final'
+/IA_C4 'Supervisor'
+/P19ACOM 'Partidos políticos entre los que se duda el voto en las elecciones autonómicas del País Vasco de 2020 (2)[recodificada]'
+/RVAUTO20 'Recuerdo de voto en las elecciones autonómicas del País Vasco de 2020'
+/RVAUTO16 'Recuerdo de voto en las elecciones autonómicas del País Vasco de 2016 [recodificada]'
+/RECUERDO 'Recuerdo de voto en las elecciones generales de noviembre de 2019 [recodificada]'
+/ESTUDIOS 'Estudios de la persona entrevistada [recodificada]'
+/CLASESUB 'Identificación subjetiva de clase [recodificada]'
+/PESO 'Ponderación'
+/PESOPR01 'Ponderación para Álava'
+/PESOPR20 'Ponderación para Guipúzcoa'
+/PESOPR48 'Ponderación para Vizcaya'
+.
+
+VALUE LABELS
+ESTUDIO
+/CCAA
+16 'País Vasco'
+/PROV
+1 'Araba/Álava' 20 'Gipuzkoa' 48 'Bizkaia'
+/MUN
+0 'Mun.<=100.000 hab. no capitales de CA o provincia' 13 'Barakaldo' 20 'Bilbao' 59 'Vitoria-Gasteiz'
+69 'Donostia-San Sebastián'
+/CAPITAL
+1 'Capital de CC.AA.' 2 'Capital de provincia' 3 'Otros municipios'
+/TAMUNI
+1 'Menos o igual a 2.000 habitantes' 2 '2.001 a 10.000 habitantes' 3 '10.001 a 50.000 habitantes'
+4 '50.001 a 100.000 habitantes' 5 '100.001 a 400.000 habitantes' 6 '400.001 a 1.000.000 habitantes'
+7 'Más de 1.000.000 habitantes'
+/ENTREV
+0 'Anonimizado'
+/TIPO_TEL
+1 'Fijo' 2 'Móvil'
+/SEXO
+1 'Hombre' 2 'Mujer'
+/EDAD
+99 'N.C.'
+/A0
+1 'Sí' 2 'No'
+/A0a
+1 'Sólo la nacionalidad española' 2 'La nacionalidad española y otra'
+/P1
+1 'En el País Vasco' 2 'En otra comunidad autónoma' 3 'En otro país' 9 'N.C.'
+/P1A
+0 'N.P.' 1 'Andalucía' 2 'Aragón' 3 'Asturias (Principado de)' 4 'Balears (Illes)' 5 'Canarias'
+6 'Cantabria' 7 'Castilla-La Mancha' 8 'Castilla y León' 9 'Cataluña' 10 'Comunitat Valenciana'
+11 'Extremadura' 12 'Galicia' 13 'Madrid (Comunidad de)' 14 'Murcia (Región de)' 15 'Navarra (Comunidad Foral de)'
+16 'País Vasco' 17 'Rioja (La)' 18 'Ceuta (Ciudad Autónoma de)' 19 'Melilla (Ciudad Autónoma de)'
+99 'N.C.'
+/P1B
+0 'N.P.' 101 'Albania' 102 'Austria' 103 'Bélgica' 104 'Bulgaria' 106 'Chipre' 107 'Dinamarca'
+108 'España' 109 'Finlandia' 110 'Francia' 111 'Grecia' 112 'Hungría' 113 'Irlanda' 114 'Islandia'
+115 'Italia' 116 'Liechtenstein' 117 'Luxemburgo' 118 'Malta' 119 'Mónaco' 120 'Noruega' 121 'Países Bajos'
+122 'Polonia' 123 'Portugal' 124 'Andorra' 125 'Reino Unido' 126 'Alemania' 128 'Rumanía' 129 'San Marino'
+130 'Santa Sede' 131 'Suecia' 132 'Suiza' 135 'Ucrania' 136 'Letonia' 137 'Moldavia' 138 'Bielorrusia'
+139 'Georgia' 141 'Estonia' 142 'Lituania' 143 'República Checa' 144 'República Eslovaca' 145 'Bosnia Herzegovina'
+146 'Croacia' 147 'Eslovenia' 148 'Armenia' 154 'Rusia' 156 'Macedonia' 157 'Serbia' 158 'Montenegro'
+199 'Otros territorios de Europa' 201 'Burkina Faso' 202 'Angola' 203 'Argelia' 204 'Benín'
+205 'Botsuana' 206 'Burundi' 207 'Cabo Verde' 208 'Camerún' 209 'Comoras' 210 'Congo' 211 'Costa de Marfil'
+212 'Yibuti' 213 'Egipto' 214 'Etiopía' 215 'Gabón' 216 'Gambia' 217 'Ghana' 218 'Guinea' 219 'Guinea Bissau'
+220 'Guinea Ecuatorial' 221 'Kenia' 222 'Lesoto' 223 'Liberia' 224 'Libia' 225 'Madagascar'
+226 'Malaui' 227 'Mali' 228 'Marruecos' 229 'Mauricio' 230 'Mauritania' 231 'Mozambique' 232 'Namibia'
+233 'Níger' 234 'Nigeria' 235 'República Centroafricana' 236 'Sudáfrica' 237 'Ruanda' 238 'Santo Tomé y Príncipe'
+239 'Senegal' 240 'Seychelles' 241 'Sierra Leona' 242 'Somalia' 243 'Sudán' 244 'Suazilandia'
+245 'Tanzania' 246 'Chad' 247 'Togo' 248 'Túnez' 249 'Uganda' 250 'República Democrática del Congo'
+251 'Zambia' 252 'Zimbabue' 253 'Eritrea' 299 'Otros territorios de África' 301 'Canadá' 302 'Estados Unidos de América'
+303 'México' 310 'Antigua y Barbuda' 311 'Bahamas' 312 'Barbados' 313 'Belice' 314 'Costa Rica'
+315 'Cuba' 316 'Dominica' 317 'El Salvador' 318 'Granada' 319 'Guatemala' 320 'Haití' 321 'Honduras'
+322 'Jamaica' 323 'Nicaragua' 324 'Panamá' 325 'San Vicente y las Granadinas' 326 'República Dominicana'
+327 'Trinidad y Tobago' 328 'Santa Lucía' 329 'San Cristóbal y Nieves' 340 'Argentina' 341 'Bolivia'
+342 'Brasil' 343 'Colombia' 344 'Chile' 345 'Ecuador' 346 'Guyana' 347 'Paraguay' 348 'Perú'
+349 'Surinam' 350 'Uruguay' 351 'Venezuela' 399 'Otros territorios de América' 401 'Afganistán'
+402 'Arabia Saudita' 403 'Bahrein' 404 'Bangladés' 405 'Myanmar' 407 'China' 408 'Emiratos Árabes Unidos'
+409 'Filipinas' 410 'India' 411 'Indonesia' 412 'Irak' 413 'Irán' 414 'Israel' 415 'Japón' 416 'Jordania'
+417 'Camboya' 418 'Kuwait' 419 'Laos' 420 'Líbano' 421 'Malasia' 422 'Maldivas' 423 'Mongolia'
+424 'Nepal' 425 'Omán' 426 'Pakistán' 427 'Qatar' 430 'Corea' 431 'Corea del Norte (República Popular Democrática)'
+432 'Singapur' 433 'Siria' 434 'Sri Lanka' 435 'Tailandia' 436 'Turquía' 437 'Vietnam' 439 'Brunei'
+440 'Islas Marshall' 441 'Yemen' 442 'Azerbaiyán' 443 'Kazajistán' 444 'Kirguistán' 445 'Tayikistán'
+446 'Turkmenistán' 447 'Uzbekistán' 499 'Otros territorios de Asia' 501 'Australia' 502 'Fiyi'
+504 'Nueva Zelanda' 505 'Papúa Nueva Guinea' 506 'Islas Salomón' 507 'Samoa' 508 'Tonga' 509 'Vanuatu'
+511 'Micronesia' 512 'Tuvalu' 513 'Islas Cook' 515 'Nauru' 516 'Palaos' 517 'Timor Oriental'
+555 'Apátridas' 599 'Otros territorios de Oceanía' 999 'N.S./N.C.'
+/P2
+1 'Castellano (español)' 2 'Euskera' 3 'Ambas por igual' 4 'Otra' 8 'N.S.' 9 'N.C.'
+/P3_1
+1 'Sí' 2 'No' 9 'N.C.'
+/P3_2
+1 'Sí' 2 'No' 9 'N.C.'
+/P3_3
+1 'Sí' 2 'No' 9 'N.C.'
+/P3_4
+1 'Sí' 2 'No' 9 'N.C.'
+/P4
+1 'Muy buena' 2 'Buena' 3 'Regular' 4 'Mala' 5 'Muy mala' 8 'N.S.' 9 'N.C.'
+/P5
+1 'Conservador/a' 2 'Demócrata cristiano/a' 3 'Liberal' 4 'Progresista' 5 'Socialdemócrata'
+6 'Socialista' 7 'Comunista' 8 'Nacionalista' 9 'Feminista' 10 'Ecologista' 96 'Otras respuestas '
+97 '(NO LEER) Apolítico/a ' 98 'N.S.' 99 'N.C.'
+/P5A
+1 'Conservador/a' 2 'Demócrata cristiano/a' 3 'Liberal' 4 'Progresista' 5 'Socialdemócrata'
+6 'Socialista' 7 'Comunista' 8 'Nacionalista' 9 'Feminista' 10 'Ecologista' 96 'Otras respuestas '
+97 '(NO LEER) Apolítico/a ' 98 'N.S.' 99 'N.C.'
+/P6
+1 'Mucho' 2 'Bastante' 3 'Poco' 4 'Nada' 9 'N.C.'
+/P7
+1 'Con mucho interés' 2 'Con bastante interés' 3 'Con poco interés' 4 'Con ningún interés' 8 'N.S.'
+9 'N.C.'
+/P8_1
+1 'Mucho' 2 'Bastante' 3 'Poco' 4 'Nada' 9 'N.C.'
+/P8_2
+1 'Mucho' 2 'Bastante' 3 'Poco' 4 'Nada' 9 'N.C.'
+/P8_3
+1 'Mucho' 2 'Bastante' 3 'Poco' 4 'Nada' 9 'N.C.'
+/P8_4
+1 'Mucho' 2 'Bastante' 3 'Poco' 4 'Nada' 9 'N.C.'
+/P9
+1 'El paro' 2 'El coronavirus y la gestión de la pandemia' 3 'La corrupción' 4 'La inseguridad ciudadana'
+5 'El estado de las autonomías/La cuestión territorial' 6 'La vivienda' 7 'La economía' 8 'La inmigración'
+9 'La sanidad' 10 'La educación' 11 'El medio ambiente' 12 'Los/as autónomos/as' 13 'La creación de empleo'
+14 'La Reforma Laboral' 15 'La crisis económica' 16 'La situación del país' 17 'La recuperación del país'
+18 'El fraude fiscal' 19 'Las pensiones' 20 'Las políticas sociales, los temas sociales, los derechos sociales'
+21 'Los desahucios' 22 'La violencia contra la mujer' 23 'Las reformas institucionales, la reforma de la Constitución'
+24 'Los impuestos, la política fiscal' 25 'La unidad de España' 26 'Cataluña' 27 'Ataques contra Cataluña/Anticataluña'
+28 'Independencia de Cataluña' 29 'Referéndum/Autodeterminación de Cataluña' 30 'Las promesas, propuestas electorales'
+31 'Las críticas entre partidos y/o candidatos/as' 32 'Derrotar al Gobierno/presidente del Gobierno'
+33 'El cambio' 34 'El bipartidismo' 35 'Los nuevos partidos, partidos emergentes' 36 'El poder, la competición por el poder, la búsqueda del poder'
+37 'Los pactos, las coaliciones' 38 'El sistema electoral/La Ley electoral' 39 'Los/as refugiados/as'
+40 'La protección de los animales' 41 'Los/as políticos/as/La política' 42 'Los recortes' 43 'La precariedad. Los bajos salarios'
+44 'La independencia/autodeterminación' 45 'La falta de Gobierno' 46 'La emigración' 47 'Los nacionalismos'
+48 'La justicia' 49 'Las drogas' 50 'Los problemas de la agricultura, ganadería' 51 'La juventud'
+52 'Las infraestructuras' 53 'Venezuela' 54 'Sorpasso' 55 'La repetición de elecciones' 56 'Las disputas entre los partidos'
+57 'Las acusaciones personales' 58 'Los errores de los partidos y los/as políticos/as' 59 'El vertedero de Zaldívar'
+96 'Otra cuestión' 95 'Todos los temas' 97 'Ningún tema' 98 'N.S.' 99 'N.C.'
+/P9A
+11 'EAJ-PNV' 12 'EH Bildu' 2 'PSE-EE-PSOE' 21 'Elkarrekin Podemos' 1 'PP' 4 'Ciudadanos' 18 'VOX'
+95 'Otro' 97 'Ninguno' 98 'N.S.' 99 'N.C.' 0 'N.P.'
+/P9B
+1 'Muy importante' 2 'Bastante importante' 3 'Poco importante' 4 'Nada importante' 8 'N.S.'
+9 'N.C.' 0 'N.P.'
+/P10_1
+1 'Prensa, en formato impreso' 2 'Prensa, en formato digital' 3 'Televisión' 4 'Radio' 5 'Redes sociales'
+6 'Contactos personales, reuniones, mítines, etc.' 7 '(NO LEER) Otros medios' 97 '(NO LEER) No se informó, no le interesa la política'
+98 'N.S.' 99 'N.C.'
+/P10_2
+1 'Prensa, en formato impreso' 2 'Prensa, en formato digital' 3 'Televisión' 4 'Radio' 5 'Redes sociales'
+6 'Contactos personales, reuniones, mítines, etc.' 7 '(NO LEER) Otros medios' 97 '(NO LEER) No se informó, no le interesa la política'
+98 'N.S.' 99 'N.C.'
+/P10_3
+1 'Prensa, en formato impreso' 2 'Prensa, en formato digital' 3 'Televisión' 4 'Radio' 5 'Redes sociales'
+6 'Contactos personales, reuniones, mítines, etc.' 7 '(NO LEER) Otros medios' 97 '(NO LEER) No se informó, no le interesa la política'
+98 'N.S.' 99 'N.C.'
+/P10IMPRESA
+1 'Menciona' 2 'No menciona'
+/P10DIGITAL
+1 'Menciona' 2 'No menciona'
+/P10TV
+1 'Menciona' 2 'No menciona'
+/P10RADIO
+1 'Menciona' 2 'No menciona'
+/P10A
+1 'El País' 2 'El Mundo' 3 'ABC' 4 'La Razón' 5 'La Gaceta' 6 'Ideal (Granada, Jaén, Almería)'
+7 'Diario Sur (Málaga)' 8 'Diario de Cádiz' 9 'Diario de Sevilla' 10 'Córdoba' 11 'El Correo de Andalucía'
+12 'La Voz de Cádiz' 13 'La Voz de Almería' 14 'Diario de Jerez' 15 'La Opinión de Málaga' 16 'Diario de Jaén'
+17 'Huelva Información' 18 'Granada Hoy' 19 'El Día de Córdoba' 20 'Heraldo de Aragón' 21 'El Periódico de Aragón'
+22 'Diario del Alto Aragón' 23 'La Nueva España' 24 'El Comercio' 25 'La Voz de Asturias' 26 'Diario de Mallorca'
+27 'Última Hora' 28 'Diario Baleares' 29 'El Día de Canarias' 30 'Canarias 7' 31 'La Provincia'
+32 'El Diario Montañés' 33 'Alerta (Cantabria)' 34 'El Norte de Castilla' 35 'Diario de León'
+36 'La Gaceta Regional de Salamanca' 37 'Diario de Burgos' 38 'La Opinión-El Correo de Zamora'
+39 'El Adelanto de Salamanca' 40 'Diario Palentino' 41 'Diario de Ávila' 42 'El Adelantado de Segovia'
+43 'Heraldo de Soria' 44 'La Tribuna de Ciudad Real, Toledo y Talavera' 45 'El Día (de Castilla-La Mancha)'
+46 'La Tribuna de Albacete' 47 'El Día de Cuenca' 48 'La Región (Orense)' 49 'ARA' 50 'El Punt-Avui'
+51 'La Vanguardia' 52 'El Periódico de Catalunya' 53 'Diari de Tarragona' 54 'Diari de Girona'
+55 'Diari de Terrassa' 56 'Diari de Sabadell' 57 'Hoy-Diario de Extremadura' 58 'Periódico de Extremadura'
+59 'Levante' 60 'Las Provincias' 61 'Información de Alicante' 62 'Mediterráneo' 63 'La Voz de Galicia'
+64 'Faro de Vigo' 65 'El Correo Gallego' 66 'Faro de Ourense' 67 'Diario de Pontevedra' 68 'El Progreso (Lugo)'
+69 'Diario de Navarra' 70 'La Verdad' 71 'La Opinión de Murcia' 72 'Berria' 73 'El Correo' 74 'El Diario Vasco'
+75 'Noticias de Guipúzcoa' 76 'Gara' 77 'Deia' 78 'Diario de Noticias (Álava, Navarra)' 79 'La Rioja'
+80 'El Pueblo de Ceuta' 81 'El Faro-Ceuta Y Melilla' 82 'El Diario Avisos' 83 'ElNacional.cat'
+84 'Público.es' 85 'Eldiario.es' 86 'OK Diario.es' 88 'Infolibre.es' 89 'Expansión' 90 'Cinco Días'
+91 '20 Minutos' 92 'El Confidencial.com' 93 'ElEspañol.com' 94 'El Independiente.com' 87 'Periódicos digitales'
+95 'Cualquiera' 96 'Otro' 99 'N.C.' 0 'N.P.'
+/P10B
+1 'El País' 2 'El Mundo' 3 'ABC' 4 'La Razón' 5 'La Gaceta' 6 'Ideal (Granada, Jaén, Almería)'
+7 'Diario Sur (Málaga)' 8 'Diario de Cádiz' 9 'Diario de Sevilla' 10 'Córdoba' 11 'El Correo de Andalucía'
+12 'La Voz de Cádiz' 13 'La Voz de Almería' 14 'Diario de Jerez' 15 'La Opinión de Málaga' 16 'Diario de Jaén'
+17 'Huelva Información' 18 'Granada Hoy' 19 'El Día de Córdoba' 20 'Heraldo de Aragón' 21 'El Periódico de Aragón'
+22 'Diario del Alto Aragón' 23 'La Nueva España' 24 'El Comercio' 25 'La Voz de Asturias' 26 'Diario de Mallorca'
+27 'Última Hora' 28 'Diario Baleares' 29 'El Día de Canarias' 30 'Canarias 7' 31 'La Provincia'
+32 'El Diario Montañés' 33 'Alerta (Cantabria)' 34 'El Norte de Castilla' 35 'Diario de León'
+36 'La Gaceta Regional de Salamanca' 37 'Diario de Burgos' 38 'La Opinión-El Correo de Zamora'
+39 'El Adelanto de Salamanca' 40 'Diario Palentino' 41 'Diario de Ávila' 42 'El Adelantado de Segovia'
+43 'Heraldo de Soria' 44 'La Tribuna de Ciudad Real, Toledo y Talavera' 45 'El Día (de Castilla-La Mancha)'
+46 'La Tribuna de Albacete' 47 'El Día de Cuenca' 48 'La Región (Orense)' 49 'ARA' 50 'El Punt-Avui'
+51 'La Vanguardia' 52 'El Periódico de Catalunya' 53 'Diari de Tarragona' 54 'Diari de Girona'
+55 'Diari de Terrassa' 56 'Diari de Sabadell' 57 'Hoy-Diario de Extremadura' 58 'Periódico de Extremadura'
+59 'Levante' 60 'Las Provincias' 61 'Información de Alicante' 62 'Mediterráneo' 63 'La Voz de Galicia'
+64 'Faro de Vigo' 65 'El Correo Gallego' 66 'Faro de Ourense' 67 'Diario de Pontevedra' 68 'El Progreso (Lugo)'
+69 'Diario de Navarra' 70 'La Verdad' 71 'La Opinión de Murcia' 72 'Berria' 73 'El Correo' 74 'El Diario Vasco'
+75 'Noticias de Guipúzcoa' 76 'Gara' 77 'Deia' 78 'Diario de Noticias (Álava, Navarra)' 79 'La Rioja'
+80 'El Pueblo de Ceuta' 81 'El Faro-Ceuta Y Melilla' 82 'El Diario Avisos' 83 'ElNacional.cat'
+84 'Público.es' 85 'Eldiario.es' 86 'OK Diario.es' 88 'Infolibre.es' 89 'Expansión' 90 'Cinco Días'
+91 '20 Minutos' 92 'El Confidencial.com' 93 'ElEspañol.com' 94 'El Independiente.com' 87 'Periódicos digitales'
+95 'Cualquiera' 96 'Otro' 99 'N.C.' 0 'N.P.'
+/P10C
+1 'TVE1' 2 'La 2' 3 'Antena 3' 4 'La Cuatro' 5 'Telecinco' 6 'La Sexta' 7 'Canal 24 horas' 8 'TVE (sin especificar)'
+9 'Canal Sur' 10 'TV3' 11 '8TV' 12 '3/24' 13 'Barcelona TV (BTV)' 14 'TeleMadrid' 15 '13TV'
+16 'Canala 33' 17 'TVG' 18 'ETB1' 19 'ETB2' 20 'ETB' 21 'Televisión de Castilla-La Mancha (TVCM)'
+22 'TVC (Canarias)' 23 'Aragón TV' 24 'IB3 (Baleares)' 25 '7 Televisión Región Murcia' 26 'Canal Extremadura'
+27 'TPA (Asturias)' 28 'TVCYL (Castilla y León)' 29 'Intereconomia TV' 30 'Nafar Telebista (NTB)'
+31 'Á Punt' 60 'Otras televisiones autonómicas' 61 'Televisiones insulares' 62 'Televisiones locales'
+94 'Otras cadenas de televisión' 95 'Cualquiera sin especificar' 96 'Otra' 99 'N.C.' 0 'N.P.'
+/P10D
+1 'Cadena Ser' 2 'Cadena COPE' 3 'Onda Cero' 4 'RNE (Sin especificar)' 5 'RNE-RADIO 1' 6 'RNE-RADIO 4'
+7 'RNE-RADIO 5-Todo Noticias' 8 'Es Radio' 9 'RAC 1' 10 'Catalunya Radio' 11 'Catalunya Informació'
+12 'Canal Sur Radio' 13 'Radio Euskadi, Euskadi Irratia' 14 'Radio Euskadi Gaztea' 15 'Onda Vasca'
+16 'Radio 7' 17 'À Punt Radio (Radio de Valencia)' 18 'Radio Castilla-La Mancha' 19 'Radio Voz'
+20 'RPA (Radio Principado de Asturias)' 21 'Radio Galega' 22 'IB3' 23 'Onda Regional de Murcia'
+24 'Aragón Radio' 25 'Radio Teletaxi' 26 'Radio Intereconomía' 92 'Radios autonómicas o locales'
+94 'Otras radios musicales' 95 'Cualquiera sin especificar' 96 'Otra' 98 'N.S.' 99 'N.C.' 0 'N.P.'
+/P11_1
+1 'Menciona' 2 'No menciona'
+/P11_2
+1 'Menciona' 2 'No menciona'
+/P11_3
+1 'Menciona' 2 'No menciona'
+/P11_4
+1 'Menciona' 2 'No menciona'
+/P11_5
+1 'Menciona' 2 'No menciona'
+/P11_7
+1 'Menciona' 2 'No menciona'
+/P11_9
+1 'Menciona' 2 'No menciona'
+/P12_1
+1 'Menciona' 2 'No menciona'
+/P12_2
+1 'Menciona' 2 'No menciona'
+/P12_3
+1 'Menciona' 2 'No menciona'
+/P12_4
+1 'Menciona' 2 'No menciona'
+/P12_5
+1 'Menciona' 2 'No menciona'
+/P12_6
+1 'Menciona' 2 'No menciona'
+/P12_7
+1 'Menciona' 2 'No menciona'
+/P12_9
+1 'Menciona' 2 'No menciona'
+/P13_1
+1 'Sí' 2 'No' 9 'N.C.'
+/P13_2
+1 'Sí' 2 'No' 9 'N.C.'
+/P13_3
+1 'Sí' 2 'No' 9 'N.C.'
+/P13_4
+1 'Sí' 2 'No' 9 'N.C.'
+/P13_5
+1 'Sí' 2 'No' 9 'N.C.'
+/P14
+1 'Sí' 2 'No' 9 'N.C.'
+/P14A_11
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P14A_12
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P14A_2
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P14A_21
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P14A_1
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P14A_18
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P14A_95
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P14A_98
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P14A_99
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P15
+1 'Sí' 2 'No' 9 'N.C.'
+/P15A_11
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P15A_12
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P15A_2
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P15A_21
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P15A_1
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P15A_18
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P15A_95
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P15A_98
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P15A_99
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P16
+1 'Sí' 2 'No' 9 'N.C.'
+/P16A_11
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P16A_12
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P16A_2
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P16A_21
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P16A_1
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P16A_18
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P16A_95
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P16A_98
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P16A_99
+1 'Menciona' 2 'No menciona' 0 'N.P.'
+/P17_1
+1 'Habitualmente' 2 'De vez en cuando' 3 'Rara vez' 4 'Casi nunca o nunca' 7 '(NO LEER) No procede'
+9 'N.C.'
+/P17_2
+1 'Habitualmente' 2 'De vez en cuando' 3 'Rara vez' 4 'Casi nunca o nunca' 7 '(NO LEER) No procede'
+9 'N.C.'
+/P17_3
+1 'Habitualmente' 2 'De vez en cuando' 3 'Rara vez' 4 'Casi nunca o nunca' 7 '(NO LEER) No procede'
+9 'N.C.'
+/P18
+1 'Sí' 2 'No' 9 'N.C.'
+/P18A
+1 'Mucho' 2 'Bastante' 3 'Poco' 4 'Nada' 8 'N.S.' 9 'N.C.' 0 'N.P.'
+/P18B
+1 'Le animaron a votar' 2 'Le animaron a abstenerse' 3 'Le ayudaron a decidir el partido por el que iba a votar'
+4 'Reforzaron su decisión de votar por el partido que pensaba' 5 'Le animaron a votar a otro partido distinto al que tenía pensado'
+6 'Otra respuesta' 8 'N.S.' 9 'N.C.' 0 'N.P.'
+/P19
+1 'Dudó entre varios partidos o coaliciones' 2 'Dudó entre un partido o coalición y la abstención'
+3 'Dudó entre un partido o coalición y votar en blanco o nulo' 4 'Dudó entre votar en blanco y abstenerse'
+5 'Tenía decidido votar por un partido o coalición' 6 'Tenía decidido votar en blanco o nulo'
+7 'Tenía decidido abstenerse' 9 'N.C.'
+/P19A01
+11 'EAJ-PNV' 12 'EH Bildu' 2 'PSE-EE-PSOE' 21 'Elkarrekin Podemos' 1 'PP+C''s' 18 'VOX' 5 'IU'
+17 'PACMA' 20 'Los Verdes' 22 'EQUO' 27 'Escaños en Blanco' 29 'P-LIB (Partido Libertario)'
+95 'Otros partidos' 96 'En blanco' 77 'Voto nulo' 97 'Abstención' 98 'No recuerda' 99 'N.C.'
+0 'N.P.'
+/P19A02
+11 'EAJ-PNV' 12 'EH Bildu' 2 'PSE-EE-PSOE' 21 'Elkarrekin Podemos' 1 'PP+C''s' 18 'VOX' 4 'Ciudadanos'
+17 'PACMA' 20 'Los Verdes' 22 'EQUO' 95 'Otros partidos' 96 'En blanco' 77 'Voto nulo' 97 'Abstención'
+98 'No recuerda' 99 'N.C.' 0 'N.P.'
+/P20
+11 'EAJ-PNV' 12 'EH Bildu' 2 'PSE-EE-PSOE' 21 'Elkarrekin Podemos' 1 'PP+C''s' 18 'VOX' 95 'Otro partido'
+4 'Ciudadanos' 5 'IU' 17 'PACMA' 20 'Los Verdes' 22 'EQUO' 27 'Escaños en Blanco' 96 'En blanco'
+77 'Voto nulo' 97 'No votó/abstención' 98 'No recuerda' 99 'N.C.'
+/P20A_1
+1 'Por el/la candidato/a que presentaba a lehendakari' 2 'Porque siempre suele votar a este partido/coalición'
+3 'Porque es el que está más capacitado para gobernar en Euskadi' 4 'Porque es el que mejor representa las ideas de la gente como Ud.'
+5 'Por su actuación en la legislatura anterior' 6 'Para evitar que ganase otro partido/coalición'
+96 'Otras respuestas' 98 'N.S.' 99 'N.C.' 0 'N.P.'
+/P20A_2
+1 'Por el/la candidato/a que presentaba a lehendakari' 2 'Porque siempre suele votar a este partido/coalición'
+3 'Porque es el que está más capacitado para gobernar en Euskadi' 4 'Porque es el que mejor representa las ideas de la gente como Ud.'
+5 'Por su actuación en la legislatura anterior' 6 'Para evitar que ganase otro partido/coalición'
+96 'Otras respuestas' 98 'N.S.' 99 'N.C.' 0 'N.P.'
+/P21
+1 'No pudo votar' 2 'No quiso ir a votar' 3 'Normalmente vota, pero esta vez no quiso hacerlo'
+4 'Normalmente vota, pero esta vez no pudo hacerlo' 9 'N.C.' 0 'N.P.'
+/P21A
+1 'Nunca vota' 2 'Lo tenía decidido hace bastante tiempo (antes del inicio de la campaña electoral) '
+3 'Lo decidió al comienzo de la campaña electoral ' 4 'Lo decidió durante la última semana de la campaña electoral, unos días antes de las elecciones '
+5 'Dudó hasta el último momento ' 9 'N.C.' 0 'N.P.'
+/P21B_1
+1 'No había ninguna alternativa que le satisficiera' 2 'Está harto/a de política y elecciones'
+3 'Da lo mismo votar que no votar, no sirve para nada' 4 'Estaba desorientado/a, no sabía a quién votar'
+5 'No le inspiraba confianza ningún partido ni ningún/a político/a' 6 'Para mostrar su descontento'
+7 'Por miedo al contagio del coronavirus' 8 'Otras respuestas' 98 'N.S.' 99 'N.C.' 0 'N.P.'
+/P21B_2
+1 'No había ninguna alternativa que le satisficiera' 2 'Está harto/a de política y elecciones'
+3 'Da lo mismo votar que no votar, no sirve para nada' 4 'Estaba desorientado/a, no sabía a quién votar'
+5 'No le inspiraba confianza ningún partido ni ningún/a político/a' 6 'Para mostrar su descontento'
+7 'Por miedo al contagio del coronavirus' 8 'Otras respuestas' 98 'N.S.' 99 'N.C.' 0 'N.P.'
+/P21C
+1 'No estaba inscrito/a en el censo electoral' 2 'No tenía su DNI o pasaporte' 3 'No sabía dónde tenía que ir a votar'
+4 'Por motivos familiares' 5 'Por motivos de salud/Por el coronavirus' 6 'Por motivos de trabajo'
+7 'Estaba ausente' 8 'No tenía edad para votar' 9 'Otras respuestas' 99 'N.C.' 0 'N.P.'
+/P22
+1 'Lo tenía decidido desde hace bastante tiempo (antes del inicio de la campaña electoral)  '
+2 'Lo decidió al comienzo de la campaña electoral ' 3 'Lo decidió durante la última semana de la campaña electoral, unos días antes de las elecciones '
+4 'Lo decidió durante la jornada de reflexión, la víspera de las elecciones ' 5 'Lo decidió el mismo día de las elecciones '
+9 'N.C.' 0 'N.P.'
+/P23
+1 'Habría votado por el mismo partido o coalición por el que lo hizo ' 2 'Se habría abstenido o habría votado en blanco '
+3 'Habría votado por un partido o coalición distinto al que votó ' 4 'Habría votado por un partido o coalición en vez de votar en blanco o nulo '
+5 'Habría votado por un partido o coalición en vez de abstenerse ' 8 'N.S.' 9 'N.C.'
+/P24_1
+0 '0 Con toda seguridad, no lo votaría nunca' 10 '10 Con toda seguridad, lo votaría siempre'
+98 'N.S.' 99 'N.C.'
+/P24_2
+0 '0 Con toda seguridad, no lo votaría nunca' 10 '10 Con toda seguridad, lo votaría siempre'
+98 'N.S.' 99 'N.C.'
+/P24_3
+0 '0 Con toda seguridad, no lo votaría nunca' 10 '10 Con toda seguridad, lo votaría siempre'
+98 'N.S.' 99 'N.C.'
+/P24_4
+0 '0 Con toda seguridad, no lo votaría nunca' 10 '10 Con toda seguridad, lo votaría siempre'
+98 'N.S.' 99 'N.C.'
+/P24_5
+0 '0 Con toda seguridad, no lo votaría nunca' 10 '10 Con toda seguridad, lo votaría siempre'
+98 'N.S.' 99 'N.C.'
+/P24_6
+0 '0 Con toda seguridad, no lo votaría nunca' 10 '10 Con toda seguridad, lo votaría siempre'
+98 'N.S.' 99 'N.C.'
+/P24_7
+0 '0 Con toda seguridad, no lo votaría nunca' 10 '10 Con toda seguridad, lo votaría siempre'
+98 'N.S.' 99 'N.C.'
+/PARTICIPACIONA
+1 'Fue a votar y votó ' 2 'No tenía edad para votar ' 3 'Fue a votar pero no pudo hacerlo '
+4 'No fue a votar porque no pudo ' 5 'Prefirió no votar ' 6 'No tenía derecho a voto ' 8 'No recuerda '
+9 'N.C.'
+/RECUVOTOA
+0 'N.P.' 11 'EAJ-PNV' 12 'EH Bildu' 21 'Elkarrekin Podemos' 2 'PSE-EE-PSOE' 1 'PP' 4 'Ciudadanos'
+95 'Otros partidos' 96 'En blanco' 77 'Voto nulo' 98 'No recuerda' 99 'N.C.'
+/P26_1
+1 '1 Muy mal' 10 '10 Muy bien' 97 'No conoce' 98 'N.S.' 99 'N.C.'
+/P26_2
+1 '1 Muy mal' 10 '10 Muy bien' 97 'No conoce' 98 'N.S.' 99 'N.C.'
+/P26_3
+1 '1 Muy mal' 10 '10 Muy bien' 97 'No conoce' 98 'N.S.' 99 'N.C.'
+/P26_4
+1 '1 Muy mal' 10 '10 Muy bien' 97 'No conoce' 98 'N.S.' 99 'N.C.'
+/P26_5
+1 '1 Muy mal' 10 '10 Muy bien' 97 'No conoce' 98 'N.S.' 99 'N.C.'
+/P26_6
+1 '1 Muy mal' 10 '10 Muy bien' 97 'No conoce' 98 'N.S.' 99 'N.C.'
+/P27
+1 'Un Estado con un único Gobierno central sin autonomías ' 2 'Un Estado en el que las comunidades autónomas tengan menor autonomía que en la actualidad '
+3 'Un Estado con comunidades autónomas como en la actualidad ' 4 'Un Estado en el que las comunidades autónomas tengan mayor autonomía que en la actualidad '
+5 'Un Estado en el que se reconociese a las comunidades autónomas la posibilidad de convertirse en Estados independientes '
+8 'N.S.' 9 'N.C.'
+/P28
+1 'Me siento únicamente español/a ' 2 'Me siento más español/a que vasco/a ' 3 'Me siento tan español/a como vasco/a '
+4 'Me siento más vasco/a que español/a ' 5 'Me siento únicamente vasco/a ' 7 '(NO LEER) Ninguna de las anteriores  '
+8 'N.S.' 9 'N.C.'
+/P29
+1 '1 Mínimo grado de nacionalismo vasco' 10 '10 Máximo grado de nacionalismo vasco' 98 'N.S.'
+99 'N.C.'
+/PARTICIPACIONG
+1 'Fue a votar y votó ' 2 'No tenía edad para votar ' 3 'Fue a votar pero no pudo hacerlo '
+4 'No fue a votar porque no pudo ' 5 'Prefirió no votar ' 6 'No tenía derecho a voto ' 8 'No recuerda '
+9 'N.C.'
+/RECUVOTOG
+0 'N.P.' 11 'EAJ-PNV' 2 'PSE-EE-PSOE' 12 'EH Bildu' 21 'Elkarrekin Podemos' 1 'PP' 18 'VOX'
+4 'Ciudadanos' 50 'Más País' 95 'Otros partidos' 96 'En blanco' 77 'Voto nulo' 98 'No recuerda'
+99 'N.C.'
+/ESCIDEOL
+1 '1 Izquierda' 10 '10 Derecha' 98 'N.S.' 99 'N.C.'
+/ESCIDEOLPAR_1
+1 '1 Izquierda' 10 '10 Derecha' 98 'N.S.' 99 'N.C.'
+/ESCIDEOLPAR_2
+1 '1 Izquierda' 10 '10 Derecha' 98 'N.S.' 99 'N.C.'
+/ESCIDEOLPAR_3
+1 '1 Izquierda' 10 '10 Derecha' 98 'N.S.' 99 'N.C.'
+/ESCIDEOLPAR_4
+1 '1 Izquierda' 10 '10 Derecha' 98 'N.S.' 99 'N.C.'
+/ESCIDEOLPAR_5
+1 '1 Izquierda' 10 '10 Derecha' 98 'N.S.' 99 'N.C.'
+/ESCIDEOLPAR_6
+1 '1 Izquierda' 10 '10 Derecha' 98 'N.S.' 99 'N.C.'
+/ESCIDEOLPAR_7
+1 '1 Izquierda' 10 '10 Derecha' 98 'N.S.' 99 'N.C.'
+/ESCUELA
+1 'No, es analfabeto/a' 2 'No, pero sabe leer y escribir' 3 'Sí, ha ido a la escuela' 9 'N.C.'
+/NIVELESTENTREV
+0 'N.P.' 1 'Menos de 5 años de escolarización ' 2 'Educación Primaria (Educación Primaria de LOGSE, 5º curso de EGB, enseñanza primaria antigua) '
+3 'Cualificación profesional grado inicial (FP grado inicial). PCPI (Programas de Cualificación Profesional Inicial, que no'+' precisan de titulación académica de la primera etapa de secundaria para su realización). Programas de garantía social '
+4 'Educación secundaria (ESO, EGB. Graduado Escolar. Certificado de Escolaridad, Bachillerato Elemental) '
+5 'FP de Grado Medio (ciclo/módulo formativo de FP (grado medio), de Artes Plásticas y Diseño, Música y Danza, enseñanzas d'+'eportivas, FP I, Bachiller Laboral Elemental. Oficialía Industrial; Bachillerato Comercial) '
+6 'Bachillerato (Bachillerato LOGSE, BUP, Bachillerato Superior (6º), Bachillerato Universitario (7º), incluidos COU y PREU'+') '
+7 'FP de Grado Superior (ciclo/módulo formativo de FP (grado superior) de Artes Plásticas, Diseño, Música y Danza, Deporte,'+' FP II, Bachillerato Laboral Superior, Maestría industrial, perito/a mercantil; Secretariado de 2º grado; Grado Medio co'+'nservatorio) '
+8 'Arquitectura/Ingeniería Técnica (aparejador/a; peritos/as) ' 9 'Diplomatura (ATENCIÓN: sólo diplomaturas oficiales, no codificar aquí los tres primeros años de una licenciatura o grado'+' con mayor duración) '
+10 'Grado (estudios de grado, enseñanzas artísticas equivalentes (desde 2006)) ' 11 'Licenciatura (titulaciones con equivalencia oficial: 2º ciclo INEF; Danza y Arte Dramático (desde 1992); Grado Superior '+'de Música) '
+12 'Arquitectura/Ingeniería' 13 'Máster oficial universitario (especialidades médicas o equivalente) '
+14 'Doctorado' 15 'Títulos propios de posgrado (máster no oficial, etc.) ' 16 'Otros estudios '
+98 'N.S./No recuerda ' 99 'N.C.'
+/RELIGION
+1 'Católico/a practicante' 2 'Católico/a no practicante' 3 'Creyente de otra religión' 4 'Agnóstico/a'
+5 'Indiferente, no creyente' 6 'Ateo/a' 9 'N.C.'
+/FRECUENCIARELI
+0 'N.P.' 1 'Nunca' 2 'Casi nunca' 3 'Varias veces al año' 4 'Dos o tres veces al mes' 5 'Todos los domingos y festivos'
+6 'Varias veces a la semana' 9 'N.C.'
+/ESTADOCIVIL
+1 'Casado/a' 2 'Soltero/a' 3 'Viudo/a' 4 'Separado/a' 5 'Divorciado/a' 9 'N.C.'
+/SITLAB
+1 'Trabaja' 2 'Jubilado/a o pensionista (anteriormente ha trabajado) ' 3 'Pensionista (anteriormente no ha trabajado) '
+4 'En paro y ha trabajado antes ' 5 'En paro y busca su primer empleo ' 6 'Estudiante ' 7 'Trabajo doméstico no remunerado '
+8 'Otra situación' 9 'N.C.'
+/CNO11
+1 'Directores/as y gerentes' 2 'Profesionales científicos/as e intelectuales' 3 'Técnicos/as y profesionales de nivel medio'
+4 'Personal de apoyo administrativo' 5 'Trabajadores/as de los servicios y vendedores/as de comercios y mercados'
+6 'Agricultores/as y trabajadores/as cualificados/as agropecuarios/as, forestales y pesqueros/as'
+7 'Oficiales/as, operarios/as y artesanos/as de artes mecánicas y de otros oficios' 8 'Operadores/as de instalaciones y máquinas y ensambladores/as'
+9 'Ocupaciones elementales' 10 'Ocupaciones militares y cuerpos policiales' 11 'Otra/o' 99 'N.C.'
+/RELALAB
+1 'Asalariado/a fijo/a (a sueldo, comisión, jornal, etc. con carácter fijo) ' 2 'Asalariado/a eventual o interino/a (a sueldo, comisión, jornal, etc. con carácter temporal o interino) '
+3 'Empresario/a o profesional con asalariados/as  ' 4 'Profesional o trabajador/a autónomo/a (sin asalariados/as) '
+5 'Ayuda familiar (sin remuneración reglamentada en la empresa o negocio de un/a familiar) '
+6 'Miembro de una cooperativa ' 7 'Otra situación' 9 'N.C.'
+/CLASESOCIAL
+1 'Clase alta ' 2 'Clase media-alta ' 3 'Clase media-media ' 4 'Clase media-baja ' 5 'Clase trabajadora/obrera '
+12 'Clase baja ' 6 'Clase pobre ' 7 'Infraclase' 8 'Proletariado' 9 'A los/as de abajo ' 10 'Excluidos/as'
+11 'A la gente común ' 96 'Otras' 97 'No cree en las clases ' 98 'No sabe/duda ' 99 'N.C.'
+/IA_I501
+0 'No procede'
+/IA_I502
+0 'No procede'
+/IA_I503
+0 'No procede'
+/IA_I504
+0 'No procede'
+/IA_I505
+0 'No procede'
+/IA_I506
+0 'No procede'
+/IA_I507
+0 'No procede'
+/IA_I508
+0 'No procede'
+/IA_I509
+0 'No procede'
+/IA_I510
+0 'No procede'
+/IA_I511
+0 'No'
+/IA_I512
+0 'No'
+/IA_I513
+0 'No'
+/IA_I514
+0 'No'
+/IA_I515
+0 'No'
+/IA_I516
+0 'No'
+/IA_I517
+0 'No'
+/IA_I518
+0 'No'
+/IA_I519
+0 'No'
+/IA_I520
+0 'No'
+/IA_I521
+0 'No procede'
+/IA_I522
+0 'No procede'
+/IA_I523
+0 'No procede'
+/IA_I524
+0 'No procede'
+/IA_I525
+0 'No procede'
+/IA_I526
+0 'No'
+/IA_I528
+0 'No procede'
+/IA_I529
+0 'No procede'
+/IA_I530
+0 'No procede'
+/IA_I531
+0 'No procede'
+/IA_I532
+0 'No'
+/IA_I533
+0 'No'
+/IA_I534
+0 'No'
+/IA_I535
+0 'No'
+/IA_I536
+0 'No procede'
+/IA_I537
+0 'No procede'
+/IA_OBS0
+0 'No procede'
+/IA_OBS1
+0 'No procede'
+/IA_OBS2
+0 'No procede'
+/IA_E1_DIA
+99 'N.C.'
+/IA_E1_MES
+1 'Enero  ' 2 'Febrero  ' 3 'Marzo  ' 4 'Abril  ' 5 'Mayo  ' 6 'Junio  ' 7 'Julio  ' 8 'Agosto  '
+9 'Septiembre  ' 10 'Octubre  ' 11 'Noviembre    ' 12 'Diciembre  ' 99 'N.C.'
+/IA_E1_ANYO
+20 '2020'
+/IA_E2
+1 'Lunes' 2 'Martes' 3 'Miércoles' 4 'Jueves' 5 'Viernes' 6 'Sábado' 7 'Domingo' 9 'N.C.'
+/IA_E3
+/IA_E4
+1 'Mañana (9-12)' 2 'Mediodía (12-16)' 3 'Tarde (16-20)' 4 'Noche (20-22)' 5 'Otra (22-9)'
+/IA_VALIDA
+0 'No' 1 'Sí'
+/IA_APLAZADA
+0 'No' 1 'Sí'
+/IA_MODIFICADA
+0 'No' 1 'Sí'
+/IA_SUPERVISADA
+0 'No' 1 'Sí'
+/IA_C2
+1 'Entrevista no supervisada' 2 'Supervisión telefónica' 3 'Supervisión personal' 4 'Supervisión telefónica y personal'
+5 'Supervisión directa' 6 'Supervisión de audio (monitorización)'
+/IA_C2A
+0 'N.P.' 1 'Entrevista correcta' 2 'Entrevista incorrecta' 3 'No se ha establecido contacto'
+/IA_C2B_1
+1 'Dirección inexistente (no existe número en la calle, piso, etc...)' 0 'N.P.'
+/IA_C2B_2
+1 'Dirección ilocalizable (faltan datos: número, piso, letra, etc...)' 0 'N.P.'
+/IA_C2B_3
+1 'No coinciden datos personales y no ha sido realizada en la dirección que se hace constar'
+0 'N.P.'
+/IA_C2B_4
+1 'Negativa que ofrece dudas. Coinciden datos personales pero niegan haber realizado la entrevista'
+0 'N.P.'
+/IA_C2B_5
+1 'Realizada a una persona, recogiendo los datos de otra' 0 'N.P.'
+/IA_C2B_6
+1 'Realizada cambiando género del entrevistado' 0 'N.P.'
+/IA_C2B_7
+1 'Cambio de edad por otra de un tramo contiguo' 0 'N.P.'
+/IA_C2B_8
+1 'Cambio de edad por otra de un tramo no contiguo' 0 'N.P.'
+/IA_C2B_9
+1 'Realizada fuera de la vivienda pero vive en la sección electoral' 0 'N.P.'
+/IA_C2B_10
+1 'Realizada fuera de la vivienda, y no vive en la sección electoral' 0 'N.P.'
+/IA_C2B_11
+1 'Realizada en dirección que no corresponde a la sección electoral' 0 'N.P.'
+/IA_C2B_12
+1 'Realizada, pero no respeta las normas de ruta' 0 'N.P.'
+/IA_C2B_13
+1 'Se detecta que no ha hecho todas las preguntas' 0 'N.P.'
+/IA_C2B_14
+1 'Negativa que ofrece dudas: no coincide la dirección ni datos personales. Posibilidad de error en el teléfono'
+0 'N.P.'
+/IA_C3
+1 'Entrevista válida' 2 'Entrevista anulada' 0 'N.P.'
+/IA_C4
+0 'Anonimizado'
+/P19ACOM
+1112 'EAJ-PNV/EH Bildu' 1102 'EAJ-PNV/PSE-EE-PSOE' 1121 'EAJ-PNV/Elkarrekin Podemos' 1101 'EAJ-PNV/PP+C''s'
+1118 'EAJ-PNV/VOX' 1195 'EAJ-PNV/Otros' 1177 'EAJ-PNV/Voto nulo' 1196 'EAJ-PNV/En blanco' 1197 'EAJ-PNV/Abstención'
+1202 'EH Bildu/PSE-EE-PSOE' 1221 'EH Bildu/Elkarrekin Podemos' 1201 'EH Bildu/PP+C''s' 1218 'EH Bildu/VOX'
+1295 'EH Bildu/Otros' 1277 'EH Bildu/Voto nulo' 1296 'EH Bildu/En blanco' 1297 'EH Bildu/Abstención'
+221 'PSE-EE-PSOE/Elkarrekin Podemos' 201 'PSE-EE-PSOE/PP+C''s' 218 'PSE-EE-PSOE/VOX' 295 'PSE-EE-PSOE/Otros'
+277 'PSE-EE-PSOE/Voto nulo' 296 'PSE-EE-PSOE/En blanco' 297 'PSE-EE-PSOE/Abstención' 2101 'Elkarrekin Podemos/PP+C''s'
+2118 'Elkarrekin Podemos/VOX' 2195 'Elkarrekin Podemos/Otros' 2177 'Elkarrekin Podemos/Voto nulo'
+2196 'Elkarrekin Podemos/En blanco' 2197 'Elkarrekin Podemos/Abstención' 118 'PP+C''s/VOX' 195 'PP+C''s/Otros'
+177 'PP+C''s/Voto nulo' 196 'PP+C''s/En blanco' 197 'PP+C''s/Abstención' 1895 'VOX/Otros' 1877 'VOX/Voto nulo'
+1896 'VOX/En blanco' 1897 'VOX/Abstención' 9577 'Otros/Voto nulo' 9596 'Otros/En blanco' 9597 'Otros/Abstención'
+7796 'Voto nulo/En blanco' 7797 'Voto nulo/Abstención' 9697 'En blanco/Abstención' 9994 'Otras respuestas'
+9998 'N.S.' 9999 'N.C.' 0 'N.P.'
+/RVAUTO20
+11 'EAJ-PNV' 12 'EH Bildu' 2 'PSE-EE-PSOE' 21 'Elkarrekin Podemos' 1 'PP+C''s' 18 'VOX' 17 'PACMA'
+95 'Otro partido' 96 'En blanco' 77 'Voto nulo' 97 'No votó/abstención' 98 'No recuerda' 99 'N.C.'
+/RVAUTO16
+11 'EAJ-PNV' 12 'EH Bildu' 21 'Elkarrekin Podemos' 2 'PSE-EE-PSOE' 1 'PP' 4 'Ciudadanos' 95 'Otros partidos'
+96 'En blanco' 77 'Nulo' 94 'No tenía edad' 97 'No votó' 93 'No tenía derecho a voto' 98 'No recuerda'
+99 'N.C.'
+/RECUERDO
+11 'EAJ-PNV' 2 'PSE-EE-PSOE' 12 'EH Bildu' 21 'Elkarrekin Podemos' 1 'PP' 18 'VOX' 4 'Ciudadanos'
+50 'Más País' 95 'Otros partidos' 96 'En blanco' 77 'Nulo' 94 'No tenía edad' 97 'No votó' 93 'No tenía derecho a voto'
+98 'No recuerda' 99 'N.C.'
+/ESTUDIOS
+1 'Sin estudios' 2 'Primaria' 3 'Secundaria 1ª etapa' 4 'Secundaria 2ª etapa' 5 'F.P.' 6 'Superiores'
+7 'Otros' 9 'N.C.'
+/CLASESUB
+1 'Clase alta y media alta' 2 'Clase media-media' 3 'Clase media-baja' 4 'Clase trabajadora/obrera/proletariado'
+5 'Clase baja/pobre' 6 'Otras' 8 'N.S.' 9 'N.C.'
+/PESO
+/PESOPR01
+/PESOPR20
+/PESOPR48
+.
+EXECUTE.
+
+MISSING VALUES
+ P1A (0) P1B (0) P9A (0) P9B (0) P10A (0) P10B (0) P10C (0) P10D (0) P14A_11 (0) P14A_12 (0)
+ P14A_2 (0) P14A_21 (0) P14A_1 (0) P14A_18 (0) P14A_95 (0) P14A_98 (0) P14A_99 (0) P15A_11 (0)
+ P15A_12 (0) P15A_2 (0) P15A_21 (0) P15A_1 (0) P15A_18 (0) P15A_95 (0) P15A_98 (0) P15A_99 (0)
+ P16A_11 (0) P16A_12 (0) P16A_2 (0) P16A_21 (0) P16A_1 (0) P16A_18 (0) P16A_95 (0) P16A_98 (0)
+ P16A_99 (0) P18A (0) P18B (0) P19A01 (0) P19A02 (0) P20A_1 (0) P20A_2 (0) P21 (0) P21A (0)
+ P21B_1 (0) P21B_2 (0) P21C (0) P22 (0) RECUVOTOA (0) RECUVOTOG (0) NIVELESTENTREV (0) FRECUENCIARELI (0)
+ IA_C2A (0) IA_C2B_1 (0) IA_C2B_2 (0) IA_C2B_3 (0) IA_C2B_4 (0) IA_C2B_5 (0) IA_C2B_6 (0) IA_C2B_7 (0)
+ IA_C2B_8 (0) IA_C2B_9 (0) IA_C2B_10 (0) IA_C2B_11 (0) IA_C2B_12 (0) IA_C2B_13 (0) IA_C2B_14 (0)
+ IA_C3 (0) P19ACOM (0).
+EXECUTE.
+WEIGHT BY PESO.
+* WEIGHT BY PESOPR01.
+* WEIGHT BY PESOPR20.
+* WEIGHT BY PESOPR48.
+FREQUENCIES VARIABLES ALL.

@@ -1,0 +1,11 @@
+Origen de los datos:
+https://www.cis.es/cis/opencm/ES/1_encuestas/estudios/listaMuestras.jsp?estudio=14522
+
+País Vasco:
+https://www.cis.es/cis/opencm/ES/1_encuestas/estudios/ver.jsp?estudio=14522&cuestionario=17498&muestra=24794
+
+Álava:
+https://www.cis.es/cis/opencm/ES/1_encuestas/estudios/ver.jsp?estudio=14522&cuestionario=17498&muestra=24794
+
+Bizkaia:
+

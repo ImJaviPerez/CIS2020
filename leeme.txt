@@ -1,0 +1,27 @@
+# https://rfortherestofus.com/2021/02/how-to-use-git-github-with-r/
+
+git --version
+
+library(usethis)
+edit_git_config()
+# [user]
+# 	name = ImJaviPerez
+# 	email = ImJaviPerez@gmail.com
+# [init]
+# 	defaultBranch = main
+
+
+
+library(usethis)
+usethis::create_github_token()
+#
+library(gitcreds)
+gitcreds_set()
+
+
+# Sometimes you already have a project locally and you want to get it on GitHub. To do this, you’ll need to first use the use_git() function from usethis, as we did above. Then, you can use the use_github() function, which will create a GitHub repo and connect it to your current RStudio project.
+library(usethis)
+usethis::use_github()
+
+# Pushing means sending any changes in your code from RStudio to GitHub. To do this, we first have to commit. After committing, we now have a push button (the up arrow) on RStudio that we can use to send our code to GitHub.
+
