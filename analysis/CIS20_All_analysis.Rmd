@@ -281,12 +281,6 @@ pander(head(aux_tbl))
 
 
 
-# Caracteristicas de los votantes de los votantes de `Elkarrekin Podemos` en las elecciones autonómicas del País Vasco de 2020
-```{r}
-# levels(cis_2020_df$RVAUTO20)
-rows_RVAUTO20_ElkPod <- which(cis_2020_df$RVAUTO20 == 'Elkarrekin Podemos')
-
-```
 
 
 
