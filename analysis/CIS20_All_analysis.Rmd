@@ -1,5 +1,6 @@
 ---
-title: "Análisis datos voto Berdeak EQUO 2023"
+title: "CIS 2020"
+subtitle: "Análisis de datos de todos los partidos"
 author: "ImJaviPerez"
 date: "Diciembre 2022"
 output:
@@ -16,9 +17,9 @@ header-includes:
 - \usepackage{framed}
 - \usepackage{fancyhdr}
 - \pagestyle{fancy}
-- \fancyhead[RO,RE]{AnálisiS EQUO 2023}
+- \fancyhead[RO,RE]{AnálisiS total}
 - \fancyfoot{}
-- \fancyfoot[RE,LO]{Votos 2023}
+- \fancyfoot[RE,LO]{Votos 2020}
 - \fancyfoot[LE,RO]{\thepage}
 bibliography: BibliografiaME.bib
 ---

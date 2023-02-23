@@ -17,9 +17,9 @@ header-includes:
 - \usepackage{framed}
 - \usepackage{fancyhdr}
 - \pagestyle{fancy}
-- \fancyhead[RO,RE]{AnálisiS EQUO 2023}
+- \fancyhead[RO,RE]{Cocinado total}
 - \fancyfoot{}
-- \fancyfoot[RE,LO]{Votos 2023}
+- \fancyfoot[RE,LO]{Votos 2020}
 - \fancyfoot[LE,RO]{\thepage}
 bibliography: BibliografiaME.bib
 ---
