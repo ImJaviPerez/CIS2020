@@ -117,6 +117,7 @@ cat("\\frac{1}{", Q, "} = ",round(1/Q, digits = 4), ".", sep = "")
 # summary(cis_2020_ca_00)
 ```
 
+## Datos objetivos y datos de opinión
 Debemos tener en cuenta que hay una serie de variables que son datos objetivos de la persona como por ejemplo su provincia de empadronamiento. A estas características las llamaremos variables *ilustrativas*, que son:
 
 ```{r echo=FALSE, results='asis'}
