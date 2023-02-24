@@ -135,31 +135,36 @@ cat(paste0("`", levels(cis_2020_df$P5), "`", collapse = ", "), ".", sep = "")
 ```
 
 ## Selección de encuestas realtivas a *EQUO Berdeak*
-Nos interesa conocer las características del grupo de votantes afín a *EQUO Berdeak*. Para ello, siguiendo el criterio de JRB, se entresacan las entrevistas de las personas que dijeron votar a `Elkarrekin Podemos` o que votaron a `Otro partido` en las siguentes ocasiones:
+Nos interesa conocer las características del grupo de votantes afín a *EQUO Berdeak*. Para ello, siguiendo el criterio de JRB, se entresacan las entrevistas de las personas que dijeron votar a `Elkarrekin Podemos` o que votaron a `Otro partido` en las siguientes ocasiones:
 
- + elecciones autonómicas del 2020: preguntas: `P20` y `P20R` = `RVAUTO20`.
- + elecciones generales de noviembre de 2019: preguntas` P30a` = `RECUVOTOG` y `P30aa` `RECUERDO`.
- + elecciones autonómicas de 2016: preguntas `P25a` = `RECUVOTOA` y `P25aa` = `RVAUTO16`.
+ + elecciones autonómicas del 2020: preguntas: `P20` y `P20R` = `RVAUTO20`: `Elkarrekin Podemos`.
+ + elecciones generales de noviembre de 2019: preguntas` P30a` = `RECUVOTOG` y `P30aa` `RECUERDO`: `Otros partidos`.
+ + elecciones autonómicas de 2016: preguntas `P25a` = `RECUVOTOA` y `P25aa` = `RVAUTO16`: `Otros partidos`
 
 ```{r}
 rows_ElkBer <- c()
 # Autonomicas 2020
 # levels(cis_2020_df$P20)
-rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$P20 == 'Elkarrekin Podemos' | cis_2020_df$P20 == 'Otro partido'))
+# rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$P20 == 'Elkarrekin Podemos' | cis_2020_df$P20 == 'Otro partido'))
+rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$P20 == 'Elkarrekin Podemos'))
 # levels(cis_2020_df$RVAUTO20)
-rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RVAUTO20 == 'Elkarrekin Podemos' | cis_2020_df$RVAUTO20 == 'Otro partido'))
+# rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RVAUTO20 == 'Elkarrekin Podemos' | cis_2020_df$RVAUTO20 == 'Otro partido'))
+rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RVAUTO20 == 'Elkarrekin Podemos'))
 #
 # Generales 2019
 # levels(cis_2020_df$RECUERDO)
-rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RECUERDO == 'Elkarrekin Podemos' | cis_2020_df$RECUERDO == 'Otros partidos'))
+# rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RECUERDO == 'Elkarrekin Podemos' | cis_2020_df$RECUERDO == 'Otros partidos'))
+rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RECUERDO == 'Otros partidos'))
 # levels(cis_2020_df$RECUVOTOG)
-rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RECUVOTOG == 'Elkarrekin Podemos' | cis_2020_df$RECUVOTOG == 'Otros partidos'))
+rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RECUVOTOG == 'Otros partidos'))
 #
 # Autonomicas 2016
 # levels(cis_2020_df$RECUVOTOA)
-rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RECUVOTOA == 'Elkarrekin Podemos' | cis_2020_df$RECUVOTOA == 'Otros partidos'))
+# rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RECUVOTOA == 'Elkarrekin Podemos' | cis_2020_df$RECUVOTOA == 'Otros partidos'))
+rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RECUVOTOA == 'Otros partidos'))
 # levels(cis_2020_df$RVAUTO16)
-rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RVAUTO16 == 'Elkarrekin Podemos' | cis_2020_df$RVAUTO16 == 'Otros partidos'))
+# rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RVAUTO16 == 'Elkarrekin Podemos' | cis_2020_df$RVAUTO16 == 'Otros partidos'))
+rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RVAUTO16 == 'Otros partidos'))
 
 rows_ElkBer <- unique(rows_ElkBer)
 ```
