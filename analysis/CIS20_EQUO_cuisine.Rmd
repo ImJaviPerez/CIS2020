@@ -356,9 +356,12 @@ cat(paste0("`", levels(cis_2020_EB_df$TAMUNI)[aux_idx], "`", collapse = ", "), s
 No existen personas encuestadas con municipios de más de $400000$ habitantes. Sencillamente se eliminan esas modalidades porque no tienen sentido.
 
 Se reagrupan ambas en una sola.
+
+NA
+
 ```{r}
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$TAMUNI)[aux_idx], collapse = "', '"), "') = '", levels(cis_2020_EB_df$TAMUNI)[min(aux_idx)-1] ,"'")
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$TAMUNI)[aux_idx], collapse = "', '"), "') = NA")
 cis_2020_EB_df$TAMUNI_GRUPO <- car::recode(var = cis_2020_EB_df$TAMUNI,
                                         recodes = recodes_str,
                                         levels = c(levels(cis_2020_EB_df$TAMUNI)[-aux_idx]))
