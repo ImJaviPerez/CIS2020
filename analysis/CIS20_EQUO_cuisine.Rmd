@@ -135,43 +135,54 @@ cat(paste0("`", levels(cis_2020_df$P5), "`", collapse = ", "), ".", sep = "")
 ```
 
 ## Selección de encuestas realtivas a *EQUO Berdeak*
-Nos interesa conocer las características del grupo de votantes afín a *EQUO Berdeak*. Para ello, siguiendo el criterio de JRB, se entresacan las entrevistas que dijeron votar a `Elkarrekin Podemos` o que votaron a `Otro partido`.
+Nos interesa conocer las características del grupo de votantes afín a *EQUO Berdeak*. Para ello, siguiendo el criterio de JRB, se entresacan las entrevistas de las personas que dijeron votar a `Elkarrekin Podemos` o que votaron a `Otro partido` en las siguentes ocasiones:
 
+ + elecciones autonómicas del 2020: preguntas: `P20` y `P20R` = `RVAUTO20`.
+ + elecciones generales de noviembre de 2019: preguntas` P30a` = `RECUVOTOG` y `P30aa` `RECUERDO`.
+ + elecciones autonómicas de 2016: preguntas `P25a` = `RECUVOTOA` y `P25aa` = `RVAUTO16`.
 
 ```{r}
+rows_ElkBer <- c()
 # Autonomicas 2020
+# levels(cis_2020_df$P20)
+rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$P20 == 'Elkarrekin Podemos' | cis_2020_df$P20 == 'Otro partido'))
 # levels(cis_2020_df$RVAUTO20)
-rows_RVAUTO20_ElkBer <- which(cis_2020_df$RVAUTO20 == 'Elkarrekin Podemos' | cis_2020_df$RVAUTO20 == 'Otro partido')
+rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RVAUTO20 == 'Elkarrekin Podemos' | cis_2020_df$RVAUTO20 == 'Otro partido'))
+#
+# Generales 2019
+# levels(cis_2020_df$RECUERDO)
+rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RECUERDO == 'Elkarrekin Podemos' | cis_2020_df$RECUERDO == 'Otros partidos'))
+# levels(cis_2020_df$RECUVOTOG)
+rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RECUVOTOG == 'Elkarrekin Podemos' | cis_2020_df$RECUVOTOG == 'Otros partidos'))
+#
+# Autonomicas 2016
+# levels(cis_2020_df$RECUVOTOA)
+rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RECUVOTOA == 'Elkarrekin Podemos' | cis_2020_df$RECUVOTOA == 'Otros partidos'))
+# levels(cis_2020_df$RVAUTO16)
+rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RVAUTO16 == 'Elkarrekin Podemos' | cis_2020_df$RVAUTO16 == 'Otros partidos'))
 
-# 2019
-# levels(cis_2020_df$RVAUTO20)
-rows_RVAUTO20_ElkBer <- which(cis_2020_df$RVAUTO20 == 'Elkarrekin Podemos' | cis_2020_df$RVAUTO20 == 'Otro partido')
-
-# 2016
+rows_ElkBer <- unique(rows_ElkBer)
 ```
 
-ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
-ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
-
-TODO HACER UN SUBSET CON LOS DATOS PARA EL COCINADO
-
-ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
-ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
+```{r}
+# Data subset
+cis_2020_EB_df <- cis_2020_df[rows_ElkBer,]
+```
 
 
 ### Datos numéricos y datos cualitativos
 ```{r}
 # Indices of numeric variables
-numeric_cols_idx <- which(sapply(cis_2020_df, is.numeric))
+numeric_cols_idx <- which(sapply(cis_2020_EB_df, is.numeric))
 # Names of numeric variables
-numeric_cols_names <- colnames(cis_2020_df[,numeric_cols_idx])
+numeric_cols_names <- colnames(cis_2020_EB_df[,numeric_cols_idx])
 n_numeric <- length(numeric_cols_idx)
 
 # Indices of factor variables
-factor_cols_idx <- which(sapply(cis_2020_df, is.factor))
+factor_cols_idx <- which(sapply(cis_2020_EB_df, is.factor))
 n_factor <- length(factor_cols_idx)
 
-n_other <- length(cis_2020_df) - n_numeric - n_factor
+n_other <- length(cis_2020_EB_df) - n_numeric - n_factor
 ```
 
 
@@ -180,18 +191,18 @@ n_numeric <- 0
 n_factor <- 0
 n_other <- 0
 numeric_cols_idx <- c()
-for (i in 1:ncol(cis_2020_df)) {
-  if (class(cis_2020_df[,i]) == "numeric"){
+for (i in 1:ncol(cis_2020_EB_df)) {
+  if (class(cis_2020_EB_df[,i]) == "numeric"){
     n_numeric <- n_numeric + 1
     numeric_cols_idx <- c(numeric_cols_idx, i)
-  }else if (class(cis_2020_df[,i]) == "factor"){
+  }else if (class(cis_2020_EB_df[,i]) == "factor"){
     n_factor <- n_factor + 1
   }else{
     n_other <- n_other + 1
   }
 }
 # numeric_cols_idx
-numeric_cols_names <- colnames(cis_2020_df[,numeric_cols_idx])
+numeric_cols_names <- colnames(cis_2020_EB_df[,numeric_cols_idx])
 ```
 
 Tenemos
@@ -217,10 +228,10 @@ Así mismo, también se excluyen las variables que no cambian de valor a lo larg
 # If you have a character vector of variable names, and want to operate on them with a for loop, index into the special .data pronoun:
 #
 aux_idx <- c()
-for (i in colnames(cis_2020_df)[!(colnames(cis_2020_df) %in% excluded_cols)] ) {
+for (i in colnames(cis_2020_EB_df)[!(colnames(cis_2020_EB_df) %in% excluded_cols)] ) {
   # En esta variable todas las encuestas tienen el mismo resultado => se excluye es variable
-  aux_tbl <- cis_2020_df %>% dplyr::count(.data[[i]], .drop = FALSE)
-  if (max(aux_tbl$n) == nrow(cis_2020_df)) aux_idx <- c(aux_idx, i)
+  aux_tbl <- cis_2020_EB_df %>% dplyr::count(.data[[i]], .drop = FALSE)
+  if (max(aux_tbl$n) == nrow(cis_2020_EB_df)) aux_idx <- c(aux_idx, i)
 }
 excluded_cols <- c(excluded_cols, aux_idx)
 ```
@@ -235,10 +246,10 @@ Además también se excluyen las variables, como el "número de cuestionario", q
 # If you have a character vector of variable names, and want to operate on them with a for loop, index into the special .data pronoun:
 #
 aux_idx <- c()
-for (i in colnames(cis_2020_df)[!(colnames(cis_2020_df) %in% excluded_cols)] ) {
+for (i in colnames(cis_2020_EB_df)[!(colnames(cis_2020_EB_df) %in% excluded_cols)] ) {
   # En esta variable todas las encuestas tienen un resultado diferente => se excluye es variable
-  aux_tbl <- cis_2020_df %>% dplyr::count(.data[[i]], .drop = FALSE)
-  if (nrow(aux_tbl) == nrow(cis_2020_df)) aux_idx <- c(aux_idx, i)
+  aux_tbl <- cis_2020_EB_df %>% dplyr::count(.data[[i]], .drop = FALSE)
+  if (nrow(aux_tbl) == nrow(cis_2020_EB_df)) aux_idx <- c(aux_idx, i)
 }
 excluded_cols <- c(excluded_cols, aux_idx)
 ```
@@ -261,7 +272,7 @@ cat(length(excluded_cols))
 ```
 preguntas de un total de 
 ```{r echo=FALSE, results='asis'}
-cat(length(cis_2020_df))
+cat(length(cis_2020_EB_df))
 ```
 .
 
@@ -285,9 +296,9 @@ Antes de aplicar el ACM, realizamos un análisis descriptivo, para detectar la e
 El criterio para definir “*efectivo pequeño*” es que el número  de efectivos de una modalidad sea menor que: 
 ```{r echo=FALSE, results='asis'}
 efectivo_min_percent <- 0.02
-efectivo_min_abs <- efectivo_min_percent * nrow(cis_2020_df)
+efectivo_min_abs <- efectivo_min_percent * nrow(cis_2020_EB_df)
 
-cat(efectivo_min_percent, "$\\cdot$", "n =", efectivo_min_percent, "$\\cdot$", nrow(cis_2020_df), "=", efectivo_min_abs)
+cat(efectivo_min_percent, "$\\cdot$", "n =", efectivo_min_percent, "$\\cdot$", nrow(cis_2020_EB_df), "=", efectivo_min_abs)
 ```
 
 ```{r efect_peq_dplyr}
@@ -297,8 +308,8 @@ colnames(efectivo_peq_df) <- c("variable", "modalidad", "freq")
 
 require(dplyr)
 
-for (i in colnames(cis_2020_df)[!(colnames(cis_2020_df) %in% excluded_cols)]) {
-  aux_tbl <- cis_2020_df %>% dplyr::count(.data[[i]], .drop = FALSE)
+for (i in colnames(cis_2020_EB_df)[!(colnames(cis_2020_EB_df) %in% excluded_cols)]) {
+  aux_tbl <- cis_2020_EB_df %>% dplyr::count(.data[[i]], .drop = FALSE)
   aux_idx <- which(aux_tbl$n < efectivo_min_abs)
   
   for (j in aux_idx) {
@@ -319,11 +330,11 @@ cat(paste0("`", unique(efectivo_peq_df$variable), "`", collapse = ", "), sep = "
 
 Es necesario *"cocinar"* estas variables una a una.
 
-```{r echo=FALSE, results='asis'}
-# cat(sprintf("### Variable `%s`: *%s*\n", 
-#        unique(efectivo_peq_df$variable),
-#        attributes(cis_2020_df)$variable.labels[unique(efectivo_peq_df$variable)]),
-#    sep = "")
+```{r echo=FALSE, results='asis', eval=FALSE}
+cat(sprintf("### Variable `%s`: *%s*\n",
+            unique(efectivo_peq_df$variable),
+            attributes(cis_2020_EB_df)$variable.labels[unique(efectivo_peq_df$variable)]),
+    sep = "")
 ```
 
 ### Variable `TAMUNI`: *Tamaño de municipio*
@@ -331,7 +342,7 @@ Es necesario *"cocinar"* estas variables una a una.
 ```{r}
 require(dplyr)
 require(pander)
-pander(cis_2020_df %>% dplyr::count(TAMUNI, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(TAMUNI, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
@@ -339,7 +350,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'TAMUNI'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$TAMUNI)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$TAMUNI)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 No existen personas encuestadas con municipios de más de $400000$ habitantes. Sencillamente se eliminan esas modalidades porque no tienen sentido.
@@ -347,11 +358,11 @@ No existen personas encuestadas con municipios de más de $400000$ habitantes. S
 Se reagrupan ambas en una sola.
 ```{r}
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_df$TAMUNI)[aux_idx], collapse = "', '"), "') = '", levels(cis_2020_df$TAMUNI)[min(aux_idx)-1] ,"'")
-cis_2020_df$TAMUNI_GRUPO <- car::recode(var = cis_2020_df$TAMUNI,
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$TAMUNI)[aux_idx], collapse = "', '"), "') = '", levels(cis_2020_EB_df$TAMUNI)[min(aux_idx)-1] ,"'")
+cis_2020_EB_df$TAMUNI_GRUPO <- car::recode(var = cis_2020_EB_df$TAMUNI,
                                         recodes = recodes_str,
-                                        levels = c(levels(cis_2020_df$TAMUNI)[-aux_idx]))
-pander(cis_2020_df %>% dplyr::count(TAMUNI_GRUPO), .drop=FALSE)
+                                        levels = c(levels(cis_2020_EB_df$TAMUNI)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(TAMUNI_GRUPO), .drop=FALSE)
 ```
 Se excluye la variable `TAMUNI` y se deja la nueva agrupación `TAMUNI_GRUPO`.
 ```{r}
@@ -368,7 +379,7 @@ cat("(", efectivo_min_abs, ").", sep = "")
 
 ```{r}
 require(pander)
-pander(head(cis_2020_df %>% dplyr::count(EDAD)))
+pander(head(cis_2020_EB_df %>% dplyr::count(EDAD)))
 ```
 
 ```{r}
@@ -383,35 +394,35 @@ cat(edad_interval_len)
  años:
 ```{r}
 # copy variable in new column
-cis_2020_df$EDAD_GRUPO <- cis_2020_df$EDAD
+cis_2020_EB_df$EDAD_GRUPO <- cis_2020_EB_df$EDAD
 # Group data
 
 require(car)
 # Create recodes string not including last level = "N.C."
-age_ini_idx <- seq(from=1, to=length(levels(cis_2020_df$EDAD))-1, by=edad_interval_len)
-age_end_idx <- seq(from=edad_interval_len, to=length(levels(cis_2020_df$EDAD))-1, by=edad_interval_len)
+age_ini_idx <- seq(from=1, to=length(levels(cis_2020_EB_df$EDAD))-1, by=edad_interval_len)
+age_end_idx <- seq(from=edad_interval_len, to=length(levels(cis_2020_EB_df$EDAD))-1, by=edad_interval_len)
 # include higher ages at the end
 if (length(age_ini_idx) > length(age_end_idx)) {
-  age_end_idx <- c(age_end_idx, length(levels(cis_2020_df$EDAD))-1)
+  age_end_idx <- c(age_end_idx, length(levels(cis_2020_EB_df$EDAD))-1)
 }
-str_aux_1 <- levels(cis_2020_df$EDAD)[age_ini_idx]
-str_aux_2 <- levels(cis_2020_df$EDAD)[age_end_idx]
+str_aux_1 <- levels(cis_2020_EB_df$EDAD)[age_ini_idx]
+str_aux_2 <- levels(cis_2020_EB_df$EDAD)[age_end_idx]
 # Create recodes parameter
 recodes_str <- paste0(str_aux_1, ":", str_aux_2, "='", str_aux_1, "-", str_aux_2, "';", collapse = "")
 # Recode EDAD in groups of length equal to edad_interval_len
-cis_2020_df$EDAD_GRUPO <- car::recode(var = cis_2020_df$EDAD, recodes = recodes_str)
+cis_2020_EB_df$EDAD_GRUPO <- car::recode(var = cis_2020_EB_df$EDAD, recodes = recodes_str)
 # Check results
 require(pander)
-pander(cis_2020_df %>% dplyr::count(EDAD_GRUPO, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(EDAD_GRUPO, .drop=FALSE))
 ```
 Se observa que las últimas modalidades no llegan al efectivo mínimo requerido, con lo que se reagrupan en una sola:
 ```{r}
 # Re-recode from 86 until the end
-cis_2020_df$EDAD_GRUPO <- car::recode(var = cis_2020_df$EDAD_GRUPO, recodes = "'86-89':'94-98' = '86-98'")
+cis_2020_EB_df$EDAD_GRUPO <- car::recode(var = cis_2020_EB_df$EDAD_GRUPO, recodes = "'86-89':'94-98' = '86-98'")
 
 # Check results
 require(pander)
-pander(cis_2020_df %>% dplyr::count(EDAD_GRUPO, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(EDAD_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `EDAD` y se deja la nueva agrupación `EDAD_GRUPO`.
@@ -435,7 +446,7 @@ cat(efectivo_peq_df[which(efectivo_peq_df$variable == "A0a" & efectivo_peq_df$mo
  respuestas para la modalidad 
 ```{r echo=FALSE, results='asis'}
 # Write factors
-cat(paste0("`", levels(cis_2020_df$A0a)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$A0a)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 . No se puede re-codificar para agrupar con la otra modalidad.
 
@@ -443,7 +454,7 @@ cat(paste0("`", levels(cis_2020_df$A0a)[aux_idx], "`", collapse = ", "), sep = "
 
 ```{r}
 require(dplyr)
-pander(cis_2020_df %>% dplyr::count(P1, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P1, .drop=FALSE))
 ```
 
 
@@ -452,21 +463,21 @@ Esta pregunta tiene efectivos pequeños en las modalidades
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P1'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P1)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupa junto con la modalidad 
 ```{r echo=FALSE, results='asis'}
-cat("`", levels(cis_2020_df$P1)[3], "`", sep = "")
+cat("`", levels(cis_2020_EB_df$P1)[3], "`", sep = "")
 ```
  en una sola.
 ```{r}
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_df$P1)[c(aux_idx, 3)], collapse = "', '"), "') = levels(cis_2020_df$P1)[3]")
-cis_2020_df$P1_GRUPO <- car::recode(var = cis_2020_df$P1, 
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P1)[c(aux_idx, 3)], collapse = "', '"), "') = levels(cis_2020_EB_df$P1)[3]")
+cis_2020_EB_df$P1_GRUPO <- car::recode(var = cis_2020_EB_df$P1, 
                                     recodes = recodes_str, 
-                                    levels = c(levels(cis_2020_df$P1)[-aux_idx], 'NS_NC'))
-pander(cis_2020_df %>% dplyr::count(P1_GRUPO), .drop=FALSE)
+                                    levels = c(levels(cis_2020_EB_df$P1)[-aux_idx], 'NS_NC'))
+pander(cis_2020_EB_df %>% dplyr::count(P1_GRUPO), .drop=FALSE)
 ```
 Se excluye la variable `P1` y se deja la nueva agrupación `P1_GRUPO`.
 ```{r}
@@ -479,7 +490,7 @@ La mayoría de los encuestados han nacido en Euskadi. La siguiente tabla muestra
 
 ```{r}
 require(dplyr)
-pander(cis_2020_df %>% dplyr::count(P1A, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P1A, .drop=FALSE))
 ```
 
 Table: Comunidades autónomas de nacimiento de los encuestados (`NA` corresponde a `País Vasco`).
@@ -499,13 +510,13 @@ Se hacen las siguientes agrupaciones:
 
 No hay nadie de *Melilla (Ciudad Autónoma de)* en esta encuesta.
 ```{r}
-# levels(cis_2020_df$P1A)
-cis_2020_df$P1A_GRUPO <- car::recode(var = cis_2020_df$P1A, recodes = "c('Cataluña', 'Comunitat Valenciana', 'Canarias', 'Balears (Illes)') = 'Cat_Val_Isl'; c('Galicia', 'Asturias (Principado de)', 'Cantabria') = 'Gal_Ast_Can'; c('Aragón', 'Navarra (Comunidad Foral de)') = 'Nav_Arag'; c('Madrid (Comunidad de)', 'Castilla-La Mancha', 'Rioja (La)') = 'Mad_Man_Rio'; c('Andalucía',  'Murcia (Región de)', 'Ceuta (Ciudad Autónoma de)', 'Melilla (Ciudad Autónoma de)') = 'And_Mur_Ceu'")
+# levels(cis_2020_EB_df$P1A)
+cis_2020_EB_df$P1A_GRUPO <- car::recode(var = cis_2020_EB_df$P1A, recodes = "c('Cataluña', 'Comunitat Valenciana', 'Canarias', 'Balears (Illes)') = 'Cat_Val_Isl'; c('Galicia', 'Asturias (Principado de)', 'Cantabria') = 'Gal_Ast_Can'; c('Aragón', 'Navarra (Comunidad Foral de)') = 'Nav_Arag'; c('Madrid (Comunidad de)', 'Castilla-La Mancha', 'Rioja (La)') = 'Mad_Man_Rio'; c('Andalucía',  'Murcia (Región de)', 'Ceuta (Ciudad Autónoma de)', 'Melilla (Ciudad Autónoma de)') = 'And_Mur_Ceu'")
 ```
 
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P1A_GRUPO, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P1A_GRUPO, .drop=FALSE))
 ```
 
 Table: Votantes de diferentes comunidades agrupados. La agrupación es subjetiva: las comunidades de cada grupo deben ser *similares* entre sí y además deberían contener al menos 
@@ -523,7 +534,7 @@ excluded_cols <- c(excluded_cols, "P1A")
 
 Disponemos de 
 ```{r echo=FALSE, results='asis'}
-cat(length(cis_2020_df$P1B[!is.na(cis_2020_df$P1B)]))
+cat(length(cis_2020_EB_df$P1B[!is.na(cis_2020_EB_df$P1B)]))
 ```
  encuestas con votantes nacidos en otros países.
 
@@ -532,11 +543,11 @@ Se eliminan las modalidades nulas.
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P1B' & efectivo_peq_df$freq == 0), "modalidad"])
 
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_df$P1B)[aux_idx], collapse = "', '"), "') = 'Otra'")
-cis_2020_df$P1B_GRUPO <- car::recode(var = cis_2020_df$P1B, 
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P1B)[aux_idx], collapse = "', '"), "') = 'Otra'")
+cis_2020_EB_df$P1B_GRUPO <- car::recode(var = cis_2020_EB_df$P1B, 
                                     recodes = recodes_str, 
-                                    levels = c(levels(cis_2020_df$P1B)[-aux_idx]))
-pander(cis_2020_df %>% dplyr::count(P1B_GRUPO), .drop=FALSE)
+                                    levels = c(levels(cis_2020_EB_df$P1B)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(P1B_GRUPO), .drop=FALSE)
 ```
 
 
@@ -544,17 +555,17 @@ Se recodifican en dos grupos: `Europa` y `No Europa`:
 
 
 ```{r}
-# cat(paste0("'", levels(cis_2020_df$P1B_GRUPO), "'", collapse = ", "), sep = "")
+# cat(paste0("'", levels(cis_2020_EB_df$P1B_GRUPO), "'", collapse = ", "), sep = "")
 
 # Create recodes parameter
 recodes_str <- "c('Francia', 'Países Bajos', 'Portugal', 'Andorra', 'Alemania', 'Suiza', 'Eslovenia', 'Rusia', 'Otros territorios de Europa') = 'Europa';
 c('Angola', 'Argelia', 'Guinea Bissau', 'Marruecos', 'Nigeria', 'Estados Unidos de América', 'México', 'Cuba', 'El Salvador', 'Nicaragua', 'República Dominicana', 'Argentina', 'Bolivia', 'Brasil', 'Colombia', 'Chile', 'Ecuador', 'Paraguay', 'Uruguay', 'Venezuela', 'Otros territorios de América', 'N.S./N.C.') = 'No Europa'"
 
 # Recode
-cis_2020_df$P1B_GRUPO <- car::recode(var = cis_2020_df$P1B_GRUPO, 
+cis_2020_EB_df$P1B_GRUPO <- car::recode(var = cis_2020_EB_df$P1B_GRUPO, 
                                     recodes = recodes_str,
                                     levels = c('Europa', 'No Europa'))
-pander(cis_2020_df %>% dplyr::count(P1B_GRUPO, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P1B_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `P1B` y se deja la nueva agrupación `P1B_GRUPO`.
@@ -569,14 +580,14 @@ excluded_cols <- c(excluded_cols, "P1B")
 
 ```{r}
 require(dplyr)
-pander(cis_2020_df %>% dplyr::count(P2, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P2, .drop=FALSE))
 ```
 Esta pregunta tiene efectivos pequeños en las modalidades 
 ```{r echo=FALSE, results='asis'}
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P2'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P2)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se eliminan las dos modalidades nulas.
@@ -584,11 +595,11 @@ Se eliminan las dos modalidades nulas.
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P2' & efectivo_peq_df$freq == 0), "modalidad"])
 
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_df$P2)[aux_idx], collapse = "', '"), "') = 'Otra'")
-cis_2020_df$P2_GRUPO <- car::recode(var = cis_2020_df$P2, 
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P2)[aux_idx], collapse = "', '"), "') = 'Otra'")
+cis_2020_EB_df$P2_GRUPO <- car::recode(var = cis_2020_EB_df$P2, 
                                     recodes = recodes_str, 
-                                    levels = c(levels(cis_2020_df$P2)[-aux_idx]))
-pander(cis_2020_df %>% dplyr::count(P2_GRUPO), .drop=FALSE)
+                                    levels = c(levels(cis_2020_EB_df$P2)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(P2_GRUPO), .drop=FALSE)
 ```
 
 No se reagrupa más.
@@ -602,7 +613,7 @@ excluded_cols <- c(excluded_cols, "P2")
 
 En estas preguntas se ha elegido la modalidad 
 ```{r echo=FALSE, results='asis'}
-cat("`", levels(cis_2020_df$P3_1)[3], "`", sep = "")
+cat("`", levels(cis_2020_EB_df$P3_1)[3], "`", sep = "")
 ```
 en un máximo de
 ```{r echo=FALSE, results='asis'}
@@ -613,9 +624,9 @@ cat(max(efectivo_peq_df[efectivo_peq_df$variable %in% c('P3_1', 'P3_2', 'P3_3', 
 ### Variable `P4`: *Valoración de la situación general de la comunidad autónoma*
 
 ```{r}
-pander(cis_2020_df %>% dplyr::count(P4, .drop=FALSE))
-# pander(table(cis_2020_df$P4))
-# pander(as.data.frame(table(cis_2020_df$P4), col.names = c('P4', 'freq')))
+pander(cis_2020_EB_df %>% dplyr::count(P4, .drop=FALSE))
+# pander(table(cis_2020_EB_df$P4))
+# pander(as.data.frame(table(cis_2020_EB_df$P4), col.names = c('P4', 'freq')))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
@@ -623,17 +634,17 @@ Esta pregunta tiene efectivos pequeños en las modalidades
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P4'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P4)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P4)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan ambas en una sola.
 ```{r}
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_df$P4)[aux_idx], collapse = "', '"), "') = 'NS_NC'")
-cis_2020_df$P4_GRUPO <- car::recode(var = cis_2020_df$P4, 
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P4)[aux_idx], collapse = "', '"), "') = 'NS_NC'")
+cis_2020_EB_df$P4_GRUPO <- car::recode(var = cis_2020_EB_df$P4, 
                                     recodes = recodes_str, 
-                                    levels = c(levels(cis_2020_df$P4)[-aux_idx], 'NS_NC'))
-pander(cis_2020_df %>% dplyr::count(P4_GRUPO), .drop=FALSE)
+                                    levels = c(levels(cis_2020_EB_df$P4)[-aux_idx], 'NS_NC'))
+pander(cis_2020_EB_df %>% dplyr::count(P4_GRUPO), .drop=FALSE)
 ```
 Se excluye la variable `P4` y se deja la nueva agrupación `P4_GRUPO`.
 ```{r}
@@ -642,7 +653,7 @@ excluded_cols <- c(excluded_cols, "P4")
 
 ### Variable `P5A`: *Autodefinición de su ideología política (2ª opción)*
 ```{r}
-pander(cis_2020_df %>% dplyr::count(P5A, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P5A, .drop=FALSE))
 ```
 
 Se hacen varias reagrupaciones[^P5AJRB],
@@ -650,16 +661,16 @@ Se hacen varias reagrupaciones[^P5AJRB],
 [^P5AJRB]: Se siguen los criterios de JRB para la pregunta `P5A`.
 
 ```{r}
-# levels(cis_2020_df$P5A)
+# levels(cis_2020_EB_df$P5A)
 # Create recodes parameter
 recodes_str <- "c('Conservador/a', 'Demócrata cristiano/a', 'Liberal') = 'Centro derecha'; c('Progresista', 'Socialdemócrata') = 'Socialdemocracia'; c('Socialista', 'Comunista', 'Otras respuestas ') = 'Izquierda';  c('(NO LEER) Apolítico/a ', 'N.S.') = 'No alineado/a'"
 # select old levels indices
-aux_idx <- which(levels(cis_2020_df$P5A) %in% c('PP', 'Ciudadanos'))
+aux_idx <- which(levels(cis_2020_EB_df$P5A) %in% c('PP', 'Ciudadanos'))
 # Recode
-cis_2020_df$P5A_GRUPO <- car::recode(var = cis_2020_df$P5A, 
+cis_2020_EB_df$P5A_GRUPO <- car::recode(var = cis_2020_EB_df$P5A, 
                                     recodes = recodes_str,
                                     levels = c('Centro derecha', 'Socialdemocracia', 'Izquierda', 'Nacionalista', 'Feminista', 'Ecologista', 'No alineado/a', 'N.C.'))
-pander(cis_2020_df %>% dplyr::count(P5A_GRUPO, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P5A_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `P5A` y se deja la nueva agrupación `P5A_GRUPO`.
@@ -671,14 +682,14 @@ excluded_cols <- c(excluded_cols, "P5A")
 ### Variable `P6`: *Grado de interés por la política*
 
 ```{r}
-pander(cis_2020_df %>% dplyr::count(P6, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P6, .drop=FALSE))
 ```
 En este caso no se reagrupan modalidad.
 
 ### Variable `P7`: *Grado de interés por la campaña electoral*
 
 ```{r}
-pander(cis_2020_df %>% dplyr::count(P7, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P7, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
@@ -686,17 +697,17 @@ Esta pregunta tiene efectivos pequeños en las modalidades
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P7'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P7)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P7)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan ambas en una sola.
 ```{r}
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_df$P7)[aux_idx], collapse = "', '"), "') = 'NS_NC'")
-cis_2020_df$P7_GRUPO <- car::recode(var = cis_2020_df$P7, 
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P7)[aux_idx], collapse = "', '"), "') = 'NS_NC'")
+cis_2020_EB_df$P7_GRUPO <- car::recode(var = cis_2020_EB_df$P7, 
                                     recodes = recodes_str, 
-                                    levels = c(levels(cis_2020_df$P7)[1:4], 'NS_NC'))
-pander(cis_2020_df %>% dplyr::count(P7_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$P7)[1:4], 'NS_NC'))
+pander(cis_2020_EB_df %>% dplyr::count(P7_GRUPO, .drop=FALSE))
 ```
 Se excluye la variable `P7` y se deja la nueva agrupación `P7_GRUPO`.
 ```{r}
@@ -710,7 +721,7 @@ Estas preguntas tienen efectivos pequeños en la modalidad
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P8_1'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P8_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P8_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 En este caso no se reagrupa ninguna de ellas.
@@ -718,7 +729,7 @@ En este caso no se reagrupa ninguna de ellas.
 ### Variable `P9`: *Tema más más debatido en la campaña electoral*
 
 ```{r}
-pander(cis_2020_df %>% dplyr::count(P9, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P9, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
@@ -726,9 +737,9 @@ Esta pregunta tiene efectivos pequeños en las modalidades
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P9'),"modalidad"])
 # length(aux_idx)
-# length(levels(cis_2020_df$P9))
+# length(levels(cis_2020_EB_df$P9))
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P9)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P9)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 En primer lugar se eliminan las modalidades con cero efectivos.
 
@@ -736,17 +747,17 @@ En primer lugar se eliminan las modalidades con cero efectivos.
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P9' & efectivo_peq_df$freq == 0),"modalidad"])
 # # Write factors
-# cat(paste0("`", levels(cis_2020_df$P9)[aux_idx], "`", collapse = ", "), sep = "", ".")
+# cat(paste0("`", levels(cis_2020_EB_df$P9)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
 # Create recodes parameter
 recodes_str <- sprintf("c(%s) = NA",
-                       paste0("'", levels(cis_2020_df$P9)[aux_idx], "'", collapse = ", "))
+                       paste0("'", levels(cis_2020_EB_df$P9)[aux_idx], "'", collapse = ", "))
 
 # Recode
-cis_2020_df$P9_GRUPO <- car::recode(var = cis_2020_df$P9, 
+cis_2020_EB_df$P9_GRUPO <- car::recode(var = cis_2020_EB_df$P9, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$P9)[-aux_idx]))
-pander(cis_2020_df %>% dplyr::count(P9_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$P9)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(P9_GRUPO, .drop=FALSE))
 ```
 
 Se hacen varias reagrupaciones[^P9JRB],
@@ -754,7 +765,7 @@ Se hacen varias reagrupaciones[^P9JRB],
 [^P9JRB]: Se siguen los criterios de JRB para la pregunta `P9`.
 
 ```{r}
-# cat(levels(cis_2020_df$P9), sep = "',\n'")
+# cat(levels(cis_2020_EB_df$P9), sep = "',\n'")
 
 # Create recodes parameter
 recodes_str <- "c('El coronavirus y la gestión de la pandemia') = 'La pandemia'; 
@@ -767,9 +778,9 @@ c('Cataluña', 'Los nacionalismos', 'La inseguridad ciudadana', 'La inmigración
 c('N.C.', 'Ningún tema') = 'Sin temas prioritarios'"
 
 # Recode
-cis_2020_df$P9_GRUPO <- car::recode(var = cis_2020_df$P9, 
+cis_2020_EB_df$P9_GRUPO <- car::recode(var = cis_2020_EB_df$P9, 
                                     recodes = recodes_str)
-pander(cis_2020_df %>% dplyr::count(P9_GRUPO, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P9_GRUPO, .drop=FALSE))
 ```
 
 
@@ -782,7 +793,7 @@ excluded_cols <- c(excluded_cols, "P9")
 #### Variable `P9A`: *Partido político más cercano a la posición personal respecto al tema debatido*
 
 ```{r}
-pander(cis_2020_df %>% dplyr::count(P9A, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P9A, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
@@ -790,9 +801,9 @@ Esta pregunta tiene efectivos pequeños en las modalidades
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P9A'),"modalidad"])
 # length(aux_idx)
-# length(levels(cis_2020_df$P9A))
+# length(levels(cis_2020_EB_df$P9A))
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P9A)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P9A)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se hacen varias reagrupaciones[^P9AJRB],
@@ -802,12 +813,12 @@ Se hacen varias reagrupaciones[^P9AJRB],
 # Create recodes parameter
 recodes_str <- "c('PP', 'Ciudadanos', 'VOX') = 'Conservador'; c('Elkarrekin Podemos', 'Otro') = 'Elkarrekin Berdeak'"
 # select old levels indices
-aux_idx <- which(levels(cis_2020_df$P9A) %in% c('PP', 'Ciudadanos', 'Elkarrekin Podemos', 'Otro'))
+aux_idx <- which(levels(cis_2020_EB_df$P9A) %in% c('PP', 'Ciudadanos', 'Elkarrekin Podemos', 'Otro'))
 # Recode
-cis_2020_df$P9A_GRUPO <- car::recode(var = cis_2020_df$P9A, 
+cis_2020_EB_df$P9A_GRUPO <- car::recode(var = cis_2020_EB_df$P9A, 
                                     recodes = recodes_str,
-                                    levels = c('Conservador', levels(cis_2020_df$P9A)[-aux_idx], 'Elkarrekin Berdeak'))
-pander(cis_2020_df %>% dplyr::count(P9A_GRUPO, .drop=FALSE))
+                                    levels = c('Conservador', levels(cis_2020_EB_df$P9A)[-aux_idx], 'Elkarrekin Berdeak'))
+pander(cis_2020_EB_df %>% dplyr::count(P9A_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `P9A` y se deja la nueva agrupación `P9A_GRUPO`.
@@ -818,7 +829,7 @@ excluded_cols <- c(excluded_cols, "P9A")
 
 #### Variable `P9B`: *Grado de importancia del tema más debatido*
 ```{r}
-pander(cis_2020_df %>% dplyr::count(P9B, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P9B, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
@@ -826,7 +837,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P9B'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P9B)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P9B)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan las modalidades `N.S.` y `N.C.` en una sola.
@@ -834,12 +845,12 @@ Se reagrupan las modalidades `N.S.` y `N.C.` en una sola.
 # Create recodes parameter
 recodes_str <- "c('N.S.', 'N.C.') = 'NS_NC'"
 # select old levels indices
-aux_idx <- which(levels(cis_2020_df$P9B) %in% c('N.S.', 'N.C.'))
+aux_idx <- which(levels(cis_2020_EB_df$P9B) %in% c('N.S.', 'N.C.'))
 # Recode
-cis_2020_df$P9B_GRUPO <- car::recode(var = cis_2020_df$P9B, 
+cis_2020_EB_df$P9B_GRUPO <- car::recode(var = cis_2020_EB_df$P9B, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$P9B)[-aux_idx], 'NS_NC'))
-pander(cis_2020_df %>% dplyr::count(P9B_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$P9B)[-aux_idx], 'NS_NC'))
+pander(cis_2020_EB_df %>% dplyr::count(P9B_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `P9B` y se deja la nueva agrupación `P9B_GRUPO`.
@@ -852,7 +863,7 @@ excluded_cols <- c(excluded_cols, "P9B")
 
 #### Variable `P10_1`: *Primer lugar (Fuentes utilizadas para informarse sobre las elecciones)*
 ```{r}
-pander(cis_2020_df %>% dplyr::count(P10_1, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P10_1, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
@@ -860,7 +871,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P10_1'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P10_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P10_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan las modalidades `N.S.` y `N.C.` en una sola.
@@ -868,12 +879,12 @@ Se reagrupan las modalidades `N.S.` y `N.C.` en una sola.
 # Create recodes parameter
 recodes_str <- "c('N.S.', 'N.C.') = 'NS_NC'"
 # select old levels indices
-aux_idx <- which(levels(cis_2020_df$P10_1) %in% c('N.S.', 'N.C.'))
+aux_idx <- which(levels(cis_2020_EB_df$P10_1) %in% c('N.S.', 'N.C.'))
 # Recode
-cis_2020_df$P10_1_GRUPO <- car::recode(var = cis_2020_df$P10_1, 
+cis_2020_EB_df$P10_1_GRUPO <- car::recode(var = cis_2020_EB_df$P10_1, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$P10_1)[-aux_idx], 'NS_NC'))
-pander(cis_2020_df %>% dplyr::count(P10_1_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$P10_1)[-aux_idx], 'NS_NC'))
+pander(cis_2020_EB_df %>% dplyr::count(P10_1_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `P10_1` y se deja la nueva agrupación `P10_1_GRUPO`.
@@ -883,7 +894,7 @@ excluded_cols <- c(excluded_cols, "P10_1")
 
 #### Variable `P10_2`: *Segundo lugar (Fuentes utilizadas para informarse sobre las elecciones)*
 ```{r}
-pander(cis_2020_df %>% dplyr::count(P10_2, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P10_2, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
@@ -891,13 +902,13 @@ Esta pregunta tiene efectivos pequeños en las modalidades
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P10_2'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P10_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P10_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 No se reagrupa.
 
 #### Variable `P10_3`: *Tercer lugar (Fuentes utilizadas para informarse sobre las elecciones)*
 ```{r}
-pander(cis_2020_df %>% dplyr::count(P10_3, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P10_3, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
@@ -905,14 +916,14 @@ Esta pregunta tiene efectivos pequeños en las modalidades
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P10_3'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P10_3)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P10_3)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 No se reagrupa.
 
 
 #### Variable `P10A`: *Periódico en formato impreso preferido para seguir la información política y electoral durante la campaña electoral*
 ```{r}
-pander(cis_2020_df %>% dplyr::count(P10A, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P10A, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
@@ -920,7 +931,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P10A'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P10A)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P10A)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 En primer lugar se eliminan las modalidades con cero efectivos.
@@ -929,17 +940,17 @@ En primer lugar se eliminan las modalidades con cero efectivos.
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P10A' & efectivo_peq_df$freq == 0),"modalidad"])
 # # Write factors
-# cat(paste0("`", levels(cis_2020_df$P10A)[aux_idx], "`", collapse = ", "), sep = "", ".")
+# cat(paste0("`", levels(cis_2020_EB_df$P10A)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
 # Create recodes parameter
 recodes_str <- sprintf("c(%s) = NA",
-                       paste0("'", levels(cis_2020_df$P10A)[aux_idx], "'", collapse = ", "))
+                       paste0("'", levels(cis_2020_EB_df$P10A)[aux_idx], "'", collapse = ", "))
 
 # Recode
-cis_2020_df$P10A_GRUPO <- car::recode(var = cis_2020_df$P10A, 
+cis_2020_EB_df$P10A_GRUPO <- car::recode(var = cis_2020_EB_df$P10A, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$P10A)[-aux_idx]))
-pander(cis_2020_df %>% dplyr::count(P10A_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$P10A)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(P10A_GRUPO, .drop=FALSE))
 ```
 
 Se hacen varias reagrupaciones[^P10AJRB],
@@ -947,7 +958,7 @@ Se hacen varias reagrupaciones[^P10AJRB],
 [^P10AJRB]: Se siguen los criterios de JRB para la pregunta `P10A`.
 
 ```{r}
-# cat(paste0("'", levels(cis_2020_df$P10A_GRUPO), "'", collapse = ", "), sep = "")
+# cat(paste0("'", levels(cis_2020_EB_df$P10A_GRUPO), "'", collapse = ", "), sep = "")
 
 # Create recodes parameter
 recodes_str <- "c('El Mundo', 'ABC', 'El Correo', 'El Diario Vasco') = 'Editoriales centro-derecha';
@@ -955,10 +966,10 @@ c('El País', 'Noticias de Guipúzcoa', 'Deia', 'Diario de Noticias (Álava, Nav
 c('Berria', 'Gara', 'Otro') = 'Editoriales izquierda'"
 
 # Recode
-cis_2020_df$P10A_GRUPO <- car::recode(var = cis_2020_df$P10A_GRUPO, 
+cis_2020_EB_df$P10A_GRUPO <- car::recode(var = cis_2020_EB_df$P10A_GRUPO, 
                                     recodes = recodes_str,
                                     levels = c('Editoriales centro-derecha', 'Editoriales centro-izquierda', 'Editoriales izquierda', 'N.C.'))
-pander(cis_2020_df %>% dplyr::count(P10A_GRUPO, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P10A_GRUPO, .drop=FALSE))
 ```
 
 
@@ -971,7 +982,7 @@ excluded_cols <- c(excluded_cols, "P10A")
 #### Variable `P10B`: *Periódico en formato digital preferido para seguir la información política y electoral durante la campaña electoral*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P10B, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P10B, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
@@ -979,7 +990,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P10B'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P10B)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P10B)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 En primer lugar se eliminan las modalidades con cero efectivos.
@@ -988,17 +999,17 @@ En primer lugar se eliminan las modalidades con cero efectivos.
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P10B' & efectivo_peq_df$freq == 0),"modalidad"])
 # # Write factors
-# cat(paste0("`", levels(cis_2020_df$P10B)[aux_idx], "`", collapse = ", "), sep = "", ".")
+# cat(paste0("`", levels(cis_2020_EB_df$P10B)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
 # Create recodes parameter
 recodes_str <- sprintf("c(%s) = NA",
-                       paste0("'", levels(cis_2020_df$P10B)[aux_idx], "'", collapse = ", "))
+                       paste0("'", levels(cis_2020_EB_df$P10B)[aux_idx], "'", collapse = ", "))
 
 # Recode
-cis_2020_df$P10B_GRUPO <- car::recode(var = cis_2020_df$P10B, 
+cis_2020_EB_df$P10B_GRUPO <- car::recode(var = cis_2020_EB_df$P10B, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$P10B)[-aux_idx]))
-pander(cis_2020_df %>% dplyr::count(P10B_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$P10B)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(P10B_GRUPO, .drop=FALSE))
 ```
 
 Se hacen varias reagrupaciones[^P10BJRB],
@@ -1006,7 +1017,7 @@ Se hacen varias reagrupaciones[^P10BJRB],
 [^P10BJRB]: Se siguen los criterios de JRB para la pregunta `P10B`.
 
 ```{r}
-# cat(paste0("'", levels(cis_2020_df$P10B_GRUPO), "'", collapse = ", "), sep = "")
+# cat(paste0("'", levels(cis_2020_EB_df$P10B_GRUPO), "'", collapse = ", "), sep = "")
 
 # Create recodes parameter
 recodes_str <- "c('El Mundo', 'ABC', 'La Razón', 'OK Diario.es', 'El Correo', 'El Diario Vasco', 'El Independiente.com') = 'Editoriales centro-derecha';
@@ -1015,10 +1026,10 @@ c('Público.es', 'Eldiario.es', 'Berria', 'Gara', 'Infolibre.es', 'Otro') = 'Edi
 c('Periódicos digitales', 'Cualquiera') = 'Sin referencias'"
 
 # Recode
-cis_2020_df$P10B_GRUPO <- car::recode(var = cis_2020_df$P10B_GRUPO, 
+cis_2020_EB_df$P10B_GRUPO <- car::recode(var = cis_2020_EB_df$P10B_GRUPO, 
                                     recodes = recodes_str,
                                     levels = c('Editoriales centro-derecha', 'Editoriales centro-izquierda', 'Editoriales izquierda', 'Sin referencias', 'N.C.'))
-pander(cis_2020_df %>% dplyr::count(P10B_GRUPO, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P10B_GRUPO, .drop=FALSE))
 ```
 
 
@@ -1031,7 +1042,7 @@ excluded_cols <- c(excluded_cols, "P10B")
 #### Variable `P10C`: *Cadena de televisión preferida para seguir la información política y electoral durante la campaña electoral*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P10C, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P10C, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
@@ -1039,7 +1050,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P10C'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P10C)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P10C)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 En primer lugar se eliminan las modalidades con cero efectivos.
@@ -1048,17 +1059,17 @@ En primer lugar se eliminan las modalidades con cero efectivos.
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P10C' & efectivo_peq_df$freq == 0),"modalidad"])
 # # Write factors
-# cat(paste0("`", levels(cis_2020_df$P10C)[aux_idx], "`", collapse = ", "), sep = "", ".")
+# cat(paste0("`", levels(cis_2020_EB_df$P10C)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
 # Create recodes parameter
 recodes_str <- sprintf("c(%s) = NA",
-                       paste0("'", levels(cis_2020_df$P10C)[aux_idx], "'", collapse = ", "))
+                       paste0("'", levels(cis_2020_EB_df$P10C)[aux_idx], "'", collapse = ", "))
 
 # Recode
-cis_2020_df$P10C_GRUPO <- car::recode(var = cis_2020_df$P10C, 
+cis_2020_EB_df$P10C_GRUPO <- car::recode(var = cis_2020_EB_df$P10C, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$P10C)[-aux_idx]))
-pander(cis_2020_df %>% dplyr::count(P10C_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$P10C)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(P10C_GRUPO, .drop=FALSE))
 ```
 
 Se hacen varias reagrupaciones[^P10CJRB],
@@ -1066,7 +1077,7 @@ Se hacen varias reagrupaciones[^P10CJRB],
 [^P10CJRB]: Se siguen los criterios de JRB para la pregunta `P10C`.
 
 ```{r}
-# cat(paste0("'", levels(cis_2020_df$P10C_GRUPO), "'", collapse = ", "), sep = "")
+# cat(paste0("'", levels(cis_2020_EB_df$P10C_GRUPO), "'", collapse = ", "), sep = "")
 
 # Create recodes parameter
 recodes_str <- "c('TVE1', 'La 2', 'Canal 24 horas') = 'TV estatales públicas';
@@ -1077,10 +1088,10 @@ c('ETB1', 'ETB2', 'ETB') = 'TV vascas públicas';
 c('Televisiones locales', 'Cualquiera sin especificar', 'Otra') ='Sin referencias claras'"
 
 # Recode
-cis_2020_df$P10C_GRUPO <- car::recode(var = cis_2020_df$P10C_GRUPO, 
+cis_2020_EB_df$P10C_GRUPO <- car::recode(var = cis_2020_EB_df$P10C_GRUPO, 
                                     recodes = recodes_str,
                                     levels = c('TV estatales públicas', 'A3Media+Derecha', 'A3Media+Izquierda', 'Mediaset', 'TV vascas públicas', 'Sin referencias claras'))
-pander(cis_2020_df %>% dplyr::count(P10C_GRUPO, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P10C_GRUPO, .drop=FALSE))
 ```
 
 
@@ -1093,7 +1104,7 @@ excluded_cols <- c(excluded_cols, "P10C")
 #### Variable `P10D`: *Emisora de radio preferida para seguir la información política y electoral durante la campaña electoral*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P10D, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P10D, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
@@ -1101,7 +1112,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P10D'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P10D)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P10D)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 
@@ -1111,17 +1122,17 @@ En primer lugar se eliminan las modalidades con cero efectivos.
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P10D' & efectivo_peq_df$freq == 0),"modalidad"])
 # # Write factors
-# cat(paste0("`", levels(cis_2020_df$P10D)[aux_idx], "`", collapse = ", "), sep = "", ".")
+# cat(paste0("`", levels(cis_2020_EB_df$P10D)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
 # Create recodes parameter
 recodes_str <- sprintf("c(%s) = NA",
-                       paste0("'", levels(cis_2020_df$P10D)[aux_idx], "'", collapse = ", "))
+                       paste0("'", levels(cis_2020_EB_df$P10D)[aux_idx], "'", collapse = ", "))
 
 # Recode
-cis_2020_df$P10D_GRUPO <- car::recode(var = cis_2020_df$P10D, 
+cis_2020_EB_df$P10D_GRUPO <- car::recode(var = cis_2020_EB_df$P10D, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$P10D)[-aux_idx]))
-pander(cis_2020_df %>% dplyr::count(P10D_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$P10D)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(P10D_GRUPO, .drop=FALSE))
 ```
 
 Se hacen varias reagrupaciones[^P10DJRB],
@@ -1129,7 +1140,7 @@ Se hacen varias reagrupaciones[^P10DJRB],
 [^P10DJRB]: Se siguen los criterios de JRB para la pregunta `P10D`.
 
 ```{r}
-# cat(paste0("'", levels(cis_2020_df$P10D_GRUPO), "'", collapse = ", "), sep = "")
+# cat(paste0("'", levels(cis_2020_EB_df$P10D_GRUPO), "'", collapse = ", "), sep = "")
 
 # Create recodes parameter
 recodes_str <- "c('RNE (Sin especificar)', 'RNE-RADIO 5-Todo Noticias') = 'Estatales públicas';
@@ -1141,10 +1152,10 @@ c('N.S.', 'N.C.') = 'NS NC';
 "
 
 # Recode
-cis_2020_df$P10D_GRUPO <- car::recode(var = cis_2020_df$P10D_GRUPO, 
+cis_2020_EB_df$P10D_GRUPO <- car::recode(var = cis_2020_EB_df$P10D_GRUPO, 
                                     recodes = recodes_str,
                                     levels = c('Estatales públicas', 'Estatales centro-derecha', 'Estatales centro-izquierda', 'Autonomistas', 'Sin referencias claras', 'NS NC'))
-pander(cis_2020_df %>% dplyr::count(P10D_GRUPO, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P10D_GRUPO, .drop=FALSE))
 ```
 
 
@@ -1158,7 +1169,7 @@ excluded_cols <- c(excluded_cols, "P10D")
 #### Variable `P11_9`: *Redes sociales en Internet en las que se tiene cuenta. Respuesta `N.C.`*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P11_9, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P11_9, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
@@ -1166,7 +1177,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P11_9'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P11_9)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P11_9)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
  O sea que *No Contesta* ese número de veces.
  
@@ -1178,7 +1189,7 @@ cat(paste0("`", levels(cis_2020_df$P11_9)[aux_idx], "`", collapse = ", "), sep =
 #### Variable `P12_9`: *Tipos de páginas de Internet desde las que se ha seguido la información de las elecciones. Respuesta `N.C.`*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P12_9, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P12_9, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
@@ -1186,7 +1197,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P12_9'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P12_9)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P12_9)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
  O sea que *No Contesta* ese número de veces.
  
@@ -1205,14 +1216,14 @@ Estas preguntas tienen efectivos pequeños en la modalidad
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P13_1'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P13_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P13_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
  No se puede agrupar nada.
  
 #### Pregunta `P13_4`: *Trabajó como voluntario/a en la campaña de algún partido o candidato/a*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P13_4, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P13_4, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
@@ -1220,7 +1231,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P13_4'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P13_4)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P13_4)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
  No se puede agrupar nada.
@@ -1228,7 +1239,7 @@ cat(paste0("`", levels(cis_2020_df$P13_4)[aux_idx], "`", collapse = ", "), sep =
 #### Variable `P13_5`: *Asistió a un mitin o reunión de algún partido*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P13_5, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P13_5, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
@@ -1236,7 +1247,7 @@ Esta pregunta tiene efectivos pequeños en la modalidad
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P13_5'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P13_5)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P13_5)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
  No se puede agrupar nada.
@@ -1244,7 +1255,7 @@ cat(paste0("`", levels(cis_2020_df$P13_5)[aux_idx], "`", collapse = ", "), sep =
 ### Variable `P14`: *Contacto de algún partido político para pedir el voto*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P14, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P14, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
@@ -1252,7 +1263,7 @@ Esta pregunta tiene efectivos pequeños en la modalidad
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P14'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P14)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P14)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
  No se puede agrupar nada.
@@ -1261,7 +1272,7 @@ cat(paste0("`", levels(cis_2020_df$P14)[aux_idx], "`", collapse = ", "), sep = "
 
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P14A_95, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P14A_95, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
@@ -1269,7 +1280,7 @@ Esta pregunta tiene efectivos pequeños en la modalidad
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P14A_95'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P14A_95)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P14A_95)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 O sea que ha mencionado que contactó `Otro` partido diferente a los de la lista.
@@ -1280,7 +1291,7 @@ No se puede agrupar nada.
 #### Variable `P14A_98`: *No recuerda*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P14A_98, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P14A_98, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
@@ -1288,7 +1299,7 @@ Esta pregunta tiene efectivos pequeños en la modalidad
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P14A_98'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P14A_98)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P14A_98)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 O sea que `No recuerda` que partido de la lista le contactó.
@@ -1299,7 +1310,7 @@ No se puede agrupar nada.
 #### Variable `P14A_99`: *N.C.*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P14A_99, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P14A_99, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
@@ -1307,7 +1318,7 @@ Esta pregunta tiene efectivos pequeños en la modalidad
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P14A_99'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P14A_99)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P14A_99)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 O sea que `N.C.` (no contesta) quién le contactó.
@@ -1319,7 +1330,7 @@ No se puede agrupar nada.
 ### Variable `P15`: *Envío personal de mensajes electrónicos en relación con algún partido político*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P15, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P15, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
@@ -1327,7 +1338,7 @@ Esta pregunta tiene efectivos pequeños en la modalidad
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P15'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P15)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P15)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 No se puede agrupar nada.
@@ -1336,7 +1347,7 @@ No se puede agrupar nada.
 #### Variable `P15A_2`: *PSE-EE-PSOE*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P15A_2, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P15A_2, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
@@ -1344,7 +1355,7 @@ Esta pregunta tiene efectivos pequeños en la modalidad
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P15A_2'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P15A_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P15A_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 O sea que han enviado mensajes del `PSE-EE-PSOE`.
@@ -1354,7 +1365,7 @@ No se puede agrupar nada.
 #### Variable `P15A_95`: *Otro*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P15A_95, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P15A_95, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
@@ -1362,7 +1373,7 @@ Esta pregunta tiene efectivos pequeños en la modalidad
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P15A_95'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P15A_95)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P15A_95)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 O sea que han enviado mensajes de `Otro`.
@@ -1372,7 +1383,7 @@ No se puede agrupar nada.
 #### Variable `P15A_99`: *N.C.*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P15A_99, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P15A_99, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
@@ -1380,7 +1391,7 @@ Esta pregunta tiene efectivos pequeños en la modalidad
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P15A_99'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P15A_99)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P15A_99)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 O sea que dicen que `N.C.`.
@@ -1391,7 +1402,7 @@ No se puede agrupar nada.
 ### Variable `P16`: *Recepción de mensajes electrónicos en relación con algún partido político en las elecciones*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P16, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P16, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
@@ -1399,7 +1410,7 @@ Esta pregunta tiene efectivos pequeños en la modalidad
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P16'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P16)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P16)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Sus respuestas son: `N.C.`.
@@ -1409,7 +1420,7 @@ No se puede agrupar nada.
 #### Variable `P16A_95`: *Otro*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P16A_95, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P16A_95, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
@@ -1417,7 +1428,7 @@ Esta pregunta tiene efectivos pequeños en la modalidad
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P16A_95'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P16A_95)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P16A_95)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Sus respuestas son: `Otro`.
@@ -1427,7 +1438,7 @@ No se puede agrupar nada.
 #### Variable `P16A_99`: *N.C.*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P16A_99, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P16A_99, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
@@ -1435,7 +1446,7 @@ Esta pregunta tiene efectivos pequeños en la modalidad
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P16A_99'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P16A_99)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P16A_99)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Sus respuestas son: `N.C.`.
@@ -1446,7 +1457,7 @@ No se puede agrupar nada.
 #### Variable `P17_1`: *En casa, con su familia*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P17_1, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P17_1, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
@@ -1454,7 +1465,7 @@ Esta pregunta tiene efectivos pequeños en la modalidad
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P17_1'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P17_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P17_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Sus respuestas son: `N.C.`.
@@ -1464,7 +1475,7 @@ No se puede agrupar nada.
 #### Variable `P17_2`: *Con sus amigos/as*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P17_2, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P17_2, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
@@ -1472,7 +1483,7 @@ Esta pregunta tiene efectivos pequeños en la modalidad
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P17_2'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P17_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P17_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Sus respuestas son: `N.C.`.
@@ -1483,7 +1494,7 @@ No se puede agrupar nada.
 #### Variable `P17_3`: *En su lugar de trabajo o centro de estudios*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P17_3, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P17_3, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
@@ -1491,7 +1502,7 @@ Esta pregunta tiene efectivos pequeños en la modalidad
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P17_3'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P17_3)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P17_3)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Sus respuestas son: `N.C.`.
@@ -1501,7 +1512,7 @@ No se puede agrupar nada.
 ### Variable `P18`: *Conocimiento de los resultados de sondeos electorales durante la campaña electoral*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P18, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P18, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
@@ -1509,7 +1520,7 @@ Esta pregunta tiene efectivos pequeños en la modalidad
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P18'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P18)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P18)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Sus respuestas son: `N.C.`.
@@ -1519,7 +1530,7 @@ No se puede agrupar nada.
 #### Variable `P18A`: *Grado de influencia personal de los sondeos de las elecciones*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P18A, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P18A, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades: 
@@ -1527,7 +1538,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P18A'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P18A)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P18A)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se realizan dos reagrupaciones:
@@ -1538,12 +1549,12 @@ Se realizan dos reagrupaciones:
 # Create recodes parameter
 recodes_str <- "c('Mucho', 'Bastante') = 'Bastante+'; c('N.S.', 'N.C.') = 'NS_NC'"
 # select old levels indices
-aux_idx <- which(levels(cis_2020_df$P18A) %in% c('Mucho', 'Bastante', 'N.S.', 'N.C.'))
+aux_idx <- which(levels(cis_2020_EB_df$P18A) %in% c('Mucho', 'Bastante', 'N.S.', 'N.C.'))
 # Recode
-cis_2020_df$P18A_GRUPO <- car::recode(var = cis_2020_df$P18A, 
+cis_2020_EB_df$P18A_GRUPO <- car::recode(var = cis_2020_EB_df$P18A, 
                                     recodes = recodes_str,
-                                    levels = c('Bastante+', levels(cis_2020_df$P18A)[-aux_idx], 'NS_NC'))
-pander(cis_2020_df %>% dplyr::count(P18A_GRUPO, .drop=FALSE))
+                                    levels = c('Bastante+', levels(cis_2020_EB_df$P18A)[-aux_idx], 'NS_NC'))
+pander(cis_2020_EB_df %>% dplyr::count(P18A_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `P18A` y se deja la nueva agrupación `P18A_GRUPO`.
@@ -1554,7 +1565,7 @@ excluded_cols <- c(excluded_cols, "P18A")
 #### Variable `P18B`: *Sentido en que le influyeron los resultados de los sondeos*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P18B, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P18B, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -1562,7 +1573,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P18B'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P18B)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P18B)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan las modalidades `N.S.` y `N.C.` en una sola.
@@ -1570,12 +1581,12 @@ Se reagrupan las modalidades `N.S.` y `N.C.` en una sola.
 # Create recodes parameter
 recodes_str <- "c('N.S.', 'N.C.') = 'NS_NC'"
 # select old levels indices
-aux_idx <- which(levels(cis_2020_df$P18B) %in% c('N.S.', 'N.C.'))
+aux_idx <- which(levels(cis_2020_EB_df$P18B) %in% c('N.S.', 'N.C.'))
 # Recode
-cis_2020_df$P18B_GRUPO <- car::recode(var = cis_2020_df$P18B, 
+cis_2020_EB_df$P18B_GRUPO <- car::recode(var = cis_2020_EB_df$P18B, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$P18B)[-aux_idx], 'NS_NC'))
-pander(cis_2020_df %>% dplyr::count(P18B_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$P18B)[-aux_idx], 'NS_NC'))
+pander(cis_2020_EB_df %>% dplyr::count(P18B_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `P18B` y se deja la nueva agrupación `P18B_GRUPO`.
@@ -1589,7 +1600,7 @@ excluded_cols <- c(excluded_cols, "P18B")
 ### Variable `P19`: *Decisión respecto al voto en las elecciones*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P19, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P19, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -1597,7 +1608,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P19'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P19)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P19)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 En este caso no se hace ninguna reagrupación.
@@ -1606,7 +1617,7 @@ En este caso no se hace ninguna reagrupación.
 
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P19A01, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P19A01, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -1614,7 +1625,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P19A01'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P19A01)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P19A01)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 **En este caso no tengo criterio para hacer agrupaciones. Quedo pendiente de la respuesta que me de JRB.**
@@ -1623,7 +1634,7 @@ cat(paste0("`", levels(cis_2020_df$P19A01)[aux_idx], "`", collapse = ", "), sep 
 #### Variable `P19A02`: *Partidos políticos entre los que se duda el voto (2)*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P19A02, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P19A02, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -1631,7 +1642,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P19A02'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P19A02)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P19A02)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 **En este caso no tengo criterio para hacer agrupaciones. Quedo pendiente de la respuesta que me de JRB.**
@@ -1640,7 +1651,7 @@ cat(paste0("`", levels(cis_2020_df$P19A02)[aux_idx], "`", collapse = ", "), sep 
 ### Variable `P20`: *Recuerdo de voto en las elecciones*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P20, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P20, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -1648,7 +1659,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P20'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P20)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P20)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 **En este caso no tengo criterio para hacer agrupaciones. Quedo pendiente de la respuesta que me de JRB.**
@@ -1657,7 +1668,7 @@ cat(paste0("`", levels(cis_2020_df$P20)[aux_idx], "`", collapse = ", "), sep = "
 #### Variable `P20A_1`: *Primer lugar*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P20A_1, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P20A_1, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -1665,7 +1676,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P20A_1'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P20A_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P20A_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan las modalidades `N.S.` y `N.C.` en una sola.
@@ -1673,12 +1684,12 @@ Se reagrupan las modalidades `N.S.` y `N.C.` en una sola.
 # Create recodes parameter
 recodes_str <- "c('N.S.', 'N.C.') = 'NS_NC'"
 # select old levels indices
-aux_idx <- which(levels(cis_2020_df$P20A_1) %in% c('N.S.', 'N.C.'))
+aux_idx <- which(levels(cis_2020_EB_df$P20A_1) %in% c('N.S.', 'N.C.'))
 # Recode
-cis_2020_df$P20A_1_GRUPO <- car::recode(var = cis_2020_df$P20A_1, 
+cis_2020_EB_df$P20A_1_GRUPO <- car::recode(var = cis_2020_EB_df$P20A_1, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$P20A_1)[-aux_idx], 'NS_NC'))
-pander(cis_2020_df %>% dplyr::count(P20A_1_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$P20A_1)[-aux_idx], 'NS_NC'))
+pander(cis_2020_EB_df %>% dplyr::count(P20A_1_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `P20A_1` y se deja la nueva agrupación `P20A_1_GRUPO`.
@@ -1690,7 +1701,7 @@ excluded_cols <- c(excluded_cols, "P20A_1")
 ### Variable `P21`: *Participación electoral en las elecciones*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P21, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P21, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -1698,7 +1709,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P21'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P21)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P21)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 En este caso no se reagrupa nada.
@@ -1708,7 +1719,7 @@ En este caso no se reagrupa nada.
 #### Variable `P21A`: *Momento de la decisión de no vota*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P21A, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P21A, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -1716,7 +1727,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P21A'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P21A)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P21A)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 En este caso no se reagrupa nada.
@@ -1725,7 +1736,7 @@ En este caso no se reagrupa nada.
 #### Variable `P21B_1`: *Primer lugar*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P21B_1, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P21B_1, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -1733,7 +1744,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P21B_1'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P21B_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P21B_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan las modalidades `N.S.` y `N.C.` en una sola.
@@ -1741,12 +1752,12 @@ Se reagrupan las modalidades `N.S.` y `N.C.` en una sola.
 # Create recodes parameter
 recodes_str <- "c('N.S.', 'N.C.') = 'NS_NC'"
 # select old levels indices
-aux_idx <- which(levels(cis_2020_df$P21B_1) %in% c('N.S.', 'N.C.'))
+aux_idx <- which(levels(cis_2020_EB_df$P21B_1) %in% c('N.S.', 'N.C.'))
 # Recode
-cis_2020_df$P21B_1_GRUPO <- car::recode(var = cis_2020_df$P21B_1, 
+cis_2020_EB_df$P21B_1_GRUPO <- car::recode(var = cis_2020_EB_df$P21B_1, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$P21B_1)[-aux_idx], 'NS_NC'))
-pander(cis_2020_df %>% dplyr::count(P21B_1_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$P21B_1)[-aux_idx], 'NS_NC'))
+pander(cis_2020_EB_df %>% dplyr::count(P21B_1_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `P21B_1` y se deja la nueva agrupación `P21B_1_GRUPO`.
@@ -1757,7 +1768,7 @@ excluded_cols <- c(excluded_cols, "P21B_1")
 #### Variable `P21B_2`: *Segundo lugar*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P21B_2, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P21B_2, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -1765,7 +1776,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P21B_2'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P21B_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P21B_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 **En este caso no tengo criterio para hacer reagrupaciones. Quedo pendiente de la respuesta que me de JRB.**
@@ -1773,7 +1784,7 @@ cat(paste0("`", levels(cis_2020_df$P21B_2)[aux_idx], "`", collapse = ", "), sep 
 #### Variable `P21C`: *Razones que impidieron votar*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P21C, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P21C, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -1781,7 +1792,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P21C'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P21C)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P21C)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 En primer lugar se eliminan las modalidades con cero efectivos.
@@ -1790,17 +1801,17 @@ En primer lugar se eliminan las modalidades con cero efectivos.
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P21C' & efectivo_peq_df$freq == 0),"modalidad"])
 # # Write factors
-# cat(paste0("`", levels(cis_2020_df$P21C)[aux_idx], "`", collapse = ", "), sep = "", ".")
+# cat(paste0("`", levels(cis_2020_EB_df$P21C)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
 # Create recodes parameter
 recodes_str <- sprintf("c(%s) = NA",
-                       paste0("'", levels(cis_2020_df$P21C)[aux_idx], "'", collapse = ", "))
+                       paste0("'", levels(cis_2020_EB_df$P21C)[aux_idx], "'", collapse = ", "))
 
 # Recode
-cis_2020_df$P21C_GRUPO <- car::recode(var = cis_2020_df$P21C, 
+cis_2020_EB_df$P21C_GRUPO <- car::recode(var = cis_2020_EB_df$P21C, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$P21C)[-aux_idx]))
-pander(cis_2020_df %>% dplyr::count(P21C_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$P21C)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(P21C_GRUPO, .drop=FALSE))
 ```
 
 **En este caso no tengo criterio para hacer reagrupaciones. Quedo pendiente de la respuesta que me de JRB.**
@@ -1814,7 +1825,7 @@ excluded_cols <- c(excluded_cols, "P21C")
 ### Variable `P22`: *Momento de la decisión de voto en las elecciones*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P22, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P22, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -1822,7 +1833,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P22'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P22)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P22)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 **En este caso no tengo criterio para hacer reagrupaciones. Quedo pendiente de la respuesta que me de JRB.**
@@ -1831,7 +1842,7 @@ cat(paste0("`", levels(cis_2020_df$P22)[aux_idx], "`", collapse = ", "), sep = "
 ### Variable `P23`: *Decisión respecto al voto en las elecciones de haber conocido antes los resultados*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P23, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P23, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -1839,7 +1850,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P23'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P23)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P23)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 **En este caso no tengo criterio para hacer reagrupaciones. Quedo pendiente de la respuesta que me de JRB.**
@@ -1850,7 +1861,7 @@ cat(paste0("`", levels(cis_2020_df$P23)[aux_idx], "`", collapse = ", "), sep = "
 #### Variable `P24_5`: *PP*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P24_5, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P24_5, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -1858,21 +1869,21 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P24_5'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P24_5)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P24_5)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan por un lado `6`+`7` y por otro `8`+`9`+`10`.
 
 ```{r}
-# levels(cis_2020_df$P24_5)[3]
+# levels(cis_2020_EB_df$P24_5)[3]
 
 # Create recodes parameter
 recodes_str <- "c('6', '7') = '6_7'; c('8', '9', '10 Con toda seguridad, lo votaría siempre') = '8_10'"
 # Recode
-cis_2020_df$P24_5_GRUPO <- car::recode(var = cis_2020_df$P24_5, 
+cis_2020_EB_df$P24_5_GRUPO <- car::recode(var = cis_2020_EB_df$P24_5, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$P24_5)[c(1,2,4,5,6,7)], "6_7", "8_10", levels(cis_2020_df$P24_5)[c(12,13)]))
-pander(cis_2020_df %>% dplyr::count(P24_5_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$P24_5)[c(1,2,4,5,6,7)], "6_7", "8_10", levels(cis_2020_EB_df$P24_5)[c(12,13)]))
+pander(cis_2020_EB_df %>% dplyr::count(P24_5_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `P24_5` y se deja la nueva agrupación `P24_5_GRUPO`.
@@ -1883,7 +1894,7 @@ excluded_cols <- c(excluded_cols, "P24_5")
 #### Variable `P24_6`: *Ciudadanos*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P24_6, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P24_6, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -1891,22 +1902,22 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P24_6'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P24_6)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P24_6)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan por un lado `6`+`7` y por otro `8`+`9`+`10`.
 
 
 ```{r}
-# levels(cis_2020_df$P24_6)[3]
+# levels(cis_2020_EB_df$P24_6)[3]
 
 # Create recodes parameter
 recodes_str <- "c('6', '7') = '6_7'; c('8', '9', '10 Con toda seguridad, lo votaría siempre') = '8_9_10'"
 # Recode
-cis_2020_df$P24_6_GRUPO <- car::recode(var = cis_2020_df$P24_6, 
+cis_2020_EB_df$P24_6_GRUPO <- car::recode(var = cis_2020_EB_df$P24_6, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$P24_6)[c(1,2,4,5,6,7)], "6_7", "8_9_10", levels(cis_2020_df$P24_6)[c(12,13)]))
-pander(cis_2020_df %>% dplyr::count(P24_6_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$P24_6)[c(1,2,4,5,6,7)], "6_7", "8_9_10", levels(cis_2020_EB_df$P24_6)[c(12,13)]))
+pander(cis_2020_EB_df %>% dplyr::count(P24_6_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `P24_6` y se deja la nueva agrupación `P24_6_GRUPO`.
@@ -1918,7 +1929,7 @@ excluded_cols <- c(excluded_cols, "P24_6")
 #### Variable `P24_7`: *VOX*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P24_7, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P24_7, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -1926,22 +1937,22 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P24_7'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P24_7)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P24_7)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan por un lado `2`+`3`+`4`, por otro `5`+`6` y por otro `7`+`8`+`9`+`10`.
 
 
 ```{r}
-# levels(cis_2020_df$P24_7)[3]
+# levels(cis_2020_EB_df$P24_7)[3]
 
 # Create recodes parameter
 recodes_str <- "c('2', '3', '4') = '2_3_4'; c('5', '6') = '5_6'; c('7', '8', '9', '10 Con toda seguridad, lo votaría siempre') = '7_10'"
 # Recode
-cis_2020_df$P24_7_GRUPO <- car::recode(var = cis_2020_df$P24_7, 
+cis_2020_EB_df$P24_7_GRUPO <- car::recode(var = cis_2020_EB_df$P24_7, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$P24_7)[c(1,2)], "2_3_4", "5_6", "7_10", levels(cis_2020_df$P24_7)[c(12,13)]))
-pander(cis_2020_df %>% dplyr::count(P24_7_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$P24_7)[c(1,2)], "2_3_4", "5_6", "7_10", levels(cis_2020_EB_df$P24_7)[c(12,13)]))
+pander(cis_2020_EB_df %>% dplyr::count(P24_7_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `P24_7` y se deja la nueva agrupación `P24_7_GRUPO`.
@@ -1954,7 +1965,7 @@ excluded_cols <- c(excluded_cols, "P24_7")
 
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(PARTICIPACIONA, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(PARTICIPACIONA, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -1962,7 +1973,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'PARTICIPACIONA'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$PARTICIPACIONA)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$PARTICIPACIONA)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 **En este caso no tengo criterio para hacer reagrupaciones. Quedo pendiente de la respuesta que me de JRB.**
@@ -1971,7 +1982,7 @@ cat(paste0("`", levels(cis_2020_df$PARTICIPACIONA)[aux_idx], "`", collapse = ", 
 ### Variable `RECUVOTOA`: *Recuerdo de voto en las elecciones*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(RECUVOTOA, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(RECUVOTOA, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -1979,7 +1990,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'RECUVOTOA'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$RECUVOTOA)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$RECUVOTOA)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 **En este caso no tengo criterio para hacer reagrupaciones. Quedo pendiente de la respuesta que me de JRB.**
@@ -1990,7 +2001,7 @@ cat(paste0("`", levels(cis_2020_df$RECUVOTOA)[aux_idx], "`", collapse = ", "), s
 #### Variable `P26_1`: *Íñigo Urkullu*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P26_1, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P26_1, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -1998,7 +2009,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P26_1'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P26_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P26_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 En este caso no se realizaza ninguna reagrupación.
@@ -2006,7 +2017,7 @@ En este caso no se realizaza ninguna reagrupación.
 #### Variable `P26_2`: *Maddalen Iriarte*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P26_2, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P26_2, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2014,7 +2025,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P26_2'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P26_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P26_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 En este caso no se realizaza ninguna reagrupación.
@@ -2022,7 +2033,7 @@ En este caso no se realizaza ninguna reagrupación.
 #### Variable `P26_3`: *Idoia Mendia*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P26_3, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P26_3, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2030,17 +2041,17 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P26_3'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P26_3)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P26_3)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan ambas en una sola.
 ```{r}
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_df$P26_3)[aux_idx], collapse = "', '"), "') = '9_10'")
-cis_2020_df$P26_3_GRUPO <- car::recode(var = cis_2020_df$P26_3, 
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P26_3)[aux_idx], collapse = "', '"), "') = '9_10'")
+cis_2020_EB_df$P26_3_GRUPO <- car::recode(var = cis_2020_EB_df$P26_3, 
                                     recodes = recodes_str, 
-                                    levels = c(levels(cis_2020_df$P26_3)[c(1,3:9)], '9_10', levels(cis_2020_df$P26_3)[11:13]))
-pander(cis_2020_df %>% dplyr::count(P26_3_GRUPO), .drop=FALSE)
+                                    levels = c(levels(cis_2020_EB_df$P26_3)[c(1,3:9)], '9_10', levels(cis_2020_EB_df$P26_3)[11:13]))
+pander(cis_2020_EB_df %>% dplyr::count(P26_3_GRUPO), .drop=FALSE)
 ```
 
 Se excluye la variable `P26_3` y se deja la nueva agrupación `P26_3_GRUPO`.
@@ -2052,7 +2063,7 @@ excluded_cols <- c(excluded_cols, "P26_3")
 #### Variable `P26_4`: *Miren Gorrotxategi*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P26_4, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P26_4, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2060,17 +2071,17 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P26_4'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P26_4)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P26_4)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan ambas en una sola.
 ```{r}
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_df$P26_4)[aux_idx], collapse = "', '"), "') = '9_10'")
-cis_2020_df$P26_4_GRUPO <- car::recode(var = cis_2020_df$P26_4, 
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P26_4)[aux_idx], collapse = "', '"), "') = '9_10'")
+cis_2020_EB_df$P26_4_GRUPO <- car::recode(var = cis_2020_EB_df$P26_4, 
                                     recodes = recodes_str, 
-                                    levels = c(levels(cis_2020_df$P26_4)[c(1,3:9)], '9_10', levels(cis_2020_df$P26_4)[11:13]))
-pander(cis_2020_df %>% dplyr::count(P26_4_GRUPO), .drop=FALSE)
+                                    levels = c(levels(cis_2020_EB_df$P26_4)[c(1,3:9)], '9_10', levels(cis_2020_EB_df$P26_4)[11:13]))
+pander(cis_2020_EB_df %>% dplyr::count(P26_4_GRUPO), .drop=FALSE)
 ```
 
 Se excluye la variable `P26_4` y se deja la nueva agrupación `P26_4_GRUPO`.
@@ -2082,7 +2093,7 @@ excluded_cols <- c(excluded_cols, "P26_4")
 #### Variable `P26_5`: *Carlos Iturgaiz*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P26_5, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P26_5, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2090,17 +2101,17 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P26_5'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P26_5)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P26_5)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan todas ellas en una sola.
 ```{r}
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_df$P26_5)[aux_idx], collapse = "', '"), "') = '7_10'")
-cis_2020_df$P26_5_GRUPO <- car::recode(var = cis_2020_df$P26_5, 
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P26_5)[aux_idx], collapse = "', '"), "') = '7_10'")
+cis_2020_EB_df$P26_5_GRUPO <- car::recode(var = cis_2020_EB_df$P26_5, 
                                     recodes = recodes_str, 
-                                    levels = c(levels(cis_2020_df$P26_5)[c(1,3:7)], '7_10', levels(cis_2020_df$P26_5)[11:13]))
-pander(cis_2020_df %>% dplyr::count(P26_5_GRUPO), .drop=FALSE)
+                                    levels = c(levels(cis_2020_EB_df$P26_5)[c(1,3:7)], '7_10', levels(cis_2020_EB_df$P26_5)[11:13]))
+pander(cis_2020_EB_df %>% dplyr::count(P26_5_GRUPO), .drop=FALSE)
 ```
 
 Se excluye la variable `P26_5` y se deja la nueva agrupación `P26_5_GRUPO`.
@@ -2111,7 +2122,7 @@ excluded_cols <- c(excluded_cols, "P26_5")
 #### Variable `P26_6`: *Amaia Martínez*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P26_6, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P26_6, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2119,17 +2130,17 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P26_6'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P26_6)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P26_6)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan todas ellas en una sola.
 ```{r}
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_df$P26_6)[aux_idx], collapse = "', '"), "') = '6_10'")
-cis_2020_df$P26_6_GRUPO <- car::recode(var = cis_2020_df$P26_6, 
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P26_6)[aux_idx], collapse = "', '"), "') = '6_10'")
+cis_2020_EB_df$P26_6_GRUPO <- car::recode(var = cis_2020_EB_df$P26_6, 
                                     recodes = recodes_str, 
-                                    levels = c(levels(cis_2020_df$P26_6)[c(1,3:6)], '6_10', levels(cis_2020_df$P26_6)[11:13]))
-pander(cis_2020_df %>% dplyr::count(P26_6_GRUPO), .drop=FALSE)
+                                    levels = c(levels(cis_2020_EB_df$P26_6)[c(1,3:6)], '6_10', levels(cis_2020_EB_df$P26_6)[11:13]))
+pander(cis_2020_EB_df %>% dplyr::count(P26_6_GRUPO), .drop=FALSE)
 ```
 
 Se excluye la variable `P26_6` y se deja la nueva agrupación `P26_6_GRUPO`.
@@ -2141,7 +2152,7 @@ excluded_cols <- c(excluded_cols, "P26_6")
 ### Variable `P28`: *Sentimiento nacionalista del País Vasco*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P28, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P28, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2149,19 +2160,19 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P28'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P28)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P28)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 ```{r}
 # Create recodes parameter
 recodes_str <- "c('N.S.', 'N.C.') = 'NS_NC'"
 # select old levels indices
-aux_idx <- which(levels(cis_2020_df$P28) %in% c('N.S.', 'N.C.'))
+aux_idx <- which(levels(cis_2020_EB_df$P28) %in% c('N.S.', 'N.C.'))
 # Recode
-cis_2020_df$P28_GRUPO <- car::recode(var = cis_2020_df$P28, 
+cis_2020_EB_df$P28_GRUPO <- car::recode(var = cis_2020_EB_df$P28, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$P28)[-aux_idx], 'NS_NC'))
-pander(cis_2020_df %>% dplyr::count(P28_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$P28)[-aux_idx], 'NS_NC'))
+pander(cis_2020_EB_df %>% dplyr::count(P28_GRUPO, .drop=FALSE))
 ```
 
 
@@ -2173,7 +2184,7 @@ excluded_cols <- c(excluded_cols, "P28")
 ### Variable `PARTICIPACIONG`: *Participación electoral en las elecciones generales de noviembre de 2019*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(PARTICIPACIONG, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(PARTICIPACIONG, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2181,7 +2192,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'PARTICIPACIONG'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$PARTICIPACIONG)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$PARTICIPACIONG)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 **En este caso no tengo criterio para hacer reagrupaciones. Quedo pendiente de la respuesta que me de JRB.**
@@ -2190,7 +2201,7 @@ cat(paste0("`", levels(cis_2020_df$PARTICIPACIONG)[aux_idx], "`", collapse = ", 
 ### Variable `RECUVOTOG`: *Recuerdo de voto en las elecciones generales de noviembre de 2019 de los votantes*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(RECUVOTOG, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(RECUVOTOG, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2198,7 +2209,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'RECUVOTOG'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$RECUVOTOG)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$RECUVOTOG)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 **En este caso no tengo criterio para hacer reagrupaciones. Quedo pendiente de la respuesta que me de JRB.**
@@ -2207,7 +2218,7 @@ cat(paste0("`", levels(cis_2020_df$RECUVOTOG)[aux_idx], "`", collapse = ", "), s
 ### Variable `ESCIDEOL`: *Escala de autoubicación ideológica (1-10)*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(ESCIDEOL, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOL, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2215,17 +2226,17 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'ESCIDEOL'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$ESCIDEOL)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOL)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan ambas en una sola.
 ```{r}
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_df$ESCIDEOL)[aux_idx], collapse = "', '"), "') = '9_10'")
-cis_2020_df$ESCIDEOL_GRUPO <- car::recode(var = cis_2020_df$ESCIDEOL, 
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$ESCIDEOL)[aux_idx], collapse = "', '"), "') = '9_10'")
+cis_2020_EB_df$ESCIDEOL_GRUPO <- car::recode(var = cis_2020_EB_df$ESCIDEOL, 
                                     recodes = recodes_str, 
-                                    levels = c(levels(cis_2020_df$ESCIDEOL)[c(1,3:9)], '9_10', levels(cis_2020_df$ESCIDEOL)[11:12]))
-pander(cis_2020_df %>% dplyr::count(ESCIDEOL_GRUPO), .drop=FALSE)
+                                    levels = c(levels(cis_2020_EB_df$ESCIDEOL)[c(1,3:9)], '9_10', levels(cis_2020_EB_df$ESCIDEOL)[11:12]))
+pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOL_GRUPO), .drop=FALSE)
 ```
 
 Se excluye la variable `ESCIDEOL` y se deja la nueva agrupación `ESCIDEOL_GRUPO`.
@@ -2238,7 +2249,7 @@ excluded_cols <- c(excluded_cols, "ESCIDEOL")
 #### Variable `ESCIDEOLPAR_1`: *EAJ-PNV*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(ESCIDEOLPAR_1, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_1, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2246,17 +2257,17 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'ESCIDEOLPAR_1'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$ESCIDEOLPAR_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOLPAR_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan ambas en una sola.
 ```{r}
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_df$ESCIDEOLPAR_1)[aux_idx], collapse = "', '"), "') = '1_2'")
-cis_2020_df$ESCIDEOLPAR_1_GRUPO <- car::recode(var = cis_2020_df$ESCIDEOLPAR_1, 
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$ESCIDEOLPAR_1)[aux_idx], collapse = "', '"), "') = '1_2'")
+cis_2020_EB_df$ESCIDEOLPAR_1_GRUPO <- car::recode(var = cis_2020_EB_df$ESCIDEOLPAR_1, 
                                     recodes = recodes_str, 
-                                    levels = c('1_2', levels(cis_2020_df$ESCIDEOLPAR_1)[c(4:10,2)], levels(cis_2020_df$ESCIDEOLPAR_1)[11:12]))
-pander(cis_2020_df %>% dplyr::count(ESCIDEOLPAR_1_GRUPO), .drop=FALSE)
+                                    levels = c('1_2', levels(cis_2020_EB_df$ESCIDEOLPAR_1)[c(4:10,2)], levels(cis_2020_EB_df$ESCIDEOLPAR_1)[11:12]))
+pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_1_GRUPO), .drop=FALSE)
 ```
 
 Se excluye la variable `ESCIDEOLPAR_1` y se deja la nueva agrupación `ESCIDEOLPAR_1_GRUPO`.
@@ -2267,7 +2278,7 @@ excluded_cols <- c(excluded_cols, "ESCIDEOLPAR_1")
 #### Variable `ESCIDEOLPAR_2`: *EH Bildu*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(ESCIDEOLPAR_2, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_2, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2275,21 +2286,21 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'ESCIDEOLPAR_2'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$ESCIDEOLPAR_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOLPAR_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan por un lado `6`+`7` y por otro `8`+`9`+`10`.
 
 ```{r}
-# levels(cis_2020_df$ESCIDEOLPAR_2)[3]
+# levels(cis_2020_EB_df$ESCIDEOLPAR_2)[3]
 
 # Create recodes parameter
 recodes_str <- "c('6', '7') = '6_7'; c('8', '9', '10 Derecha') = '8_10'"
 # Recode
-cis_2020_df$ESCIDEOLPAR_2_GRUPO <- car::recode(var = cis_2020_df$ESCIDEOLPAR_2, 
+cis_2020_EB_df$ESCIDEOLPAR_2_GRUPO <- car::recode(var = cis_2020_EB_df$ESCIDEOLPAR_2, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$ESCIDEOLPAR_2)[c(1,3:6)], "6_7", "8_10", levels(cis_2020_df$ESCIDEOLPAR_2)[c(11,12)]))
-pander(cis_2020_df %>% dplyr::count(ESCIDEOLPAR_2_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$ESCIDEOLPAR_2)[c(1,3:6)], "6_7", "8_10", levels(cis_2020_EB_df$ESCIDEOLPAR_2)[c(11,12)]))
+pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_2_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `ESCIDEOLPAR_2` y se deja la nueva agrupación `ESCIDEOLPAR_2_GRUPO`.
@@ -2300,7 +2311,7 @@ excluded_cols <- c(excluded_cols, "ESCIDEOLPAR_2")
 #### Variable `ESCIDEOLPAR_3`: *PSE-EE-PSOE*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(ESCIDEOLPAR_3, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_3, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2308,17 +2319,17 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'ESCIDEOLPAR_3'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$ESCIDEOLPAR_3)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOLPAR_3)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan ambas en una sola.
 ```{r}
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_df$ESCIDEOLPAR_3)[aux_idx], collapse = "', '"), "') = '9_10'")
-cis_2020_df$ESCIDEOLPAR_3_GRUPO <- car::recode(var = cis_2020_df$ESCIDEOLPAR_3, 
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$ESCIDEOLPAR_3)[aux_idx], collapse = "', '"), "') = '9_10'")
+cis_2020_EB_df$ESCIDEOLPAR_3_GRUPO <- car::recode(var = cis_2020_EB_df$ESCIDEOLPAR_3, 
                                     recodes = recodes_str, 
-                                    levels = c(levels(cis_2020_df$ESCIDEOLPAR_3)[c(1,3:9)], '9_10', levels(cis_2020_df$ESCIDEOLPAR_3)[11:12]))
-pander(cis_2020_df %>% dplyr::count(ESCIDEOLPAR_3_GRUPO), .drop=FALSE)
+                                    levels = c(levels(cis_2020_EB_df$ESCIDEOLPAR_3)[c(1,3:9)], '9_10', levels(cis_2020_EB_df$ESCIDEOLPAR_3)[11:12]))
+pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_3_GRUPO), .drop=FALSE)
 ```
 
 Se excluye la variable `ESCIDEOLPAR_3` y se deja la nueva agrupación `ESCIDEOLPAR_3_GRUPO`.
@@ -2329,7 +2340,7 @@ excluded_cols <- c(excluded_cols, "ESCIDEOLPAR_3")
 #### Variable `ESCIDEOLPAR_4`: *Elkarrekin Podemos*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(ESCIDEOLPAR_4, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_4, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2337,17 +2348,17 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'ESCIDEOLPAR_4'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$ESCIDEOLPAR_4)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOLPAR_4)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan todas en una sola.
 ```{r}
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_df$ESCIDEOLPAR_4)[aux_idx], collapse = "', '"), "') = '7_10'")
-cis_2020_df$ESCIDEOLPAR_4_GRUPO <- car::recode(var = cis_2020_df$ESCIDEOLPAR_4, 
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$ESCIDEOLPAR_4)[aux_idx], collapse = "', '"), "') = '7_10'")
+cis_2020_EB_df$ESCIDEOLPAR_4_GRUPO <- car::recode(var = cis_2020_EB_df$ESCIDEOLPAR_4, 
                                     recodes = recodes_str, 
-                                    levels = c(levels(cis_2020_df$ESCIDEOLPAR_4)[c(1,3:7)], '7_10', levels(cis_2020_df$ESCIDEOLPAR_4)[11:12]))
-pander(cis_2020_df %>% dplyr::count(ESCIDEOLPAR_4_GRUPO), .drop=FALSE)
+                                    levels = c(levels(cis_2020_EB_df$ESCIDEOLPAR_4)[c(1,3:7)], '7_10', levels(cis_2020_EB_df$ESCIDEOLPAR_4)[11:12]))
+pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_4_GRUPO), .drop=FALSE)
 ```
 
 Se excluye la variable `ESCIDEOLPAR_4` y se deja la nueva agrupación `ESCIDEOLPAR_4_GRUPO`.
@@ -2358,7 +2369,7 @@ excluded_cols <- c(excluded_cols, "ESCIDEOLPAR_4")
 #### Variable `ESCIDEOLPAR_5`: *PP*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(ESCIDEOLPAR_5, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_5, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2366,17 +2377,17 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'ESCIDEOLPAR_5'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$ESCIDEOLPAR_5)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOLPAR_5)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan todas en una sola.
 ```{r}
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_df$ESCIDEOLPAR_5)[aux_idx], collapse = "', '"), "') = '1_4'")
-cis_2020_df$ESCIDEOLPAR_5_GRUPO <- car::recode(var = cis_2020_df$ESCIDEOLPAR_5, 
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$ESCIDEOLPAR_5)[aux_idx], collapse = "', '"), "') = '1_4'")
+cis_2020_EB_df$ESCIDEOLPAR_5_GRUPO <- car::recode(var = cis_2020_EB_df$ESCIDEOLPAR_5, 
                                     recodes = recodes_str, 
-                                    levels = c('1_4', levels(cis_2020_df$ESCIDEOLPAR_5)[c(6:10,2)], levels(cis_2020_df$ESCIDEOLPAR_5)[11:12]))
-pander(cis_2020_df %>% dplyr::count(ESCIDEOLPAR_5_GRUPO), .drop=FALSE)
+                                    levels = c('1_4', levels(cis_2020_EB_df$ESCIDEOLPAR_5)[c(6:10,2)], levels(cis_2020_EB_df$ESCIDEOLPAR_5)[11:12]))
+pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_5_GRUPO), .drop=FALSE)
 ```
 
 Se excluye la variable `ESCIDEOLPAR_5` y se deja la nueva agrupación `ESCIDEOLPAR_5_GRUPO`.
@@ -2388,7 +2399,7 @@ excluded_cols <- c(excluded_cols, "ESCIDEOLPAR_5")
 #### Variable `ESCIDEOLPAR_6`: *Ciudadanos*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(ESCIDEOLPAR_6, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_6, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2396,17 +2407,17 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'ESCIDEOLPAR_6'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$ESCIDEOLPAR_6)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOLPAR_6)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan todas en una sola.
 ```{r}
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_df$ESCIDEOLPAR_6)[aux_idx], collapse = "', '"), "') = '1_4'")
-cis_2020_df$ESCIDEOLPAR_6_GRUPO <- car::recode(var = cis_2020_df$ESCIDEOLPAR_6, 
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$ESCIDEOLPAR_6)[aux_idx], collapse = "', '"), "') = '1_4'")
+cis_2020_EB_df$ESCIDEOLPAR_6_GRUPO <- car::recode(var = cis_2020_EB_df$ESCIDEOLPAR_6, 
                                     recodes = recodes_str, 
-                                    levels = c('1_4', levels(cis_2020_df$ESCIDEOLPAR_6)[c(6:10,2)], levels(cis_2020_df$ESCIDEOLPAR_6)[11:12]))
-pander(cis_2020_df %>% dplyr::count(ESCIDEOLPAR_6_GRUPO), .drop=FALSE)
+                                    levels = c('1_4', levels(cis_2020_EB_df$ESCIDEOLPAR_6)[c(6:10,2)], levels(cis_2020_EB_df$ESCIDEOLPAR_6)[11:12]))
+pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_6_GRUPO), .drop=FALSE)
 ```
 
 Se excluye la variable `ESCIDEOLPAR_6` y se deja la nueva agrupación `ESCIDEOLPAR_6_GRUPO`.
@@ -2417,7 +2428,7 @@ excluded_cols <- c(excluded_cols, "ESCIDEOLPAR_6")
 #### Variable `ESCIDEOLPAR_7`: *VOX*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(ESCIDEOLPAR_7, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_7, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2425,7 +2436,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'ESCIDEOLPAR_7'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$ESCIDEOLPAR_7)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOLPAR_7)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan por un lado `2`+`3`+`4`+`5` y por otro `6`+`7`:
@@ -2434,10 +2445,10 @@ Se reagrupan por un lado `2`+`3`+`4`+`5` y por otro `6`+`7`:
 # Create recodes parameter
 recodes_str <- "c('2', '3', '4', '5') = '2_5'; c('6', '7') = '6_7'"
 # Recode
-cis_2020_df$ESCIDEOLPAR_7_GRUPO <- car::recode(var = cis_2020_df$ESCIDEOLPAR_7, 
+cis_2020_EB_df$ESCIDEOLPAR_7_GRUPO <- car::recode(var = cis_2020_EB_df$ESCIDEOLPAR_7, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$ESCIDEOLPAR_7)[1], "2_5", "6_7", levels(cis_2020_df$ESCIDEOLPAR_7)[c(9,10,2,11,12)]))
-pander(cis_2020_df %>% dplyr::count(ESCIDEOLPAR_7_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$ESCIDEOLPAR_7)[1], "2_5", "6_7", levels(cis_2020_EB_df$ESCIDEOLPAR_7)[c(9,10,2,11,12)]))
+pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_7_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `ESCIDEOLPAR_7` y se deja la nueva agrupación `ESCIDEOLPAR_7_GRUPO`.
@@ -2449,7 +2460,7 @@ excluded_cols <- c(excluded_cols, "ESCIDEOLPAR_7")
 ### Variable *P33*, `ESCUELA`: *Escolarización de la persona entrevistada*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(ESCUELA, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(ESCUELA, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2457,18 +2468,18 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'ESCUELA'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$ESCUELA)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$ESCUELA)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan dos de ellas en una sola:
 
 ```{r}
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_df$ESCUELA)[aux_idx[c(1,2)]], collapse = "', '"), "') = 'No, pero sabe leer y escribir-'")
-cis_2020_df$ESCUELA_GRUPO <- car::recode(var = cis_2020_df$ESCUELA, 
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$ESCUELA)[aux_idx[c(1,2)]], collapse = "', '"), "') = 'No, pero sabe leer y escribir-'")
+cis_2020_EB_df$ESCUELA_GRUPO <- car::recode(var = cis_2020_EB_df$ESCUELA, 
                                     recodes = recodes_str, 
-                                    levels = c('No, pero sabe leer y escribir-', levels(cis_2020_df$ESCUELA)[c(3,4)]))
-pander(cis_2020_df %>% dplyr::count(ESCUELA_GRUPO), .drop=FALSE)
+                                    levels = c('No, pero sabe leer y escribir-', levels(cis_2020_EB_df$ESCUELA)[c(3,4)]))
+pander(cis_2020_EB_df %>% dplyr::count(ESCUELA_GRUPO), .drop=FALSE)
 ```
 
 Se excluye la variable `ESCUELA` y se deja la nueva agrupación `ESCUELA_GRUPO`.
@@ -2479,7 +2490,7 @@ excluded_cols <- c(excluded_cols, "ESCUELA")
 #### Variable *P33A*, `NIVELESTENTREV`: *Nivel de estudios alcanzado por la persona entrevistada*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(NIVELESTENTREV, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(NIVELESTENTREV, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2487,7 +2498,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'NIVELESTENTREV'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$NIVELESTENTREV)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$NIVELESTENTREV)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se reagrupan `Otros estudios`+`N.S./No recuerda`+`N.C.` en una sola:
@@ -2496,12 +2507,12 @@ Se reagrupan `Otros estudios`+`N.S./No recuerda`+`N.C.` en una sola:
 # Create recodes parameter
 recodes_str <- "c('Otros estudios ', 'N.S./No recuerda ', 'N.C.') = 'NS_NC'"
 # select old levels indices
-aux_idx <- which(levels(cis_2020_df$NIVELESTENTREV) %in% c('Otros estudios ', 'N.S./No recuerda ', 'N.C.'))
+aux_idx <- which(levels(cis_2020_EB_df$NIVELESTENTREV) %in% c('Otros estudios ', 'N.S./No recuerda ', 'N.C.'))
 # Recode
-cis_2020_df$NIVELESTENTREV_GRUPO <- car::recode(var = cis_2020_df$NIVELESTENTREV, 
+cis_2020_EB_df$NIVELESTENTREV_GRUPO <- car::recode(var = cis_2020_EB_df$NIVELESTENTREV, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$NIVELESTENTREV)[-aux_idx], 'NS_NC'))
-pander(cis_2020_df %>% dplyr::count(NIVELESTENTREV_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$NIVELESTENTREV)[-aux_idx], 'NS_NC'))
+pander(cis_2020_EB_df %>% dplyr::count(NIVELESTENTREV_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `NIVELESTENTREV` y se deja la nueva agrupación `NIVELESTENTREV_GRUPO`.
@@ -2512,7 +2523,7 @@ excluded_cols <- c(excluded_cols, "NIVELESTENTREV")
 ### Variable *P34*, `RELIGION`: *Religiosidad de la persona entrevistada*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(RELIGION, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(RELIGION, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2520,7 +2531,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'RELIGION'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$RELIGION)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$RELIGION)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 En este caso no se reagrupa nada.
@@ -2528,7 +2539,7 @@ En este caso no se reagrupa nada.
 #### Variable *P34A*, `FRECUENCIARELI`: *Frecuencia de asistencia a oficios religiosos*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(FRECUENCIARELI, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(FRECUENCIARELI, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2536,7 +2547,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'FRECUENCIARELI'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$FRECUENCIARELI)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$FRECUENCIARELI)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 En este caso no se reagrupa nada.
@@ -2545,7 +2556,7 @@ En este caso no se reagrupa nada.
 ### Variable *P35*, `ESTADOCIVIL`: *Estado civil de la persona entrevistada*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(ESTADOCIVIL, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(ESTADOCIVIL, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2553,7 +2564,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'ESTADOCIVIL'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$ESTADOCIVIL)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$ESTADOCIVIL)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 En este caso no se reagrupa nada.
@@ -2562,7 +2573,7 @@ En este caso no se reagrupa nada.
 ### Variable `SITLAB`: *Situación laboral de la persona entrevistada*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(SITLAB, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(SITLAB, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2570,7 +2581,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'SITLAB'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$SITLAB)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$SITLAB)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 En este caso no se reagrupa nada.
@@ -2581,7 +2592,7 @@ En este caso no se reagrupa nada.
 ### Variable `CNO11`: *Ocupación de la persona entrevistada*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(CNO11, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(CNO11, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2589,7 +2600,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'CNO11'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$CNO11)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$CNO11)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 En este caso no se reagrupa nada.
@@ -2598,7 +2609,7 @@ En este caso no se reagrupa nada.
 ### Variable `RELALAB`: *Situación profesional de la persona entrevistada*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(RELALAB, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(RELALAB, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2606,7 +2617,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'RELALAB'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$RELALAB)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$RELALAB)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 **En este caso no tengo criterio para hacer reagrupaciones. Quedo pendiente de la respuesta que me de JRB.**
@@ -2615,7 +2626,7 @@ cat(paste0("`", levels(cis_2020_df$RELALAB)[aux_idx], "`", collapse = ", "), sep
 ### Variable `CLASESOCIAL`: *Clase social subjetiva de la persona entrevistada*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(CLASESOCIAL, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(CLASESOCIAL, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2623,7 +2634,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'CLASESOCIAL'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$CLASESOCIAL)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$CLASESOCIAL)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se hacen varias reagrupaciones:
@@ -2632,10 +2643,10 @@ Se hacen varias reagrupaciones:
 # Create recodes parameter
 recodes_str <- "c('Clase alta ', 'Clase media-alta ') = 'Clase media-alta+'; c('Clase pobre ', 'Infraclase', 'Proletariado', 'A los/as de abajo ', 'Excluidos/as', 'A la gente común ') = 'Clase pobre-'; c('Otras', 'No cree en las clases ') = 'Otras+'"
 # Recode
-cis_2020_df$CLASESOCIAL_GRUPO <- car::recode(var = cis_2020_df$CLASESOCIAL, 
+cis_2020_EB_df$CLASESOCIAL_GRUPO <- car::recode(var = cis_2020_EB_df$CLASESOCIAL, 
                                     recodes = recodes_str,
-                                    levels = c("Clase media-alta+", levels(cis_2020_df$CLASESOCIAL)[c(3:5)], "Clase pobre-", levels(cis_2020_df$CLASESOCIAL)[12], "Otras+", levels(cis_2020_df$CLASESOCIAL)[c(15,16)]))
-pander(cis_2020_df %>% dplyr::count(CLASESOCIAL_GRUPO, .drop=FALSE))
+                                    levels = c("Clase media-alta+", levels(cis_2020_EB_df$CLASESOCIAL)[c(3:5)], "Clase pobre-", levels(cis_2020_EB_df$CLASESOCIAL)[12], "Otras+", levels(cis_2020_EB_df$CLASESOCIAL)[c(15,16)]))
+pander(cis_2020_EB_df %>% dplyr::count(CLASESOCIAL_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `CLASESOCIAL` y se deja la nueva agrupación `CLASESOCIAL_GRUPO`.
@@ -2660,7 +2671,7 @@ excluded_cols <- c(excluded_cols, aux_idx)
 ### Variable `IA_E1_DIA`: *Fecha de realización (día)*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(IA_E1_DIA, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(IA_E1_DIA, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2668,7 +2679,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_E1_DIA'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$IA_E1_DIA)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$IA_E1_DIA)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 Se eliminan las modalidades con cero efectivos.
 
@@ -2676,17 +2687,17 @@ Se eliminan las modalidades con cero efectivos.
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_E1_DIA' & efectivo_peq_df$freq == 0),"modalidad"])
 # # Write factors
-# cat(paste0("`", levels(cis_2020_df$IA_E1_DIA)[aux_idx], "`", collapse = ", "), sep = "", ".")
+# cat(paste0("`", levels(cis_2020_EB_df$IA_E1_DIA)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
 # Create recodes parameter
 recodes_str <- sprintf("c(%s) = NA",
-                       paste0("'", levels(cis_2020_df$IA_E1_DIA)[aux_idx], "'", collapse = ", "))
+                       paste0("'", levels(cis_2020_EB_df$IA_E1_DIA)[aux_idx], "'", collapse = ", "))
 
 # Recode
-cis_2020_df$IA_E1_DIA_GRUPO <- car::recode(var = cis_2020_df$IA_E1_DIA, 
+cis_2020_EB_df$IA_E1_DIA_GRUPO <- car::recode(var = cis_2020_EB_df$IA_E1_DIA, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$IA_E1_DIA)[-aux_idx]))
-pander(cis_2020_df %>% dplyr::count(IA_E1_DIA_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$IA_E1_DIA)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(IA_E1_DIA_GRUPO, .drop=FALSE))
 ```
 
 
@@ -2699,7 +2710,7 @@ excluded_cols <- c(excluded_cols, "IA_E1_DIA")
 ### Variable `IA_E2`: *Día de la semana que se realiza la entrevista*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(IA_E2, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(IA_E2, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2707,7 +2718,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_E2'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$IA_E2)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$IA_E2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 Se eliminan las modalidades con cero efectivos.
 
@@ -2715,17 +2726,17 @@ Se eliminan las modalidades con cero efectivos.
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_E2' & efectivo_peq_df$freq == 0),"modalidad"])
 # # Write factors
-# cat(paste0("`", levels(cis_2020_df$IA_E2)[aux_idx], "`", collapse = ", "), sep = "", ".")
+# cat(paste0("`", levels(cis_2020_EB_df$IA_E2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
 # Create recodes parameter
 recodes_str <- sprintf("c(%s) = NA",
-                       paste0("'", levels(cis_2020_df$IA_E2)[aux_idx], "'", collapse = ", "))
+                       paste0("'", levels(cis_2020_EB_df$IA_E2)[aux_idx], "'", collapse = ", "))
 
 # Recode
-cis_2020_df$IA_E2_GRUPO <- car::recode(var = cis_2020_df$IA_E2, 
+cis_2020_EB_df$IA_E2_GRUPO <- car::recode(var = cis_2020_EB_df$IA_E2, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$IA_E2)[-aux_idx]))
-pander(cis_2020_df %>% dplyr::count(IA_E2_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$IA_E2)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(IA_E2_GRUPO, .drop=FALSE))
 ```
 
 
@@ -2738,7 +2749,7 @@ excluded_cols <- c(excluded_cols, "IA_E2")
 ### Variable `IA_E4`: *Hora de realización*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(IA_E4, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(IA_E4, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2746,7 +2757,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_E4'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$IA_E4)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$IA_E4)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 Se eliminan las modalidades con cero efectivos.
 
@@ -2754,17 +2765,17 @@ Se eliminan las modalidades con cero efectivos.
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_E4' & efectivo_peq_df$freq == 0),"modalidad"])
 # # Write factors
-# cat(paste0("`", levels(cis_2020_df$IA_E4)[aux_idx], "`", collapse = ", "), sep = "", ".")
+# cat(paste0("`", levels(cis_2020_EB_df$IA_E4)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
 # Create recodes parameter
 recodes_str <- sprintf("c(%s) = NA",
-                       paste0("'", levels(cis_2020_df$IA_E4)[aux_idx], "'", collapse = ", "))
+                       paste0("'", levels(cis_2020_EB_df$IA_E4)[aux_idx], "'", collapse = ", "))
 
 # Recode
-cis_2020_df$IA_E4_GRUPO <- car::recode(var = cis_2020_df$IA_E4, 
+cis_2020_EB_df$IA_E4_GRUPO <- car::recode(var = cis_2020_EB_df$IA_E4, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$IA_E4)[-aux_idx]))
-pander(cis_2020_df %>% dplyr::count(IA_E4_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$IA_E4)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(IA_E4_GRUPO, .drop=FALSE))
 ```
 
 
@@ -2776,7 +2787,7 @@ excluded_cols <- c(excluded_cols, "IA_E4")
 ### Variable `IA_MODIFICADA`: *Entrevista modificada*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(IA_MODIFICADA, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(IA_MODIFICADA, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2784,7 +2795,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_MODIFICADA'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$IA_MODIFICADA)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$IA_MODIFICADA)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 No se reagrupa esa modalidad.
 
@@ -2792,7 +2803,7 @@ No se reagrupa esa modalidad.
 ### Variable `IA_SUPERVISADA`: *Entrevista supervisada*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(IA_SUPERVISADA, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(IA_SUPERVISADA, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2800,7 +2811,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_SUPERVISADA'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$IA_SUPERVISADA)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$IA_SUPERVISADA)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 No se reagrupa esa modalidad.
 
@@ -2808,7 +2819,7 @@ No se reagrupa esa modalidad.
 ### Variable `IA_C2`: *Valoración de la supervisión*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(IA_C2, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(IA_C2, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2816,7 +2827,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_C2'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$IA_C2)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$IA_C2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 Se eliminan las modalidades con cero efectivos.
 
@@ -2824,17 +2835,17 @@ Se eliminan las modalidades con cero efectivos.
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_C2' & efectivo_peq_df$freq == 0),"modalidad"])
 # # Write factors
-# cat(paste0("`", levels(cis_2020_df$IA_C2)[aux_idx], "`", collapse = ", "), sep = "", ".")
+# cat(paste0("`", levels(cis_2020_EB_df$IA_C2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
 # Create recodes parameter
 recodes_str <- sprintf("c(%s) = NA",
-                       paste0("'", levels(cis_2020_df$IA_C2)[aux_idx], "'", collapse = ", "))
+                       paste0("'", levels(cis_2020_EB_df$IA_C2)[aux_idx], "'", collapse = ", "))
 
 # Recode
-cis_2020_df$IA_C2_GRUPO <- car::recode(var = cis_2020_df$IA_C2, 
+cis_2020_EB_df$IA_C2_GRUPO <- car::recode(var = cis_2020_EB_df$IA_C2, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$IA_C2)[-aux_idx]))
-pander(cis_2020_df %>% dplyr::count(IA_C2_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$IA_C2)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(IA_C2_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `IA_C2` y se deja la nueva agrupación `IA_C2_GRUPO`.
@@ -2845,7 +2856,7 @@ excluded_cols <- c(excluded_cols, "IA_C2")
 #### Variable `IA_C2A`: *Resultado supervisión*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(IA_C2A, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(IA_C2A, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2853,7 +2864,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_C2A'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$IA_C2A)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$IA_C2A)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 Se eliminan las modalidades con cero efectivos.
 
@@ -2861,17 +2872,17 @@ Se eliminan las modalidades con cero efectivos.
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_C2A' & efectivo_peq_df$freq == 0),"modalidad"])
 # # Write factors
-# cat(paste0("`", levels(cis_2020_df$IA_C2A)[aux_idx], "`", collapse = ", "), sep = "", ".")
+# cat(paste0("`", levels(cis_2020_EB_df$IA_C2A)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
 # Create recodes parameter
 recodes_str <- sprintf("c(%s) = NA",
-                       paste0("'", levels(cis_2020_df$IA_C2A)[aux_idx], "'", collapse = ", "))
+                       paste0("'", levels(cis_2020_EB_df$IA_C2A)[aux_idx], "'", collapse = ", "))
 
 # Recode
-cis_2020_df$IA_C2A_GRUPO <- car::recode(var = cis_2020_df$IA_C2A, 
+cis_2020_EB_df$IA_C2A_GRUPO <- car::recode(var = cis_2020_EB_df$IA_C2A, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$IA_C2A)[-aux_idx]))
-pander(cis_2020_df %>% dplyr::count(IA_C2A_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$IA_C2A)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(IA_C2A_GRUPO, .drop=FALSE))
 ```
 
 
@@ -2884,7 +2895,7 @@ excluded_cols <- c(excluded_cols, "IA_C2A", "IA_C2A_GRUPO")
 ### Variable `IA_C3`: *Resultado final*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(IA_C3, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(IA_C3, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2892,7 +2903,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_C3'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$IA_C3)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$IA_C3)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 Se eliminan las modalidades con cero efectivos.
 
@@ -2900,17 +2911,17 @@ Se eliminan las modalidades con cero efectivos.
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_C3' & efectivo_peq_df$freq == 0),"modalidad"])
 # # Write factors
-# cat(paste0("`", levels(cis_2020_df$IA_C3)[aux_idx], "`", collapse = ", "), sep = "", ".")
+# cat(paste0("`", levels(cis_2020_EB_df$IA_C3)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
 # Create recodes parameter
 recodes_str <- sprintf("c(%s) = NA",
-                       paste0("'", levels(cis_2020_df$IA_C3)[aux_idx], "'", collapse = ", "))
+                       paste0("'", levels(cis_2020_EB_df$IA_C3)[aux_idx], "'", collapse = ", "))
 
 # Recode
-cis_2020_df$IA_C3_GRUPO <- car::recode(var = cis_2020_df$IA_C3, 
+cis_2020_EB_df$IA_C3_GRUPO <- car::recode(var = cis_2020_EB_df$IA_C3, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$IA_C3)[-aux_idx]))
-pander(cis_2020_df %>% dplyr::count(IA_C3_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$IA_C3)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(IA_C3_GRUPO, .drop=FALSE))
 ```
 
 Esta variable no aporta información con la que discriminar entrevistas porque todos sus elementos tienen el mismo valor. Por tanto se excluyen del análisis ACM.
@@ -2922,7 +2933,7 @@ excluded_cols <- c(excluded_cols, "IA_C3", "IA_C3_GRUPO")
 ### Variable `P19ACOM`: *Partidos políticos entre los que se duda el voto en las elecciones (2)[recodificada]*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(P19ACOM, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(P19ACOM, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2930,7 +2941,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P19ACOM'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$P19ACOM)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$P19ACOM)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 Se eliminan las modalidades con cero efectivos.
 
@@ -2938,7 +2949,7 @@ Se eliminan las modalidades con cero efectivos.
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P19ACOM' & efectivo_peq_df$freq == 0),"modalidad"])
 # Replace ' character with escape character \\'
-str_aux_1 <- levels(cis_2020_df$P19ACOM)[aux_idx]
+str_aux_1 <- levels(cis_2020_EB_df$P19ACOM)[aux_idx]
 str_aux_2 <- gsub(pattern = "'", replacement = "\\\\'", x = str_aux_1)
 
 # Create recodes parameter
@@ -2946,10 +2957,10 @@ recodes_str <- sprintf("c(%s) = NA",
                        paste0("'", str_aux_2, "'", collapse = ", "))
 
 # Recode
-cis_2020_df$P19ACOM_GRUPO <- car::recode(var = cis_2020_df$P19ACOM, 
+cis_2020_EB_df$P19ACOM_GRUPO <- car::recode(var = cis_2020_EB_df$P19ACOM, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_df$P19ACOM)[-aux_idx]))
-pander(cis_2020_df %>% dplyr::count(P19ACOM_GRUPO, .drop=FALSE))
+                                    levels = c(levels(cis_2020_EB_df$P19ACOM)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(P19ACOM_GRUPO, .drop=FALSE))
 ```
 
 
@@ -2966,7 +2977,7 @@ excluded_cols <- c(excluded_cols, "P19ACOM")
 ### Variable `RVAUTO20`: *Recuerdo de voto en las elecciones autonómicas del País Vasco de 2020*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(RVAUTO20, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(RVAUTO20, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2974,7 +2985,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'RVAUTO20'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$RVAUTO20)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$RVAUTO20)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 **En este caso no tengo criterio para hacer reagrupaciones. Quedo pendiente de la respuesta que me de JRB.**
@@ -2984,7 +2995,7 @@ cat(paste0("`", levels(cis_2020_df$RVAUTO20)[aux_idx], "`", collapse = ", "), se
 ### Variable `RVAUTO16`: *Recuerdo de voto en las elecciones autonómicas del País Vasco de 2016 [recodificada]*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(RVAUTO16, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(RVAUTO16, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -2992,7 +3003,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'RVAUTO16'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$RVAUTO16)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$RVAUTO16)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 **En este caso no tengo criterio para hacer reagrupaciones. Quedo pendiente de la respuesta que me de JRB.**
@@ -3001,7 +3012,7 @@ cat(paste0("`", levels(cis_2020_df$RVAUTO16)[aux_idx], "`", collapse = ", "), se
 ### Variable `RECUERDO`: *Recuerdo de voto en las elecciones generales de noviembre de 2019 [recodificada]*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(RECUERDO, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(RECUERDO, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -3009,7 +3020,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'RECUERDO'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$RECUERDO)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$RECUERDO)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 **En este caso no tengo criterio para hacer reagrupaciones. Quedo pendiente de la respuesta que me de JRB.**
@@ -3020,7 +3031,7 @@ cat(paste0("`", levels(cis_2020_df$RECUERDO)[aux_idx], "`", collapse = ", "), se
 ### Variable `ESTUDIOS`: *Estudios de la persona entrevistada [recodificada]*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(ESTUDIOS, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(ESTUDIOS, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -3028,7 +3039,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'ESTUDIOS'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$ESTUDIOS)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$ESTUDIOS)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 
@@ -3038,7 +3049,7 @@ cat(paste0("`", levels(cis_2020_df$ESTUDIOS)[aux_idx], "`", collapse = ", "), se
 ### Variable `CLASESUB`: *Identificación subjetiva de clase [recodificada]*
 ```{r}
 require(pander)
-pander(cis_2020_df %>% dplyr::count(CLASESUB, .drop=FALSE))
+pander(cis_2020_EB_df %>% dplyr::count(CLASESUB, .drop=FALSE))
 ```
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
@@ -3046,7 +3057,7 @@ Esta pregunta tiene efectivos pequeños en las modalidades:
 # Select factor numbers from efectivo_peq_df
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'CLASESUB'),"modalidad"])
 # Write factors
-cat(paste0("`", levels(cis_2020_df$CLASESUB)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", levels(cis_2020_EB_df$CLASESUB)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 En este caso no se reagrupa nada.
@@ -3057,7 +3068,7 @@ En este caso no se reagrupa nada.
 
 O sea que finalmente se va a realizar un ACM con $Q =$ 
 ```{r echo=FALSE, results='asis'}
-Q <- length(cis_2020_df) - length(excluded_cols)
+Q <- length(cis_2020_EB_df) - length(excluded_cols)
 cat(Q)
 ```
  preguntas.
@@ -3066,7 +3077,7 @@ cat(Q)
 
 
 ```{r}
-### (cis_2020_summ <- summary(cis_2020_df))
+### (cis_2020_summ <- summary(cis_2020_EB_df))
 ```
 
 
