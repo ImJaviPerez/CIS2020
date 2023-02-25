@@ -141,33 +141,25 @@ Nos interesa conocer las características del grupo de votantes afín a *EQUO Be
  + elecciones generales de noviembre de 2019: preguntas` P30a` = `RECUVOTOG` y `P30aa` `RECUERDO`: `Otros partidos`.
  + elecciones autonómicas de 2016: preguntas `P25a` = `RECUVOTOA` y `P25aa` = `RVAUTO16`: `Otros partidos`
 
+
 ```{r}
-rows_ElkBer <- c()
 # Autonomicas 2020
 # levels(cis_2020_df$P20)
-# rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$P20 == 'Elkarrekin Podemos' | cis_2020_df$P20 == 'Otro partido'))
-rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$P20 == 'Elkarrekin Podemos'))
 # levels(cis_2020_df$RVAUTO20)
-# rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RVAUTO20 == 'Elkarrekin Podemos' | cis_2020_df$RVAUTO20 == 'Otro partido'))
-rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RVAUTO20 == 'Elkarrekin Podemos'))
-#
 # Generales 2019
 # levels(cis_2020_df$RECUERDO)
-# rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RECUERDO == 'Elkarrekin Podemos' | cis_2020_df$RECUERDO == 'Otros partidos'))
-rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RECUERDO == 'Otros partidos'))
 # levels(cis_2020_df$RECUVOTOG)
-rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RECUVOTOG == 'Otros partidos'))
-#
 # Autonomicas 2016
 # levels(cis_2020_df$RECUVOTOA)
-# rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RECUVOTOA == 'Elkarrekin Podemos' | cis_2020_df$RECUVOTOA == 'Otros partidos'))
-rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RECUVOTOA == 'Otros partidos'))
 # levels(cis_2020_df$RVAUTO16)
-# rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RVAUTO16 == 'Elkarrekin Podemos' | cis_2020_df$RVAUTO16 == 'Otros partidos'))
-rows_ElkBer <- c(rows_ElkBer, which(cis_2020_df$RVAUTO16 == 'Otros partidos'))
-
-rows_ElkBer <- unique(rows_ElkBer)
+rows_ElkBer <-unique(which(cis_2020_df$P20 == 'Elkarrekin Podemos' | 
+                       cis_2020_df$RVAUTO20 == 'Elkarrekin Podemos' |
+                         cis_2020_df$RECUERDO == 'Otros partidos' | 
+                         cis_2020_df$RECUVOTOG == 'Otros partidos' | 
+                         cis_2020_df$RECUVOTOA == 'Otros partidos' | 
+                         cis_2020_df$RVAUTO16 == 'Otros partidos'))
 ```
+
 
 ```{r}
 # Data subset
@@ -301,7 +293,7 @@ Antes de aplicar el ACM, realizamos un análisis descriptivo, para detectar la e
 El criterio para definir “*efectivo pequeño*” es que el número  de efectivos de una modalidad sea menor que: 
 ```{r echo=FALSE, results='asis'}
 efectivo_min_percent <- 0.02
-efectivo_min_abs <- efectivo_min_percent * nrow(cis_2020_EB_df)
+efectivo_min_abs <- round(efectivo_min_percent * nrow(cis_2020_EB_df))
 
 cat(efectivo_min_percent, "$\\cdot$", "n =", efectivo_min_percent, "$\\cdot$", nrow(cis_2020_EB_df), "=", efectivo_min_abs)
 ```
@@ -342,6 +334,139 @@ cat(sprintf("### Variable `%s`: *%s*\n",
     sep = "")
 ```
 
+
+### Variable `P1A`: *Lugar de nacimiento (comunidad autónoma)*
+
+### Variable `P1B`: *Lugar de nacimiento (país)*
+### Variable `P2`: *Lengua materna de la persona entrevistada*
+### Variable `P3_1`: *Lo entiende*
+### Variable `P3_2`: *Lo habla con fluidez*
+### Variable `P3_3`: *Lo lee*
+### Variable `P3_4`: *Lo escribe correctamente*
+### Variable `P4`: *Valoración de la situación general de la comunidad autónoma (País Vasco)*
+### Variable `P5`: *Autodefinición de su ideología política*
+### Variable `P5A`: *Autodefinición de su ideología política (2ª opción)*
+### Variable `P6`: *Grado de interés por la política*
+### Variable `P7`: *Grado de interés por la campaña electoral de las elecciones autonómicas del País Vasco de 2020*
+### Variable `P8_1`: *Informarse sobre los programas y propuestas de cada partido o coalición*
+### Variable `P8_2`: *Conocer mejor a los/as candidatos/as*
+### Variable `P8_3`: *Ver las diferencias que existen entre unos partidos y otros*
+### Variable `P8_4`: *Decidir su voto*
+### Variable `P9`: *Tema más más debatido en la campaña electoral de las elecciones autonómicas del País Vasco de 2020*
+### Variable `P9A`: *Partido político más cercano a la posición personal respecto al tema debatido durante la campaña electoral de las elecciones autonómicas del País Vasco de 2020*
+### Variable `P9B`: *Grado de importancia para la persona entrevistada del tema más debatido en la campaña electoral de las elecciones autonómicas del País Vasco de 2020*
+### Variable `P10_1`: *Primer lugar*
+### Variable `P10_2`: *Segundo lugar*
+### Variable `P10_3`: *Tercer lugar*
+### Variable `P10A`: *Periódico en formato impreso preferido para seguir la información política y electoral durante la campaña electoral de las elecciones autonómicas del País Vasco de 2020*
+### Variable `P10B`: *Periódico en formato digital preferido para seguir la información política y electoral durante la campaña electoral de las elecciones autonómicas del País Vasco de 2020*
+### Variable `P10C`: *Cadena de televisión preferida para seguir la información política y electoral durante la campaña electoral de las elecciones autonómicas del País Vasco de 2020*
+### Variable `P10D`: *Emisora de radio preferida para seguir la información política y electoral durante la campaña electoral de las elecciones autonómicas del País Vasco de 2020*
+### Variable `P13_1`: *Vio por televisión o escuchó por la radio algún debate o entrevistas con candidatos/as*
+### Variable `P13_2`: *Vio o escuchó algún espacio de propaganda electoral de algún partido o coalición política*
+### Variable `P13_3`: *Leyó o echó un vistazo a cartas, folletos o programas de algún partido o coalición política*
+### Variable `P13_4`: *Trabajó como voluntario/a en la campaña de algún partido o candidato/a*
+### Variable `P13_5`: *Asistió a un mitin o reunión de algún partido*
+### Variable `P14`: *Contacto de algún partido político para pedir el voto durante la campaña electoral de las elecciones autonómicas del País Vasco de 2020*
+### Variable `P14A_98`: *No recuerda*
+### Variable `P14A_99`: *N.C.*
+### Variable `P15`: *Envío personal de mensajes electrónicos en relación con algún partido político en las elecciones autonómicas del País Vasco de 2020*
+### Variable `P15A_99`: *N.C.*
+### Variable `P16`: *Recepción de mensajes electrónicos en relación con algún partido político en las elecciones autonómicas del País Vasco de 2020*
+### Variable `P16A_95`: *Otro*
+### Variable `P16A_99`: *N.C.*
+### Variable `P17_1`: *En casa, con su familia*
+### Variable `P17_2`: *Con sus amigos/as*
+### Variable `P17_3`: *En su lugar de trabajo o centro de estudios*
+### Variable `P18`: *Conocimiento de los resultados de sondeos electorales durante la campaña electoral de las elecciones autonómicas del País Vasco de 2020*
+### Variable `P18A`: *Grado de influencia personal de los sondeos de las elecciones autonómicas del País Vasco de 2020*
+### Variable `P18B`: *Sentido en que le influyeron los resultados de los sondeos de las elecciones autonómicas del País Vasco de 2020*
+### Variable `P19`: *Decisión respecto al voto en las elecciones autonómicas del País Vasco de 2020*
+### Variable `P19A01`: *Partidos políticos entre los que se duda el voto en las elecciones autonómicas del País Vasco de 2020 (2)*
+### Variable `P19A02`: *Partidos políticos entre los que se duda el voto en las elecciones autonómicas del País Vasco de 2020 (2)*
+### Variable `P20`: *Recuerdo de voto en las elecciones autonómicas del País Vasco de 2020*
+### Variable `P20A_1`: *Primer lugar*
+### Variable `P21`: *Participación electoral en las elecciones autonómicas del País Vasco de 2020*
+### Variable `P21A`: *Momento de la decisión de no votar en las elecciones autonómicas del País Vasco de 2020*
+### Variable `P21B_1`: *Primer lugar*
+### Variable `P21B_2`: *Segundo lugar*
+### Variable `P22`: *Momento de la decisión de voto en las elecciones autonómicas del País Vasco de 2020*
+### Variable `P23`: *Decisión respecto al voto en las elecciones autonómicas del País Vasco de 2020 de haber conocido antes los resultados*
+### Variable `P24_1`: *EAJ-PNV*
+### Variable `P24_2`: *EH Bildu*
+### Variable `P24_3`: *PSE-EE-PSOE*
+### Variable `P24_4`: *Elkarrekin Podemos*
+### Variable `P24_5`: *PP*
+### Variable `P24_6`: *Ciudadanos*
+### Variable `P24_7`: *VOX*
+### Variable `PARTICIPACIONA`: *Participación electoral en las elecciones autonómicas del País Vasco de 2016*
+### Variable `RECUVOTOA`: *Recuerdo de voto en las elecciones autonómicas del País Vasco de 2016 de los votantes*
+### Variable `P26_1`: *Íñigo Urkullu*
+### Variable `P26_2`: *Maddalen Iriarte*
+### Variable `P26_3`: *Idoia Mendia*
+### Variable `P26_4`: *Miren Gorrotxategi*
+### Variable `P26_5`: *Carlos Iturgaiz*
+### Variable `P26_6`: *Amaia Martínez*
+### Variable `P27`: *Preferencia entre diferentes alternativas de organización territorial del Estado en España*
+### Variable `P28`: *Sentimiento nacionalista del País Vasco*
+### Variable `P29`: *Escala de nacionalismo (1-10) del País Vasco*
+### Variable `PARTICIPACIONG`: *Participación electoral en las elecciones generales de noviembre de 2019*
+### Variable `RECUVOTOG`: *Recuerdo de voto en las elecciones generales de noviembre de 2019 de los votantes*
+### Variable `ESCIDEOL`: *Escala de autoubicación ideológica (1-10)*
+### Variable `ESCIDEOLPAR_1`: *EAJ-PNV*
+### Variable `ESCIDEOLPAR_2`: *EH Bildu*
+### Variable `ESCIDEOLPAR_3`: *PSE-EE-PSOE*
+### Variable `ESCIDEOLPAR_4`: *Elkarrekin Podemos*
+### Variable `ESCIDEOLPAR_5`: *PP*
+### Variable `ESCIDEOLPAR_6`: *Ciudadanos*
+### Variable `ESCIDEOLPAR_7`: *VOX*
+### Variable `ESCUELA`: *Escolarización de la persona entrevistada*
+### Variable `NIVELESTENTREV`: *Nivel de estudios alcanzado por la persona entrevistada*
+### Variable `RELIGION`: *Religiosidad de la persona entrevistada*
+### Variable `FRECUENCIARELI`: *Frecuencia de asistencia a oficios religiosos*
+### Variable `ESTADOCIVIL`: *Estado civil de la persona entrevistada*
+### Variable `SITLAB`: *Situación laboral de la persona entrevistada*
+### Variable `CNO11`: *Ocupación de la persona entrevistada*
+### Variable `RELALAB`: *Situación profesional de la persona entrevistada*
+### Variable `CLASESOCIAL`: *Clase social subjetiva de la persona entrevistada*
+### Variable `IA_I506`: *Contactos fallidos por no cumplir cuotas*
+### Variable `IA_I509`: *01.  No quiere colaborar*
+### Variable `IA_I510`: *02.  Falta de tiempo. Está muy ocupado/a*
+### Variable `IA_I516`: *08.  No sabe lo suficiente/nada del tema, demasiado difícil*
+### Variable `IA_I517`: *09.  El tema no le interesa*
+### Variable `IA_I520`: *96. Otras*
+### Variable `IA_I521`: *99. No contesta*
+### Variable `IA_I523`: *Teléfono apagado/fuera de cobertura*
+### Variable `IA_I524`: *Negativas a realizar la entrevista*
+### Variable `IA_I525`: *Interrupción llamada*
+### Variable `IA_I526`: *Dificutad con el idioma*
+### Variable `IA_I528`: *Contacto fallido por no ser una vivienda/persona*
+### Variable `IA_I529`: *Contacto fallido por no ser elegible*
+### Variable `IA_I530`: *Incapacidad para responder/ininteligible*
+### Variable `IA_I531`: *Otras*
+### Variable `IA_I532`: *No le gusta dar información por teléfono*
+### Variable `IA_I535`: *Incapacidad para responder/ininteligile*
+### Variable `IA_I536`: *No elegible*
+### Variable `IA_E1_DIA`: *Fecha de realización (día)*
+### Variable `IA_E2`: *Día de la semana que se realiza la entrevista*
+### Variable `IA_E4`: *Hora de realización*
+### Variable `IA_MODIFICADA`: *Entrevista modificada*
+### Variable `IA_SUPERVISADA`: *Entrevista supervisada*
+### Variable `IA_C2`: *Valoración de la supervisión*
+### Variable `IA_C2A`: *Resultado supervisión*
+### Variable `IA_C3`: *Resultado final*
+### Variable `P19ACOM`: *Partidos políticos entre los que se duda el voto en las elecciones autonómicas del País Vasco de 2020 (2)[recodificada]*
+### Variable `RVAUTO20`: *Recuerdo de voto en las elecciones autonómicas del País Vasco de 2020*
+### Variable `RVAUTO16`: *Recuerdo de voto en las elecciones autonómicas del País Vasco de 2016 [recodificada]*
+### Variable `RECUERDO`: *Recuerdo de voto en las elecciones generales de noviembre de 2019 [recodificada]*
+### Variable `ESTUDIOS`: *Estudios de la persona entrevistada [recodificada]*
+### Variable `CLASESUB`: *Identificación subjetiva de clase [recodificada]*
+
+
+
+
+
+
 ### Variable `TAMUNI`: *Tamaño de municipio*
 
 ```{r}
@@ -361,8 +486,6 @@ cat(paste0("`", levels(cis_2020_EB_df$TAMUNI)[aux_idx], "`", collapse = ", "), s
 No existen personas encuestadas con municipios de más de $400000$ habitantes. Sencillamente se eliminan esas modalidades porque no tienen sentido.
 
 Se reagrupan ambas en una sola.
-
-NA
 
 ```{r}
 # Create recodes parameter
@@ -426,7 +549,7 @@ pander(cis_2020_EB_df %>% dplyr::count(EDAD_GRUPO, .drop=FALSE))
 Se observa que las últimas modalidades no llegan al efectivo mínimo requerido, con lo que se reagrupan en una sola:
 ```{r}
 # Re-recode from 86 until the end
-cis_2020_EB_df$EDAD_GRUPO <- car::recode(var = cis_2020_EB_df$EDAD_GRUPO, recodes = "'86-89':'94-98' = '86-98'")
+cis_2020_EB_df$EDAD_GRUPO <- car::recode(var = cis_2020_EB_df$EDAD_GRUPO, recodes = "'74-77':'86-89' = '74-89'")
 
 # Check results
 require(pander)
@@ -474,19 +597,18 @@ aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P1'),"m
 cat(paste0("`", levels(cis_2020_EB_df$P1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-Se reagrupa junto con la modalidad 
-```{r echo=FALSE, results='asis'}
-cat("`", levels(cis_2020_EB_df$P1)[3], "`", sep = "")
-```
- en una sola.
+Se eliminan la modalidad nula.
 ```{r}
+aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P1' & efectivo_peq_df$freq == 0), "modalidad"])
+
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P1)[c(aux_idx, 3)], collapse = "', '"), "') = levels(cis_2020_EB_df$P1)[3]")
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P1)[aux_idx], collapse = "', '"), "') = NA")
 cis_2020_EB_df$P1_GRUPO <- car::recode(var = cis_2020_EB_df$P1, 
                                     recodes = recodes_str, 
-                                    levels = c(levels(cis_2020_EB_df$P1)[-aux_idx], 'NS_NC'))
+                                    levels = c(levels(cis_2020_EB_df$P1)[-aux_idx]))
 pander(cis_2020_EB_df %>% dplyr::count(P1_GRUPO), .drop=FALSE)
 ```
+
 Se excluye la variable `P1` y se deja la nueva agrupación `P1_GRUPO`.
 ```{r}
 excluded_cols <- c(excluded_cols, "P1")
@@ -503,9 +625,26 @@ pander(cis_2020_EB_df %>% dplyr::count(P1A, .drop=FALSE))
 
 Table: Comunidades autónomas de nacimiento de los encuestados (`NA` corresponde a `País Vasco`).
 
+El primer paso es eliminar las modalidades nulas:
+```{r}
+aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P1A' & efectivo_peq_df$freq == 0), "modalidad"])
+
+# Create recodes parameter
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P1A)[aux_idx], collapse = "', '"), "') = NA")
+cis_2020_EB_df$P1A_GRUPO <- car::recode(var = cis_2020_EB_df$P1A, 
+                                    recodes = recodes_str, 
+                                    levels = c(levels(cis_2020_EB_df$P1A)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(P1A_GRUPO), .drop=FALSE)
+```
+
+
+
+ESTAS AQUI  ESTAS AQUI  ESTAS AQUI  ESTAS AQUI  
+
+
 Dado que la mayoría no llega al efectivo mínimo requerido, se sigue el siguiente criterio:
 
-+ Opción 1: haría Cataluña / Resto del Mediterráneo /  Andalucía+Extremadura / Galicia /  Castillas+Rioja+Madrid / Aragón+Navarra / Cantabria+Asturias
++ Opción 1: Cataluña / Resto del Mediterráneo /  Andalucía+Extremadura / Galicia /  Castillas+Rioja+Madrid / Aragón+Navarra / Cantabria+Asturias
 + Opción 2: el Mediterráneo todo junto y Galicia en la Cornisa Cantábrica. Si la Cornisa Cantábrica no llega, lo juntas con Castilla. Si hay Baleares y Canarias, con el Mediterráneo. Y si aún así, el Mediterráneo no llega a 60, con Aragón y Navarra.
 
 Se hacen las siguientes agrupaciones:
@@ -516,10 +655,9 @@ Se hacen las siguientes agrupaciones:
 + `Mad_Man_Rio` = Madrid (Comunidad de) + Castilla-La Mancha + Rioja (La).
 + `And_Mur_Ceu` = Andalucía + Murcia (Región de) + Ceuta (Ciudad Autónoma de) + Melilla (Ciudad Autónoma de).
 
-No hay nadie de *Melilla (Ciudad Autónoma de)* en esta encuesta.
 ```{r}
 # levels(cis_2020_EB_df$P1A)
-cis_2020_EB_df$P1A_GRUPO <- car::recode(var = cis_2020_EB_df$P1A, recodes = "c('Cataluña', 'Comunitat Valenciana', 'Canarias', 'Balears (Illes)') = 'Cat_Val_Isl'; c('Galicia', 'Asturias (Principado de)', 'Cantabria') = 'Gal_Ast_Can'; c('Aragón', 'Navarra (Comunidad Foral de)') = 'Nav_Arag'; c('Madrid (Comunidad de)', 'Castilla-La Mancha', 'Rioja (La)') = 'Mad_Man_Rio'; c('Andalucía',  'Murcia (Región de)', 'Ceuta (Ciudad Autónoma de)', 'Melilla (Ciudad Autónoma de)') = 'And_Mur_Ceu'")
+cis_2020_EB_df$P1A_GRUPO <- car::recode(var = cis_2020_EB_df$P1A_GRUPO, recodes = "c('Cataluña', 'Comunitat Valenciana', 'Canarias', 'Balears (Illes)') = 'Cat_Val_Isl'; c('Galicia', 'Asturias (Principado de)', 'Cantabria') = 'Gal_Ast_Can'; c('Aragón', 'Navarra (Comunidad Foral de)') = 'Nav_Arag'; c('Madrid (Comunidad de)', 'Castilla-La Mancha', 'Rioja (La)') = 'Mad_Man_Rio'; c('Andalucía',  'Murcia (Región de)', 'Ceuta (Ciudad Autónoma de)', 'Melilla (Ciudad Autónoma de)') = 'And_Mur_Ceu'")
 ```
 
 ```{r}
@@ -603,7 +741,7 @@ Se eliminan las dos modalidades nulas.
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P2' & efectivo_peq_df$freq == 0), "modalidad"])
 
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P2)[aux_idx], collapse = "', '"), "') = 'Otra'")
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P2)[aux_idx], collapse = "', '"), "') = NA")
 cis_2020_EB_df$P2_GRUPO <- car::recode(var = cis_2020_EB_df$P2, 
                                     recodes = recodes_str, 
                                     levels = c(levels(cis_2020_EB_df$P2)[-aux_idx]))
