@@ -260,7 +260,7 @@ Antes de aplicar el ACM, realizamos un análisis descriptivo, para detectar la e
 El criterio para definir “*efectivo pequeño*” es que el número  de efectivos de una modalidad sea menor que: 
 ```{r echo=FALSE, results='asis'}
 efectivo_min_percent <- 0.02
-efectivo_min_abs <- efectivo_min_percent * nrow(cis_2020_df)
+efectivo_min_abs <- round(efectivo_min_percent * nrow(cis_2020_df))
 
 cat(efectivo_min_percent, "$\\cdot$", "n =", efectivo_min_percent, "$\\cdot$", nrow(cis_2020_df), "=", efectivo_min_abs)
 ```
@@ -322,7 +322,7 @@ No existen personas encuestadas con municipios de más de $400000$ habitantes. S
 Se reagrupan ambas en una sola.
 ```{r}
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$TAMUNI)[aux_idx], collapse = "', '"), "') = NA")
+recodes_str <- paste0("c('", paste0(levels(cis_2020_df$TAMUNI)[aux_idx], collapse = "', '"), "') = NA")
 cis_2020_df$TAMUNI_GRUPO <- car::recode(var = cis_2020_df$TAMUNI,
                                         recodes = recodes_str,
                                         levels = c(levels(cis_2020_df$TAMUNI)[-aux_idx]))
@@ -507,7 +507,7 @@ Se eliminan las modalidades nulas.
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P1B' & efectivo_peq_df$freq == 0), "modalidad"])
 
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_df$P1B)[aux_idx], collapse = "', '"), "') = 'Otra'")
+recodes_str <- paste0("c('", paste0(levels(cis_2020_df$P1B)[aux_idx], collapse = "', '"), "') = NA")
 cis_2020_df$P1B_GRUPO <- car::recode(var = cis_2020_df$P1B, 
                                     recodes = recodes_str, 
                                     levels = c(levels(cis_2020_df$P1B)[-aux_idx]))
@@ -559,7 +559,7 @@ Se eliminan las dos modalidades nulas.
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P2' & efectivo_peq_df$freq == 0), "modalidad"])
 
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_df$P2)[aux_idx], collapse = "', '"), "') = 'Otra'")
+recodes_str <- paste0("c('", paste0(levels(cis_2020_df$P2)[aux_idx], collapse = "', '"), "') = NA")
 cis_2020_df$P2_GRUPO <- car::recode(var = cis_2020_df$P2, 
                                     recodes = recodes_str, 
                                     levels = c(levels(cis_2020_df$P2)[-aux_idx]))
