@@ -335,18 +335,9 @@ cat(sprintf("### Variable `%s`: *%s*\n",
 ```
 
 
-### Variable `P1A`: *Lugar de nacimiento (comunidad autónoma)*
-
-### Variable `P1B`: *Lugar de nacimiento (país)*
-### Variable `P2`: *Lengua materna de la persona entrevistada*
-### Variable `P3_1`: *Lo entiende*
-### Variable `P3_2`: *Lo habla con fluidez*
-### Variable `P3_3`: *Lo lee*
-### Variable `P3_4`: *Lo escribe correctamente*
-### Variable `P4`: *Valoración de la situación general de la comunidad autónoma (País Vasco)*
-### Variable `P5`: *Autodefinición de su ideología política*
-### Variable `P5A`: *Autodefinición de su ideología política (2ª opción)*
 ### Variable `P6`: *Grado de interés por la política*
+
+
 ### Variable `P7`: *Grado de interés por la campaña electoral de las elecciones autonómicas del País Vasco de 2020*
 ### Variable `P8_1`: *Informarse sobre los programas y propuestas de cada partido o coalición*
 ### Variable `P8_2`: *Conocer mejor a los/as candidatos/as*
@@ -512,6 +503,7 @@ cat("(", efectivo_min_abs, ").", sep = "")
 require(pander)
 pander(head(cis_2020_EB_df %>% dplyr::count(EDAD)))
 ```
+Table: Edades de los votantes. Sólo se visualizan los primeros elementos de la muestra.
 
 ```{r}
 edad_interval_len <- 4
@@ -597,7 +589,7 @@ aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P1'),"m
 cat(paste0("`", levels(cis_2020_EB_df$P1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-Se eliminan la modalidad nula.
+Se elimina la modalidad nula.
 ```{r}
 aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P1' & efectivo_peq_df$freq == 0), "modalidad"])
 
@@ -637,34 +629,29 @@ cis_2020_EB_df$P1A_GRUPO <- car::recode(var = cis_2020_EB_df$P1A,
 pander(cis_2020_EB_df %>% dplyr::count(P1A_GRUPO), .drop=FALSE)
 ```
 
-
-
-ESTAS AQUI  ESTAS AQUI  ESTAS AQUI  ESTAS AQUI  
-
-
 Dado que la mayoría no llega al efectivo mínimo requerido, se sigue el siguiente criterio:
 
 + Opción 1: Cataluña / Resto del Mediterráneo /  Andalucía+Extremadura / Galicia /  Castillas+Rioja+Madrid / Aragón+Navarra / Cantabria+Asturias
-+ Opción 2: el Mediterráneo todo junto y Galicia en la Cornisa Cantábrica. Si la Cornisa Cantábrica no llega, lo juntas con Castilla. Si hay Baleares y Canarias, con el Mediterráneo. Y si aún así, el Mediterráneo no llega a 60, con Aragón y Navarra.
++ Opción 2: el Mediterráneo todo junto y Galicia en la Cornisa Cantábrica. Si la Cornisa Cantábrica no llega, lo juntas con Castilla. Si hay Baleares y Canarias, con el Mediterráneo. Y si aún así, el Mediterráneo no llega a 5, con Aragón y Navarra.
 
 Se hacen las siguientes agrupaciones:
 
-+ `Cat_Val_Isl` = Cataluña + Comunitat Valenciana + Balears (Illes) + Canarias
++ `Cat_Val_Can` = Cataluña + Comunitat Valenciana + Balears (Illes) + Canarias
 + `Gal_Ast_Can` = Galicia + Asturias (Principado de) + Cantabria.
 + `Nav_Arag` = Aragón + Navarra (Comunidad Foral de).
 + `Mad_Man_Rio` = Madrid (Comunidad de) + Castilla-La Mancha + Rioja (La).
 + `And_Mur_Ceu` = Andalucía + Murcia (Región de) + Ceuta (Ciudad Autónoma de) + Melilla (Ciudad Autónoma de).
++ `N.C.` = `NA` = *No Aplica*; o sea se elimina del cómputo.
 
 ```{r}
 # levels(cis_2020_EB_df$P1A)
-cis_2020_EB_df$P1A_GRUPO <- car::recode(var = cis_2020_EB_df$P1A_GRUPO, recodes = "c('Cataluña', 'Comunitat Valenciana', 'Canarias', 'Balears (Illes)') = 'Cat_Val_Isl'; c('Galicia', 'Asturias (Principado de)', 'Cantabria') = 'Gal_Ast_Can'; c('Aragón', 'Navarra (Comunidad Foral de)') = 'Nav_Arag'; c('Madrid (Comunidad de)', 'Castilla-La Mancha', 'Rioja (La)') = 'Mad_Man_Rio'; c('Andalucía',  'Murcia (Región de)', 'Ceuta (Ciudad Autónoma de)', 'Melilla (Ciudad Autónoma de)') = 'And_Mur_Ceu'")
+cis_2020_EB_df$P1A_GRUPO <- car::recode(var = cis_2020_EB_df$P1A_GRUPO, recodes = "c('Cataluña', 'Comunitat Valenciana', 'Canarias', 'Balears (Illes)') = 'Cat_Val_Can'; c('Galicia', 'Asturias (Principado de)', 'Cantabria') = 'Gal_Ast_Can'; c('Aragón', 'Navarra (Comunidad Foral de)') = 'Nav_Arag'; c('Madrid (Comunidad de)', 'Castilla-La Mancha', 'Rioja (La)') = 'Mad_Man_Rio'; c('Andalucía',  'Murcia (Región de)', 'Ceuta (Ciudad Autónoma de)', 'Melilla (Ciudad Autónoma de)') = 'And_Mur_Ceu'; c('N.C.') = NA")
 ```
 
 ```{r}
 require(pander)
 pander(cis_2020_EB_df %>% dplyr::count(P1A_GRUPO, .drop=FALSE))
 ```
-
 Table: Votantes de diferentes comunidades agrupados. La agrupación es subjetiva: las comunidades de cada grupo deben ser *similares* entre sí y además deberían contener al menos 
 ```{r echo=FALSE, results='asis'}
 cat(efectivo_min_abs)
@@ -696,7 +683,6 @@ cis_2020_EB_df$P1B_GRUPO <- car::recode(var = cis_2020_EB_df$P1B,
 pander(cis_2020_EB_df %>% dplyr::count(P1B_GRUPO), .drop=FALSE)
 ```
 
-
 Se recodifican en dos grupos: `Europa` y `No Europa`:
 
 
@@ -704,8 +690,8 @@ Se recodifican en dos grupos: `Europa` y `No Europa`:
 # cat(paste0("'", levels(cis_2020_EB_df$P1B_GRUPO), "'", collapse = ", "), sep = "")
 
 # Create recodes parameter
-recodes_str <- "c('Francia', 'Países Bajos', 'Portugal', 'Andorra', 'Alemania', 'Suiza', 'Eslovenia', 'Rusia', 'Otros territorios de Europa') = 'Europa';
-c('Angola', 'Argelia', 'Guinea Bissau', 'Marruecos', 'Nigeria', 'Estados Unidos de América', 'México', 'Cuba', 'El Salvador', 'Nicaragua', 'República Dominicana', 'Argentina', 'Bolivia', 'Brasil', 'Colombia', 'Chile', 'Ecuador', 'Paraguay', 'Uruguay', 'Venezuela', 'Otros territorios de América', 'N.S./N.C.') = 'No Europa'"
+recodes_str <- "c('Andorra', 'Alemania') = 'Europa';
+c('Cuba', 'Argentina', 'Colombia', 'Chile', 'N.S./N.C.') = 'No Europa'"
 
 # Recode
 cis_2020_EB_df$P1B_GRUPO <- car::recode(var = cis_2020_EB_df$P1B_GRUPO, 
@@ -755,18 +741,132 @@ Se excluye la variable `P2` y se deja la nueva agrupación `P2_GRUPO`.
 excluded_cols <- c(excluded_cols, "P2")
 ```
 
-### Variables `P3_1`, `P3_2`, `P3_3` y `P3_4`: *Nivel de conocimiento personal de la lengua vasca*
+### Variable `P3`: *Nivel de conocimiento personal de la lengua vasca*
+#### Variable `P3_1`: *Lo entiende*
+```{r}
+require(dplyr)
+pander(cis_2020_EB_df %>% dplyr::count(P3_1, .drop=FALSE))
+```
+Esta pregunta tiene efectivos pequeños en las modalidades 
+```{r echo=FALSE, results='asis'}
+# Select factor numbers from efectivo_peq_df
+aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P3_1'),"modalidad"])
+# Write factors
+cat(paste0("`", levels(cis_2020_EB_df$P3_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
+```
 
-En estas preguntas se ha elegido la modalidad 
-```{r echo=FALSE, results='asis'}
-cat("`", levels(cis_2020_EB_df$P3_1)[3], "`", sep = "")
+En este caso se elimina esa modalidad.
+```{r}
+# Create recodes parameter
+recodes_str <- paste0("c('N.C.') = NA")
+cis_2020_EB_df$P3_1_GRUPO <- car::recode(var = cis_2020_EB_df$P3_1, 
+                                    recodes = recodes_str, 
+                                    levels = c(levels(cis_2020_EB_df$P3_1)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(P3_1_GRUPO), .drop=FALSE)
+
 ```
-en un máximo de
-```{r echo=FALSE, results='asis'}
-cat(max(efectivo_peq_df[efectivo_peq_df$variable %in% c('P3_1', 'P3_2', 'P3_3', 'P3_4'), "freq"]))
+
+Se excluye la variable `P3_1` y se deja la nueva agrupación `P3_1_GRUPO`.
+```{r}
+excluded_cols <- c(excluded_cols, "P3_1")
 ```
- ocasiones, con lo que no se reagrupan.
- 
+
+#### Variable `P3_2`: *Lo habla con fluidez*
+```{r}
+require(dplyr)
+pander(cis_2020_EB_df %>% dplyr::count(P3_2, .drop=FALSE))
+```
+Esta pregunta tiene efectivos pequeños en las modalidades 
+```{r echo=FALSE, results='asis'}
+# Select factor numbers from efectivo_peq_df
+aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P3_2'),"modalidad"])
+# Write factors
+cat(paste0("`", levels(cis_2020_EB_df$P3_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
+```
+
+Se eliminan la modalidad nula.
+```{r}
+aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P3_2' & efectivo_peq_df$freq == 0), "modalidad"])
+
+# Create recodes parameter
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P3_2)[aux_idx], collapse = "', '"), "') = NA")
+cis_2020_EB_df$P3_2_GRUPO <- car::recode(var = cis_2020_EB_df$P3_2, 
+                                    recodes = recodes_str, 
+                                    levels = c(levels(cis_2020_EB_df$P3_2)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(P3_2_GRUPO), .drop=FALSE)
+```
+
+No se reagrupa más.
+
+Se excluye la variable `P3_2` y se deja la nueva agrupación `P3_2_GRUPO`.
+```{r}
+excluded_cols <- c(excluded_cols, "P3_2")
+```
+
+#### Variable `P3_3`: *Lo lee*
+```{r}
+require(dplyr)
+pander(cis_2020_EB_df %>% dplyr::count(P3_3, .drop=FALSE))
+```
+Esta pregunta tiene efectivos pequeños en las modalidades 
+```{r echo=FALSE, results='asis'}
+# Select factor numbers from efectivo_peq_df
+aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P3_3'),"modalidad"])
+# Write factors
+cat(paste0("`", levels(cis_2020_EB_df$P3_3)[aux_idx], "`", collapse = ", "), sep = "", ".")
+```
+
+En este caso se elimina esa modalidad.
+```{r}
+# Create recodes parameter
+recodes_str <- paste0("c('N.C.') = NA")
+cis_2020_EB_df$P3_3_GRUPO <- car::recode(var = cis_2020_EB_df$P3_3, 
+                                    recodes = recodes_str, 
+                                    levels = c(levels(cis_2020_EB_df$P3_3)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(P3_3_GRUPO), .drop=FALSE)
+```
+
+No se reagrupa más.
+
+Se excluye la variable `P3_3` y se deja la nueva agrupación `P3_3_GRUPO`.
+```{r}
+excluded_cols <- c(excluded_cols, "P3_3")
+```
+
+#### Variable `P3_4`: *Lo escribe correctamente*
+
+```{r}
+require(dplyr)
+pander(cis_2020_EB_df %>% dplyr::count(P3_4, .drop=FALSE))
+```
+Esta pregunta tiene efectivos pequeños en las modalidades 
+```{r echo=FALSE, results='asis'}
+# Select factor numbers from efectivo_peq_df
+aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P3_4'),"modalidad"])
+# Write factors
+cat(paste0("`", levels(cis_2020_EB_df$P3_4)[aux_idx], "`", collapse = ", "), sep = "", ".")
+```
+
+Se elimina la modalidad nula.
+```{r}
+aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P3_4' & efectivo_peq_df$freq == 0), "modalidad"])
+
+# Create recodes parameter
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P3_4)[aux_idx], collapse = "', '"), "') = NA")
+cis_2020_EB_df$P3_4_GRUPO <- car::recode(var = cis_2020_EB_df$P3_4, 
+                                    recodes = recodes_str, 
+                                    levels = c(levels(cis_2020_EB_df$P3_4)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(P3_4_GRUPO), .drop=FALSE)
+```
+
+No se reagrupa más.
+
+Se excluye la variable `P3_4` y se deja la nueva agrupación `P3_4_GRUPO`.
+```{r}
+excluded_cols <- c(excluded_cols, "P3_4")
+```
+
+
 ### Variable `P4`: *Valoración de la situación general de la comunidad autónoma*
 
 ```{r}
@@ -796,6 +896,33 @@ Se excluye la variable `P4` y se deja la nueva agrupación `P4_GRUPO`.
 ```{r}
 excluded_cols <- c(excluded_cols, "P4")
 ```
+### Variable `P5`: *Autodefinición de su ideología política*
+```{r}
+pander(cis_2020_EB_df %>% dplyr::count(P5, .drop=FALSE))
+```
+
+Se hacen varias reagrupaciones[^P5JRB],
+
+[^P5JRB]: Se siguen los criterios de JRB para la pregunta `P5`.
+
+```{r}
+# levels(cis_2020_EB_df$P5)
+# Create recodes parameter
+recodes_str <- "c('Conservador/a', 'Demócrata cristiano/a', 'Liberal') = 'Centro derecha'; c('Progresista', 'Socialdemócrata') = 'Socialdemocracia'; c('Socialista', 'Comunista', 'Otras respuestas ') = 'Izquierda';  c('(NO LEER) Apolítico/a ', 'N.S.') = 'No alineado/a'"
+# select old levels indices
+aux_idx <- which(levels(cis_2020_EB_df$P5) %in% c('PP', 'Ciudadanos'))
+# Recode
+cis_2020_EB_df$P5_GRUPO <- car::recode(var = cis_2020_EB_df$P5, 
+                                    recodes = recodes_str,
+                                    levels = c('Centro derecha', 'Socialdemocracia', 'Izquierda', 'Nacionalista', 'Feminista', 'Ecologista', 'No alineado/a', 'N.C.'))
+pander(cis_2020_EB_df %>% dplyr::count(P5_GRUPO, .drop=FALSE))
+```
+
+Se excluye la variable `P5` y se deja la nueva agrupación `P5_GRUPO`.
+```{r}
+excluded_cols <- c(excluded_cols, "P5")
+```
+
 
 ### Variable `P5A`: *Autodefinición de su ideología política (2ª opción)*
 ```{r}
@@ -826,6 +953,10 @@ excluded_cols <- c(excluded_cols, "P5A")
 
 
 ### Variable `P6`: *Grado de interés por la política*
+
+
+ESTAS AQUI  ESTAS AQUI  ESTAS AQUI  ESTAS AQUI  
+
 
 ```{r}
 pander(cis_2020_EB_df %>% dplyr::count(P6, .drop=FALSE))
