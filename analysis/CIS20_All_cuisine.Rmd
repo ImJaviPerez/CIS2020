@@ -777,7 +777,7 @@ Se hacen varias reagrupaciones[^P9AJRB],
 # Create recodes parameter
 recodes_str <- "c('PP', 'Ciudadanos', 'VOX') = 'Conservador'; c('Elkarrekin Podemos', 'Otro') = 'Elkarrekin Berdeak'"
 # select old levels indices
-aux_idx <- which(levels(cis_2020_df$P9A) %in% c('PP', 'Ciudadanos', 'Elkarrekin Podemos', 'Otro'))
+aux_idx <- which(levels(cis_2020_df$P9A) %in% c('PP', 'Ciudadanos', 'VOX', 'Elkarrekin Podemos', 'Otro'))
 # Recode
 cis_2020_df$P9A_GRUPO <- car::recode(var = cis_2020_df$P9A, 
                                     recodes = recodes_str,
