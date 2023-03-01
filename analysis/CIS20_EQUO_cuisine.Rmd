@@ -336,20 +336,11 @@ cat(sprintf("### Variable `%s`: *%s*\n",
 
 
 
-### Variable `P16`: *Recepción de mensajes electrónicos en relación con algún partido político en las elecciones autonómicas del País Vasco de 2020*
-
-ESTAS AQUI  ESTAS AQUI  ESTAS AQUI  ESTAS AQUI  
-
-
-### Variable `P16A_95`: *Otro*
-### Variable `P16A_99`: *N.C.*
-### Variable `P17_1`: *En casa, con su familia*
-### Variable `P17_2`: *Con sus amigos/as*
-### Variable `P17_3`: *En su lugar de trabajo o centro de estudios*
-### Variable `P18`: *Conocimiento de los resultados de sondeos electorales durante la campaña electoral de las elecciones autonómicas del País Vasco de 2020*
-### Variable `P18A`: *Grado de influencia personal de los sondeos de las elecciones autonómicas del País Vasco de 2020*
-### Variable `P18B`: *Sentido en que le influyeron los resultados de los sondeos de las elecciones autonómicas del País Vasco de 2020*
 ### Variable `P19`: *Decisión respecto al voto en las elecciones autonómicas del País Vasco de 2020*
+
+ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
+
+
 ### Variable `P19A01`: *Partidos políticos entre los que se duda el voto en las elecciones autonómicas del País Vasco de 2020 (2)*
 ### Variable `P19A02`: *Partidos políticos entre los que se duda el voto en las elecciones autonómicas del País Vasco de 2020 (2)*
 ### Variable `P20`: *Recuerdo de voto en las elecciones autonómicas del País Vasco de 2020*
@@ -1813,7 +1804,6 @@ excluded_cols <- c(excluded_cols, "P15A_99")
 ```
 
 
-
 ### Variable `P16`: *Recepción de mensajes electrónicos en relación con algún partido político en las elecciones*
 ```{r}
 require(pander)
@@ -1832,41 +1822,25 @@ Sus respuestas son: `N.C.`.
 
 No se puede agrupar nada.
 
-#### Variable `P16A_95`: *Otro*
-```{r}
-require(pander)
-pander(cis_2020_EB_df %>% dplyr::count(P16A_95, .drop=FALSE))
-```
-
-Esta pregunta tiene efectivos pequeños en la modalidad 
-```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_EB_df
-aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P16A_95'),"modalidad"])
-# Write factors
-cat(paste0("`", levels(cis_2020_EB_df$P16A_95)[aux_idx], "`", collapse = ", "), sep = "", ".")
-```
-
-Sus respuestas son: `Otro`.
-
-No se puede agrupar nada.
-
 #### Variable `P16A_99`: *N.C.*
 ```{r}
 require(pander)
-pander(cis_2020_EB_df %>% dplyr::count(P16A_99, .drop=FALSE))
+aux_tbl <- cis_2020_EB_df %>% dplyr::count(P16A_99, .drop=FALSE)
+pander(aux_tbl)
 ```
 
-Esta pregunta tiene efectivos pequeños en la modalidad 
+El número de individuos que eligen `N.C.` es: 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_EB_df
-aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P16A_99'),"modalidad"])
-# Write factors
-cat(paste0("`", levels(cis_2020_EB_df$P16A_99)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat(min(aux_tbl$n))
 ```
-
-Sus respuestas son: `N.C.`.
-
-No se puede agrupar nada.
+Esto supone el 
+```{r echo=FALSE, results='asis'}
+cat(signif(100 * min(aux_tbl$n) / nrow(cis_2020_EB_df), digits = 1))
+```
+ % del total de respuestas, que es algo matemáticamente despreciable. Por tanto se excluye esta pregunta dado que no aporta nada nuevo.
+```{r}
+excluded_cols <- c(excluded_cols, "P16A_99")
+```
 
 ### Variable `P17`: *Frecuencia con la que se ha hablado en diferentes entornos sociales de las elecciones*
 #### Variable `P17_1`: *En casa, con su familia*
@@ -1885,7 +1859,24 @@ cat(paste0("`", levels(cis_2020_EB_df$P17_1)[aux_idx], "`", collapse = ", "), se
 
 Sus respuestas son: `N.C.`.
 
-No se puede agrupar nada.
+Se elimina la modalidad nula.
+```{r}
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P17_1' & efectivo_peq_EB_df$freq == 0), "modalidad"])
+
+# Create recodes parameter
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P17_1)[aux_idx], collapse = "', '"), "') = NA")
+cis_2020_EB_df$P17_1_GRUPO <- car::recode(var = cis_2020_EB_df$P17_1, 
+                                    recodes = recodes_str, 
+                                    levels = c(levels(cis_2020_EB_df$P17_1)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(P17_1_GRUPO), .drop=FALSE)
+```
+
+No se reagrupa más.
+
+Se excluye la variable `P17_1` y se deja la nueva agrupación `P17_1_GRUPO`.
+```{r}
+excluded_cols <- c(excluded_cols, "P17_1")
+```
 
 #### Variable `P17_2`: *Con sus amigos/as*
 ```{r}
@@ -1903,7 +1894,24 @@ cat(paste0("`", levels(cis_2020_EB_df$P17_2)[aux_idx], "`", collapse = ", "), se
 
 Sus respuestas son: `N.C.`.
 
-No se puede agrupar nada.
+Se eliminan las modalidades nulas.
+```{r}
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P17_2' & efectivo_peq_EB_df$freq == 0), "modalidad"])
+
+# Create recodes parameter
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P17_2)[aux_idx], collapse = "', '"), "') = NA")
+cis_2020_EB_df$P17_2_GRUPO <- car::recode(var = cis_2020_EB_df$P17_2, 
+                                    recodes = recodes_str, 
+                                    levels = c(levels(cis_2020_EB_df$P17_2)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(P17_2_GRUPO), .drop=FALSE)
+```
+
+No se reagrupa más.
+
+Se excluye la variable `P17_2` y se deja la nueva agrupación `P17_2_GRUPO`.
+```{r}
+excluded_cols <- c(excluded_cols, "P17_2")
+```
 
 
 #### Variable `P17_3`: *En su lugar de trabajo o centro de estudios*
@@ -1940,7 +1948,25 @@ cat(paste0("`", levels(cis_2020_EB_df$P18)[aux_idx], "`", collapse = ", "), sep 
 
 Sus respuestas son: `N.C.`.
 
-No se puede agrupar nada.
+Se elimina la modalidad nula.
+```{r}
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P18' & efectivo_peq_EB_df$freq == 0), "modalidad"])
+
+# Create recodes parameter
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P18)[aux_idx], collapse = "', '"), "') = NA")
+cis_2020_EB_df$P18_GRUPO <- car::recode(var = cis_2020_EB_df$P18, 
+                                    recodes = recodes_str, 
+                                    levels = c(levels(cis_2020_EB_df$P18)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(P18_GRUPO), .drop=FALSE)
+```
+
+No se reagrupa más.
+
+Se excluye la variable `P18` y se deja la nueva agrupación `P18_GRUPO`.
+```{r}
+excluded_cols <- c(excluded_cols, "P18")
+```
+
 
 #### Variable `P18A`: *Grado de influencia personal de los sondeos de las elecciones*
 ```{r}
@@ -1956,19 +1982,37 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P
 cat(paste0("`", levels(cis_2020_EB_df$P18A)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-Se realizan dos reagrupaciones:
- + `Mucho` + `Bastante` $\Rightarrow$ `Bastante+`
- +  `N.S.` + `N.C.` $\Rightarrow$ `NS_NC`
+En primer lugar se eliminan las modalidades con cero efectivos.
 
 ```{r}
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P18A' & efectivo_peq_EB_df$freq == 0),"modalidad"])
+# # Write factors
+# cat(paste0("`", levels(cis_2020_EB_df$P18A)[aux_idx], "`", collapse = ", "), sep = "", ".")
+
 # Create recodes parameter
-recodes_str <- "c('Mucho', 'Bastante') = 'Bastante+'; c('N.S.', 'N.C.') = 'NS_NC'"
-# select old levels indices
-aux_idx <- which(levels(cis_2020_EB_df$P18A) %in% c('Mucho', 'Bastante', 'N.S.', 'N.C.'))
+recodes_str <- sprintf("c(%s) = NA",
+                       paste0("'", levels(cis_2020_EB_df$P18A)[aux_idx], "'", collapse = ", "))
+
 # Recode
 cis_2020_EB_df$P18A_GRUPO <- car::recode(var = cis_2020_EB_df$P18A, 
                                     recodes = recodes_str,
-                                    levels = c('Bastante+', levels(cis_2020_EB_df$P18A)[-aux_idx], 'NS_NC'))
+                                    levels = c(levels(cis_2020_EB_df$P18A)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(P18A_GRUPO, .drop=FALSE))
+```
+
+Se realiza una reagrupación:
+ + `Mucho` + `Bastante` $\Rightarrow$ `Bastante+`
+ 
+```{r}
+# Create recodes parameter
+recodes_str <- "c('Mucho', 'Bastante') = 'Bastante+'"
+# select old levels indices
+aux_idx <- which(levels(cis_2020_EB_df$P18A_GRUPO) %in% c('Mucho', 'Bastante'))
+# Recode
+cis_2020_EB_df$P18A_GRUPO <- car::recode(var = cis_2020_EB_df$P18A_GRUPO, 
+                                    recodes = recodes_str,
+                                    levels = c('Bastante+', levels(cis_2020_EB_df$P18A_GRUPO)[-aux_idx]))
 pander(cis_2020_EB_df %>% dplyr::count(P18A_GRUPO, .drop=FALSE))
 ```
 
@@ -1991,16 +2035,22 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P
 cat(paste0("`", levels(cis_2020_EB_df$P18B)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-Se reagrupan las modalidades `N.S.` y `N.C.` en una sola.
+En primer lugar se eliminan las modalidades con cero efectivos.
+
 ```{r}
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P18B' & efectivo_peq_EB_df$freq == 0),"modalidad"])
+# # Write factors
+# cat(paste0("`", levels(cis_2020_EB_df$P18B)[aux_idx], "`", collapse = ", "), sep = "", ".")
+
 # Create recodes parameter
-recodes_str <- "c('N.S.', 'N.C.') = 'NS_NC'"
-# select old levels indices
-aux_idx <- which(levels(cis_2020_EB_df$P18B) %in% c('N.S.', 'N.C.'))
+recodes_str <- sprintf("c(%s) = NA",
+                       paste0("'", levels(cis_2020_EB_df$P18B)[aux_idx], "'", collapse = ", "))
+
 # Recode
 cis_2020_EB_df$P18B_GRUPO <- car::recode(var = cis_2020_EB_df$P18B, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_EB_df$P18B)[-aux_idx], 'NS_NC'))
+                                    levels = c(levels(cis_2020_EB_df$P18B)[-aux_idx]))
 pander(cis_2020_EB_df %>% dplyr::count(P18B_GRUPO, .drop=FALSE))
 ```
 
