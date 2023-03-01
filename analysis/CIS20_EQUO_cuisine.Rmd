@@ -300,8 +300,8 @@ cat(efectivo_min_percent, "$\\cdot$", "n =", efectivo_min_percent, "$\\cdot$", n
 
 ```{r efect_peq_dplyr}
 # Create data frame 
-efectivo_peq_df <- data.frame(matrix(ncol = 3, nrow = 0))
-colnames(efectivo_peq_df) <- c("variable", "modalidad", "freq")
+efectivo_peq_EB_df <- data.frame(matrix(ncol = 3, nrow = 0))
+colnames(efectivo_peq_EB_df) <- c("variable", "modalidad", "freq")
 
 require(dplyr)
 
@@ -310,27 +310,27 @@ for (i in colnames(cis_2020_EB_df)[!(colnames(cis_2020_EB_df) %in% excluded_cols
   aux_idx <- which(aux_tbl$n < efectivo_min_abs)
   
   for (j in aux_idx) {
-    efectivo_peq_df[nrow(efectivo_peq_df)+1,] <- c(i, aux_tbl[j,1], aux_tbl[j,2])
+    efectivo_peq_EB_df[nrow(efectivo_peq_EB_df)+1,] <- c(i, aux_tbl[j,1], aux_tbl[j,2])
   }
 }
 ```
 
 Hay 
 ```{r echo=FALSE, results='asis'}
-cat(length(unique(efectivo_peq_df$variable)))
+cat(length(unique(efectivo_peq_EB_df$variable)))
 ```
  variables con efectivo pequeño son:
  
 ```{r echo=FALSE, results='asis'}
-cat(paste0("`", unique(efectivo_peq_df$variable), "`", collapse = ", "), sep = "", ".")
+cat(paste0("`", unique(efectivo_peq_EB_df$variable), "`", collapse = ", "), sep = "", ".")
 ```
 
 Es necesario *"cocinar"* estas variables una a una.
 
 ```{r echo=FALSE, results='asis', eval=FALSE}
 cat(sprintf("### Variable `%s`: *%s*\n",
-            unique(efectivo_peq_df$variable),
-            attributes(cis_2020_EB_df)$variable.labels[unique(efectivo_peq_df$variable)]),
+            unique(efectivo_peq_EB_df$variable),
+            attributes(cis_2020_EB_df)$variable.labels[unique(efectivo_peq_EB_df$variable)]),
     sep = "")
 ```
 
@@ -445,8 +445,8 @@ pander(cis_2020_EB_df %>% dplyr::count(TAMUNI, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'TAMUNI'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'TAMUNI'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$TAMUNI)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -539,9 +539,9 @@ Las posibles respuestas (modalidades) a la pregunta son:
 
 Sólo hay
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'A0a'),"modalidad"])
-cat(efectivo_peq_df[which(efectivo_peq_df$variable == "A0a" & efectivo_peq_df$modalidad == aux_idx ), "freq"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'A0a'),"modalidad"])
+cat(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == "A0a" & efectivo_peq_EB_df$modalidad == aux_idx ), "freq"])
 ```
  respuestas para la modalidad 
 ```{r echo=FALSE, results='asis'}
@@ -560,15 +560,15 @@ pander(cis_2020_EB_df %>% dplyr::count(P1, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P1'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P1'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se elimina la modalidad nula.
 ```{r}
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P1' & efectivo_peq_df$freq == 0), "modalidad"])
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P1' & efectivo_peq_EB_df$freq == 0), "modalidad"])
 
 # Create recodes parameter
 recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P1)[aux_idx], collapse = "', '"), "') = NA")
@@ -596,7 +596,7 @@ Table: Comunidades autónomas de nacimiento de los encuestados (`NA` corresponde
 
 El primer paso es eliminar las modalidades nulas:
 ```{r}
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P1A' & efectivo_peq_df$freq == 0), "modalidad"])
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P1A' & efectivo_peq_EB_df$freq == 0), "modalidad"])
 
 # Create recodes parameter
 recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P1A)[aux_idx], collapse = "', '"), "') = NA")
@@ -650,7 +650,7 @@ cat(length(cis_2020_EB_df$P1B[!is.na(cis_2020_EB_df$P1B)]))
 
 Se eliminan las modalidades nulas.
 ```{r}
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P1B' & efectivo_peq_df$freq == 0), "modalidad"])
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P1B' & efectivo_peq_EB_df$freq == 0), "modalidad"])
 
 # Create recodes parameter
 recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P1B)[aux_idx], collapse = "', '"), "') = 'Otra'")
@@ -693,15 +693,15 @@ pander(cis_2020_EB_df %>% dplyr::count(P2, .drop=FALSE))
 ```
 Esta pregunta tiene efectivos pequeños en las modalidades 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P2'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P2'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se eliminan las dos modalidades nulas.
 ```{r}
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P2' & efectivo_peq_df$freq == 0), "modalidad"])
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P2' & efectivo_peq_EB_df$freq == 0), "modalidad"])
 
 # Create recodes parameter
 recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P2)[aux_idx], collapse = "', '"), "') = NA")
@@ -726,8 +726,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P3_1, .drop=FALSE))
 ```
 Esta pregunta tiene efectivos pequeños en las modalidades 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P3_1'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P3_1'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P3_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -754,15 +754,15 @@ pander(cis_2020_EB_df %>% dplyr::count(P3_2, .drop=FALSE))
 ```
 Esta pregunta tiene efectivos pequeños en las modalidades 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P3_2'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P3_2'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P3_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se eliminan la modalidad nula.
 ```{r}
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P3_2' & efectivo_peq_df$freq == 0), "modalidad"])
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P3_2' & efectivo_peq_EB_df$freq == 0), "modalidad"])
 
 # Create recodes parameter
 recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P3_2)[aux_idx], collapse = "', '"), "') = NA")
@@ -786,8 +786,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P3_3, .drop=FALSE))
 ```
 Esta pregunta tiene efectivos pequeños en las modalidades 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P3_3'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P3_3'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P3_3)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -817,15 +817,15 @@ pander(cis_2020_EB_df %>% dplyr::count(P3_4, .drop=FALSE))
 ```
 Esta pregunta tiene efectivos pequeños en las modalidades 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P3_4'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P3_4'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P3_4)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se elimina la modalidad nula.
 ```{r}
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P3_4' & efectivo_peq_df$freq == 0), "modalidad"])
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P3_4' & efectivo_peq_EB_df$freq == 0), "modalidad"])
 
 # Create recodes parameter
 recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P3_4)[aux_idx], collapse = "', '"), "') = NA")
@@ -853,8 +853,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P4, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P4'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P4'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P4)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -935,7 +935,7 @@ pander(cis_2020_EB_df %>% dplyr::count(P6, .drop=FALSE))
 
 Se elimina la modalidad nula.
 ```{r}
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P6' & efectivo_peq_df$freq == 0), "modalidad"])
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P6' & efectivo_peq_EB_df$freq == 0), "modalidad"])
 
 # Create recodes parameter
 recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P6)[aux_idx], collapse = "', '"), "') = NA")
@@ -960,15 +960,15 @@ pander(cis_2020_EB_df %>% dplyr::count(P7, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P7'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P7'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P7)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
 Se eliminan ambas modalidades nulas.
 ```{r}
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P7' & efectivo_peq_df$freq == 0), "modalidad"])
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P7' & efectivo_peq_EB_df$freq == 0), "modalidad"])
 
 # Create recodes parameter
 recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P7)[aux_idx], collapse = "', '"), "') = NA")
@@ -993,8 +993,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P8_1, .drop=FALSE))
 ```
 Esta pregunta tiene efectivos pequeños en la modalidad 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P8_1'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P8_1'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P8_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1021,8 +1021,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P8_2, .drop=FALSE))
 ```
 Esta pregunta tiene efectivos pequeños en las modalidades 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P8_2'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P8_2'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P8_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1049,8 +1049,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P8_3, .drop=FALSE))
 ```
 Esta pregunta tiene efectivos pequeños en las modalidades 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P8_3'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P8_3'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P8_3)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1077,8 +1077,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P8_4, .drop=FALSE))
 ```
 Esta pregunta tiene efectivos pequeños en la modalidad 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P8_4'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P8_4'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P8_4)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1106,8 +1106,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P9, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P9'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P9'),"modalidad"])
 # length(aux_idx)
 # length(levels(cis_2020_EB_df$P9))
 # Write factors
@@ -1116,8 +1116,8 @@ cat(paste0("`", levels(cis_2020_EB_df$P9)[aux_idx], "`", collapse = ", "), sep =
 En primer lugar se eliminan las modalidades con cero efectivos.
 
 ```{r}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P9' & efectivo_peq_df$freq == 0),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P9' & efectivo_peq_EB_df$freq == 0),"modalidad"])
 # # Write factors
 # cat(paste0("`", levels(cis_2020_EB_df$P9)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
@@ -1170,8 +1170,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P9A, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P9A'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P9A'),"modalidad"])
 # length(aux_idx)
 # length(levels(cis_2020_EB_df$P9A))
 # Write factors
@@ -1206,8 +1206,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P9B, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P9B'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P9B'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P9B)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1240,8 +1240,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P10_1, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P10_1'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P10_1'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P10_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1272,8 +1272,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P10_3, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P10_3'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P10_3'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P10_3)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1287,8 +1287,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P10A, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P10A'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P10A'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P10A)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1296,8 +1296,8 @@ cat(paste0("`", levels(cis_2020_EB_df$P10A)[aux_idx], "`", collapse = ", "), sep
 En primer lugar se eliminan las modalidades con cero efectivos.
 
 ```{r}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P10A' & efectivo_peq_df$freq == 0),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P10A' & efectivo_peq_EB_df$freq == 0),"modalidad"])
 # # Write factors
 # cat(paste0("`", levels(cis_2020_EB_df$P10A)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
@@ -1346,8 +1346,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P10B, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P10B'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P10B'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P10B)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1355,8 +1355,8 @@ cat(paste0("`", levels(cis_2020_EB_df$P10B)[aux_idx], "`", collapse = ", "), sep
 En primer lugar se eliminan las modalidades con cero efectivos.
 
 ```{r}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P10B' & efectivo_peq_df$freq == 0),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P10B' & efectivo_peq_EB_df$freq == 0),"modalidad"])
 # # Write factors
 # cat(paste0("`", levels(cis_2020_EB_df$P10B)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
@@ -1406,8 +1406,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P10C, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P10C'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P10C'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P10C)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1415,8 +1415,8 @@ cat(paste0("`", levels(cis_2020_EB_df$P10C)[aux_idx], "`", collapse = ", "), sep
 En primer lugar se eliminan las modalidades con cero efectivos.
 
 ```{r}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P10C' & efectivo_peq_df$freq == 0),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P10C' & efectivo_peq_EB_df$freq == 0),"modalidad"])
 # # Write factors
 # cat(paste0("`", levels(cis_2020_EB_df$P10C)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
@@ -1468,8 +1468,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P10D, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P10D'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P10D'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P10D)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1478,8 +1478,8 @@ cat(paste0("`", levels(cis_2020_EB_df$P10D)[aux_idx], "`", collapse = ", "), sep
 En primer lugar se eliminan las modalidades con cero efectivos.
 
 ```{r}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P10D' & efectivo_peq_df$freq == 0),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P10D' & efectivo_peq_EB_df$freq == 0),"modalidad"])
 # # Write factors
 # cat(paste0("`", levels(cis_2020_EB_df$P10D)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
@@ -1531,8 +1531,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P11_9, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P11_9'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P11_9'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P11_9)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1551,8 +1551,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P13_1, .drop=FALSE))
 ```
 Esta pregunta tiene efectivos pequeños en la modalidad 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P13_1'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P13_1'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P13_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1580,8 +1580,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P13_2, .drop=FALSE))
 ```
 Esta pregunta tiene efectivos pequeños en la modalidad 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P13_2'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P13_2'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P13_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1608,8 +1608,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P13_3, .drop=FALSE))
 ```
 Esta pregunta tiene efectivos pequeños en la modalidad 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P13_3'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P13_3'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P13_3)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1636,8 +1636,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P13_4, .drop=FALSE))
 ```
 Esta pregunta tiene efectivos pequeños en la modalidad 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P13_4'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P13_4'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P13_4)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1666,8 +1666,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P13_5, .drop=FALSE))
 ```
 Esta pregunta tiene efectivos pequeños en la modalidad 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P13_5'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P13_5'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P13_5)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1695,8 +1695,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P14, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P14'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P14'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P14)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1724,8 +1724,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P14A_98, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P14A_98'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P14A_98'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P14A_98)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1763,8 +1763,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P15, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P15'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P15'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P15)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1786,21 +1786,32 @@ excluded_cols <- c(excluded_cols, "P15")
 
 #### Variable `P15A_99`: *N.C.*
 ```{r}
+aux_tbl <- cis_2020_EB_df %>% dplyr::count(P15A_99, .drop=FALSE)
 require(pander)
-pander(cis_2020_EB_df %>% dplyr::count(P15A_99, .drop=FALSE))
+pander(aux_tbl)
 ```
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P15A_99'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P15A_99'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P15A_99)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-O sea que dicen que `N.C.`.
+El número de individuos que eligen `N.C.` es: 
+```{r echo=FALSE, results='asis'}
+cat(min(aux_tbl$n))
+```
+Esto supone el 
+```{r echo=FALSE, results='asis'}
+cat(signif(100 * min(aux_tbl$n) / nrow(cis_2020_EB_df), digits = 1))
+```
+ % del total de respuestas, que es algo matemáticamente despreciable. Por tanto se excluye esta pregunta dado que no aporta nada nuevo.
+```{r}
+excluded_cols <- c(excluded_cols, "P15A_99")
+```
 
-No se puede agrupar nada.
 
 
 ### Variable `P16`: *Recepción de mensajes electrónicos en relación con algún partido político en las elecciones*
@@ -1811,8 +1822,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P16, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P16'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P16'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P16)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1829,8 +1840,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P16A_95, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P16A_95'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P16A_95'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P16A_95)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1847,8 +1858,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P16A_99, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P16A_99'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P16A_99'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P16A_99)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1866,8 +1877,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P17_1, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P17_1'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P17_1'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P17_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1884,8 +1895,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P17_2, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P17_2'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P17_2'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P17_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1903,8 +1914,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P17_3, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P17_3'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P17_3'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P17_3)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1921,8 +1932,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P18, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en la modalidad 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P18'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P18'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P18)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1939,8 +1950,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P18A, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades: 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P18A'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P18A'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P18A)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -1974,8 +1985,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P18B, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P18B'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P18B'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P18B)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2009,8 +2020,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P19, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P19'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P19'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P19)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2026,8 +2037,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P19A01, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P19A01'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P19A01'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P19A01)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2043,8 +2054,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P19A02, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P19A02'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P19A02'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P19A02)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2060,8 +2071,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P20, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P20'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P20'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P20)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2077,8 +2088,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P20A_1, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P20A_1'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P20A_1'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P20A_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2110,8 +2121,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P21, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P21'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P21'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P21)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2128,8 +2139,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P21A, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P21A'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P21A'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P21A)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2145,8 +2156,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P21B_1, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P21B_1'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P21B_1'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P21B_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2177,8 +2188,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P21B_2, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P21B_2'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P21B_2'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P21B_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2193,8 +2204,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P21C, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P21C'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P21C'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P21C)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2202,8 +2213,8 @@ cat(paste0("`", levels(cis_2020_EB_df$P21C)[aux_idx], "`", collapse = ", "), sep
 En primer lugar se eliminan las modalidades con cero efectivos.
 
 ```{r}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P21C' & efectivo_peq_df$freq == 0),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P21C' & efectivo_peq_EB_df$freq == 0),"modalidad"])
 # # Write factors
 # cat(paste0("`", levels(cis_2020_EB_df$P21C)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
@@ -2234,8 +2245,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P22, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P22'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P22'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P22)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2251,8 +2262,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P23, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P23'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P23'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P23)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2270,8 +2281,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P24_5, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P24_5'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P24_5'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P24_5)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2303,8 +2314,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P24_6, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P24_6'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P24_6'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P24_6)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2338,8 +2349,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P24_7, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P24_7'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P24_7'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P24_7)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2374,8 +2385,8 @@ pander(cis_2020_EB_df %>% dplyr::count(PARTICIPACIONA, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'PARTICIPACIONA'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'PARTICIPACIONA'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$PARTICIPACIONA)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2391,8 +2402,8 @@ pander(cis_2020_EB_df %>% dplyr::count(RECUVOTOA, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'RECUVOTOA'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'RECUVOTOA'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$RECUVOTOA)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2410,8 +2421,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P26_1, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P26_1'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P26_1'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P26_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2426,8 +2437,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P26_2, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P26_2'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P26_2'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P26_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2442,8 +2453,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P26_3, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P26_3'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P26_3'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P26_3)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2472,8 +2483,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P26_4, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P26_4'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P26_4'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P26_4)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2502,8 +2513,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P26_5, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P26_5'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P26_5'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P26_5)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2531,8 +2542,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P26_6, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P26_6'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P26_6'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P26_6)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2561,8 +2572,8 @@ pander(cis_2020_EB_df %>% dplyr::count(P28, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P28'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P28'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P28)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2593,8 +2604,8 @@ pander(cis_2020_EB_df %>% dplyr::count(PARTICIPACIONG, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'PARTICIPACIONG'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'PARTICIPACIONG'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$PARTICIPACIONG)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2610,8 +2621,8 @@ pander(cis_2020_EB_df %>% dplyr::count(RECUVOTOG, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'RECUVOTOG'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'RECUVOTOG'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$RECUVOTOG)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2627,8 +2638,8 @@ pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOL, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'ESCIDEOL'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'ESCIDEOL'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOL)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2658,8 +2669,8 @@ pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_1, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'ESCIDEOLPAR_1'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'ESCIDEOLPAR_1'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOLPAR_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2687,8 +2698,8 @@ pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_2, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'ESCIDEOLPAR_2'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'ESCIDEOLPAR_2'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOLPAR_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2720,8 +2731,8 @@ pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_3, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'ESCIDEOLPAR_3'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'ESCIDEOLPAR_3'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOLPAR_3)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2749,8 +2760,8 @@ pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_4, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'ESCIDEOLPAR_4'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'ESCIDEOLPAR_4'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOLPAR_4)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2778,8 +2789,8 @@ pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_5, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'ESCIDEOLPAR_5'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'ESCIDEOLPAR_5'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOLPAR_5)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2808,8 +2819,8 @@ pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_6, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'ESCIDEOLPAR_6'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'ESCIDEOLPAR_6'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOLPAR_6)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2837,8 +2848,8 @@ pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_7, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'ESCIDEOLPAR_7'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'ESCIDEOLPAR_7'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOLPAR_7)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2869,8 +2880,8 @@ pander(cis_2020_EB_df %>% dplyr::count(ESCUELA, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'ESCUELA'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'ESCUELA'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$ESCUELA)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2899,8 +2910,8 @@ pander(cis_2020_EB_df %>% dplyr::count(NIVELESTENTREV, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'NIVELESTENTREV'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'NIVELESTENTREV'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$NIVELESTENTREV)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2932,8 +2943,8 @@ pander(cis_2020_EB_df %>% dplyr::count(RELIGION, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'RELIGION'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'RELIGION'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$RELIGION)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2948,8 +2959,8 @@ pander(cis_2020_EB_df %>% dplyr::count(FRECUENCIARELI, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'FRECUENCIARELI'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'FRECUENCIARELI'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$FRECUENCIARELI)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2965,8 +2976,8 @@ pander(cis_2020_EB_df %>% dplyr::count(ESTADOCIVIL, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'ESTADOCIVIL'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'ESTADOCIVIL'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$ESTADOCIVIL)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -2982,8 +2993,8 @@ pander(cis_2020_EB_df %>% dplyr::count(SITLAB, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'SITLAB'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'SITLAB'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$SITLAB)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -3001,8 +3012,8 @@ pander(cis_2020_EB_df %>% dplyr::count(CNO11, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'CNO11'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'CNO11'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$CNO11)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -3018,8 +3029,8 @@ pander(cis_2020_EB_df %>% dplyr::count(RELALAB, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'RELALAB'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'RELALAB'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$RELALAB)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -3035,8 +3046,8 @@ pander(cis_2020_EB_df %>% dplyr::count(CLASESOCIAL, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'CLASESOCIAL'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'CLASESOCIAL'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$CLASESOCIAL)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -3063,10 +3074,10 @@ excluded_cols <- c(excluded_cols, "CLASESOCIAL")
 Desconozco el significado de las modalidades que tienen la variables que van desde `IA_I501` hasta `IA_I537`. Por tanto las excluyo hasta que tenga un mejor conocimiento de ellas.
 
 ```{r}
-i <- which(unique(efectivo_peq_df$variable) == "IA_I506")
-j <- which(unique(efectivo_peq_df$variable) == "IA_I537")
-### aux_idx <- paste0(unique(efectivo_peq_df$variable)[i:j], collapse = ", ")
-aux_idx <- unique(efectivo_peq_df$variable)[i:j]
+i <- which(unique(efectivo_peq_EB_df$variable) == "IA_I506")
+j <- which(unique(efectivo_peq_EB_df$variable) == "IA_I537")
+### aux_idx <- paste0(unique(efectivo_peq_EB_df$variable)[i:j], collapse = ", ")
+aux_idx <- unique(efectivo_peq_EB_df$variable)[i:j]
 excluded_cols <- c(excluded_cols, aux_idx)
 ```
 
@@ -3080,16 +3091,16 @@ pander(cis_2020_EB_df %>% dplyr::count(IA_E1_DIA, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_E1_DIA'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'IA_E1_DIA'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$IA_E1_DIA)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 Se eliminan las modalidades con cero efectivos.
 
 ```{r}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_E1_DIA' & efectivo_peq_df$freq == 0),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'IA_E1_DIA' & efectivo_peq_EB_df$freq == 0),"modalidad"])
 # # Write factors
 # cat(paste0("`", levels(cis_2020_EB_df$IA_E1_DIA)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
@@ -3119,16 +3130,16 @@ pander(cis_2020_EB_df %>% dplyr::count(IA_E2, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_E2'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'IA_E2'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$IA_E2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 Se eliminan las modalidades con cero efectivos.
 
 ```{r}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_E2' & efectivo_peq_df$freq == 0),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'IA_E2' & efectivo_peq_EB_df$freq == 0),"modalidad"])
 # # Write factors
 # cat(paste0("`", levels(cis_2020_EB_df$IA_E2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
@@ -3158,16 +3169,16 @@ pander(cis_2020_EB_df %>% dplyr::count(IA_E4, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_E4'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'IA_E4'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$IA_E4)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 Se eliminan las modalidades con cero efectivos.
 
 ```{r}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_E4' & efectivo_peq_df$freq == 0),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'IA_E4' & efectivo_peq_EB_df$freq == 0),"modalidad"])
 # # Write factors
 # cat(paste0("`", levels(cis_2020_EB_df$IA_E4)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
@@ -3196,8 +3207,8 @@ pander(cis_2020_EB_df %>% dplyr::count(IA_MODIFICADA, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_MODIFICADA'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'IA_MODIFICADA'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$IA_MODIFICADA)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -3212,8 +3223,8 @@ pander(cis_2020_EB_df %>% dplyr::count(IA_SUPERVISADA, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_SUPERVISADA'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'IA_SUPERVISADA'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$IA_SUPERVISADA)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -3228,16 +3239,16 @@ pander(cis_2020_EB_df %>% dplyr::count(IA_C2, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_C2'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'IA_C2'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$IA_C2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 Se eliminan las modalidades con cero efectivos.
 
 ```{r}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_C2' & efectivo_peq_df$freq == 0),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'IA_C2' & efectivo_peq_EB_df$freq == 0),"modalidad"])
 # # Write factors
 # cat(paste0("`", levels(cis_2020_EB_df$IA_C2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
@@ -3265,16 +3276,16 @@ pander(cis_2020_EB_df %>% dplyr::count(IA_C2A, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_C2A'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'IA_C2A'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$IA_C2A)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 Se eliminan las modalidades con cero efectivos.
 
 ```{r}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_C2A' & efectivo_peq_df$freq == 0),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'IA_C2A' & efectivo_peq_EB_df$freq == 0),"modalidad"])
 # # Write factors
 # cat(paste0("`", levels(cis_2020_EB_df$IA_C2A)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
@@ -3304,16 +3315,16 @@ pander(cis_2020_EB_df %>% dplyr::count(IA_C3, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_C3'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'IA_C3'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$IA_C3)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 Se eliminan las modalidades con cero efectivos.
 
 ```{r}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'IA_C3' & efectivo_peq_df$freq == 0),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'IA_C3' & efectivo_peq_EB_df$freq == 0),"modalidad"])
 # # Write factors
 # cat(paste0("`", levels(cis_2020_EB_df$IA_C3)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
@@ -3342,16 +3353,16 @@ pander(cis_2020_EB_df %>% dplyr::count(P19ACOM, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P19ACOM'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P19ACOM'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$P19ACOM)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 Se eliminan las modalidades con cero efectivos.
 
 ```{r}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P19ACOM' & efectivo_peq_df$freq == 0),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P19ACOM' & efectivo_peq_EB_df$freq == 0),"modalidad"])
 # Replace ' character with escape character \\'
 str_aux_1 <- levels(cis_2020_EB_df$P19ACOM)[aux_idx]
 str_aux_2 <- gsub(pattern = "'", replacement = "\\\\'", x = str_aux_1)
@@ -3386,8 +3397,8 @@ pander(cis_2020_EB_df %>% dplyr::count(RVAUTO20, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'RVAUTO20'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'RVAUTO20'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$RVAUTO20)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -3404,8 +3415,8 @@ pander(cis_2020_EB_df %>% dplyr::count(RVAUTO16, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'RVAUTO16'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'RVAUTO16'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$RVAUTO16)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -3421,8 +3432,8 @@ pander(cis_2020_EB_df %>% dplyr::count(RECUERDO, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'RECUERDO'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'RECUERDO'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$RECUERDO)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -3440,8 +3451,8 @@ pander(cis_2020_EB_df %>% dplyr::count(ESTUDIOS, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'ESTUDIOS'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'ESTUDIOS'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$ESTUDIOS)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
@@ -3458,8 +3469,8 @@ pander(cis_2020_EB_df %>% dplyr::count(CLASESUB, .drop=FALSE))
 
 Esta pregunta tiene efectivos pequeños en las modalidades:  
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_df
-aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'CLASESUB'),"modalidad"])
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'CLASESUB'),"modalidad"])
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$CLASESUB)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
