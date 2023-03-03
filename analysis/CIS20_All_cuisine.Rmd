@@ -1976,7 +1976,7 @@ aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P26_1')
 cat(paste0("`", levels(cis_2020_df$P26_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-En este caso no se realizaza ninguna reagrupación.
+En este caso no se realiza ninguna reagrupación.
 
 #### Variable `P26_2`: *Maddalen Iriarte*
 ```{r}
@@ -1992,7 +1992,7 @@ aux_idx <- as.numeric(efectivo_peq_df[which(efectivo_peq_df$variable == 'P26_2')
 cat(paste0("`", levels(cis_2020_df$P26_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-En este caso no se realizaza ninguna reagrupación.
+En este caso no se realiza ninguna reagrupación.
 
 #### Variable `P26_3`: *Idoia Mendia*
 ```{r}
