@@ -335,10 +335,10 @@ cat(sprintf("### Variable `%s`: *%s*\n",
 ```
 
 
-### Variable `RECUVOTOA`: *Recuerdo de voto en las elecciones autonómicas del País Vasco de 2016 de los votantes*
-
-### Variable `P26_1`: *Íñigo Urkullu*
 ### Variable `P26_2`: *Maddalen Iriarte*
+
+ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    
+
 ### Variable `P26_3`: *Idoia Mendia*
 ### Variable `P26_4`: *Miren Gorrotxategi*
 ### Variable `P26_5`: *Carlos Iturgaiz*
