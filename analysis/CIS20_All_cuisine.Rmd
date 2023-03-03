@@ -1925,7 +1925,7 @@ excluded_cols <- c(excluded_cols, "P24_7")
 ```
 
 
-### Variable `PARTICIPACIONA`: *Participación electoral en las elecciones *
+### Variable `PARTICIPACIONA`: *Participación electoral en las elecciones autonómicas de 2016*
 
 ```{r}
 require(pander)
@@ -1943,7 +1943,7 @@ cat(paste0("`", levels(cis_2020_df$PARTICIPACIONA)[aux_idx], "`", collapse = ", 
 **En este caso no tengo criterio para hacer reagrupaciones. Quedo pendiente de la respuesta que me de JRB.**
 
 
-### Variable `RECUVOTOA`: *Recuerdo de voto en las elecciones*
+#### Variable `RECUVOTOA`: *Recuerdo de voto en las elecciones autonómicas de 2016 de los votantes*
 ```{r}
 require(pander)
 pander(cis_2020_df %>% dplyr::count(RECUVOTOA, .drop=FALSE))
