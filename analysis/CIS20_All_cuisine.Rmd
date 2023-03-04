@@ -2162,7 +2162,7 @@ cat(paste0("`", levels(cis_2020_df$PARTICIPACIONG)[aux_idx], "`", collapse = ", 
 **En este caso no tengo criterio para hacer reagrupaciones. Quedo pendiente de la respuesta que me de JRB.**
 
 
-### Variable `RECUVOTOG`: *Recuerdo de voto en las elecciones generales de noviembre de 2019 de los votantes*
+#### Variable `RECUVOTOG`: *Recuerdo de voto en las elecciones generales de noviembre de 2019 de los votantes*
 ```{r}
 require(pander)
 pander(cis_2020_df %>% dplyr::count(RECUVOTOG, .drop=FALSE))
