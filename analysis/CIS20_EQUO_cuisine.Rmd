@@ -336,18 +336,10 @@ cat(sprintf("### Variable `%s`: *%s*\n",
 
 
 
-### Variable `ESCIDEOLPAR_1`: *EAJ-PNV*
-
-ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI
-
-### Variable `ESCIDEOLPAR_2`: *EH Bildu*
-### Variable `ESCIDEOLPAR_3`: *PSE-EE-PSOE*
-### Variable `ESCIDEOLPAR_4`: *Elkarrekin Podemos*
-### Variable `ESCIDEOLPAR_5`: *PP*
-### Variable `ESCIDEOLPAR_6`: *Ciudadanos*
-### Variable `ESCIDEOLPAR_7`: *VOX*
-### Variable `ESCUELA`: *Escolarización de la persona entrevistada*
 ### Variable `NIVELESTENTREV`: *Nivel de estudios alcanzado por la persona entrevistada*
+
+ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    ESTAS AQUI
+
 ### Variable `RELIGION`: *Religiosidad de la persona entrevistada*
 ### Variable `FRECUENCIARELI`: *Frecuencia de asistencia a oficios religiosos*
 ### Variable `ESTADOCIVIL`: *Estado civil de la persona entrevistada*
@@ -2961,7 +2953,7 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P
 cat(paste0("`", levels(cis_2020_EB_df$P26_5)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-Se reagrupan por un lado del`7`+`8`+`9`+`10` y por otro `N.S.`+`N.C.`.
+Se reagrupan por un lado `7`+`8`+`9`+`10` y por otro `N.S.`+`N.C.`.
 ```{r}
 # levels(cis_2020_EB_df$P26_5)
 
@@ -2993,7 +2985,7 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P
 cat(paste0("`", levels(cis_2020_EB_df$P26_6)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-Se reagrupan por un lado del`7`+`8`+`9`+`10` y por otro `N.S.`+`N.C.`.
+Se reagrupan por un lado `7`+`8`+`9`+`10` y por otro `N.S.`+`N.C.`.
 ```{r}
 # levels(cis_2020_EB_df$P26_6)
 
@@ -3214,14 +3206,17 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'E
 cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOLPAR_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-Se reagrupan ambas en una sola.
+Se reagrupan por un lado `1 Izquierda`+`2`+`3`+`4` y por otro `N.S.`+`N.C.`.
 ```{r}
+# levels(cis_2020_EB_df$ESCIDEOLPAR_1)
+
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$ESCIDEOLPAR_1)[aux_idx], collapse = "', '"), "') = '1_2'")
+recodes_str <- "c('1 Izquierda', '2', '3', '4') = '1_4'; c('N.S.', 'N.C.') = 'NS_NC'"
+# Recode
 cis_2020_EB_df$ESCIDEOLPAR_1_GRUPO <- car::recode(var = cis_2020_EB_df$ESCIDEOLPAR_1, 
-                                    recodes = recodes_str, 
-                                    levels = c('1_2', levels(cis_2020_EB_df$ESCIDEOLPAR_1)[c(4:10,2)], levels(cis_2020_EB_df$ESCIDEOLPAR_1)[11:12]))
-pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_1_GRUPO), .drop=FALSE)
+                                    recodes = recodes_str,
+                                    levels = c('1_4', levels(cis_2020_EB_df$ESCIDEOLPAR_1)[c(6:10, 2)], "NS_NC"))
+pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_1_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `ESCIDEOLPAR_1` y se deja la nueva agrupación `ESCIDEOLPAR_1_GRUPO`.
@@ -3243,17 +3238,17 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'E
 cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOLPAR_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-Se reagrupan por un lado `6`+`7` y por otro `8`+`9`+`10`.
+Se reagrupan por un lado `7`+`8`+`9`+`10 Derecha` y por otro `N.S.`+`N.C.`.
 
 ```{r}
-# levels(cis_2020_EB_df$ESCIDEOLPAR_2)[3]
+# levels(cis_2020_EB_df$ESCIDEOLPAR_2)
 
 # Create recodes parameter
-recodes_str <- "c('6', '7') = '6_7'; c('8', '9', '10 Derecha') = '8_10'"
+recodes_str <- "c('7', '8', '9', '10 Derecha') = '7_10'; c('N.S.', 'N.C.') = 'NS_NC'"
 # Recode
 cis_2020_EB_df$ESCIDEOLPAR_2_GRUPO <- car::recode(var = cis_2020_EB_df$ESCIDEOLPAR_2, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_EB_df$ESCIDEOLPAR_2)[c(1,3:6)], "6_7", "8_10", levels(cis_2020_EB_df$ESCIDEOLPAR_2)[c(11,12)]))
+                                    levels = c(levels(cis_2020_EB_df$ESCIDEOLPAR_2)[c(1,3:7)], "7_10", "NS_NC"))
 pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_2_GRUPO, .drop=FALSE))
 ```
 
@@ -3276,14 +3271,18 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'E
 cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOLPAR_3)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-Se reagrupan ambas en una sola.
+Se reagrupan por un lado `8`+`9`+`10 Derecha` y por otro `N.S.`+`N.C.`.
+
 ```{r}
+# levels(cis_2020_EB_df$ESCIDEOLPAR_3)
+
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$ESCIDEOLPAR_3)[aux_idx], collapse = "', '"), "') = '9_10'")
+recodes_str <- "c('8', '9', '10 Derecha') = '8_10'; c('N.S.', 'N.C.') = 'NS_NC'"
+# Recode
 cis_2020_EB_df$ESCIDEOLPAR_3_GRUPO <- car::recode(var = cis_2020_EB_df$ESCIDEOLPAR_3, 
-                                    recodes = recodes_str, 
-                                    levels = c(levels(cis_2020_EB_df$ESCIDEOLPAR_3)[c(1,3:9)], '9_10', levels(cis_2020_EB_df$ESCIDEOLPAR_3)[11:12]))
-pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_3_GRUPO), .drop=FALSE)
+                                    recodes = recodes_str,
+                                    levels = c(levels(cis_2020_EB_df$ESCIDEOLPAR_3)[c(1,3:8)], "8_10", "NS_NC"))
+pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_3_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `ESCIDEOLPAR_3` y se deja la nueva agrupación `ESCIDEOLPAR_3_GRUPO`.
@@ -3305,14 +3304,18 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'E
 cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOLPAR_4)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-Se reagrupan todas en una sola.
+Se reagrupan por un lado `7`+`8`+`9`+`10 Derecha` y por otro `N.S.`+`N.C.`.
+
 ```{r}
+# levels(cis_2020_EB_df$ESCIDEOLPAR_4)
+
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$ESCIDEOLPAR_4)[aux_idx], collapse = "', '"), "') = '7_10'")
+recodes_str <- "c('7', '8', '9', '10 Derecha') = '7_10'; c('N.S.', 'N.C.') = 'NS_NC'"
+# Recode
 cis_2020_EB_df$ESCIDEOLPAR_4_GRUPO <- car::recode(var = cis_2020_EB_df$ESCIDEOLPAR_4, 
-                                    recodes = recodes_str, 
-                                    levels = c(levels(cis_2020_EB_df$ESCIDEOLPAR_4)[c(1,3:7)], '7_10', levels(cis_2020_EB_df$ESCIDEOLPAR_4)[11:12]))
-pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_4_GRUPO), .drop=FALSE)
+                                    recodes = recodes_str,
+                                    levels = c(levels(cis_2020_EB_df$ESCIDEOLPAR_4)[c(1,3:7)], "7_10", "NS_NC"))
+pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_4_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `ESCIDEOLPAR_4` y se deja la nueva agrupación `ESCIDEOLPAR_4_GRUPO`.
@@ -3334,14 +3337,17 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'E
 cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOLPAR_5)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-Se reagrupan todas en una sola.
+Se reagrupan por un lado `1 Izquierda`+`2`+`3`+`4`+`5`+`6` y por otro `N.S.`+`N.C.`.
 ```{r}
+# levels(cis_2020_EB_df$ESCIDEOLPAR_5)
+
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$ESCIDEOLPAR_5)[aux_idx], collapse = "', '"), "') = '1_4'")
+recodes_str <- "c('1 Izquierda', '2', '3', '4', '5', '6') = '1_6'; c('N.S.', 'N.C.') = 'NS_NC'"
+# Recode
 cis_2020_EB_df$ESCIDEOLPAR_5_GRUPO <- car::recode(var = cis_2020_EB_df$ESCIDEOLPAR_5, 
-                                    recodes = recodes_str, 
-                                    levels = c('1_4', levels(cis_2020_EB_df$ESCIDEOLPAR_5)[c(6:10,2)], levels(cis_2020_EB_df$ESCIDEOLPAR_5)[11:12]))
-pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_5_GRUPO), .drop=FALSE)
+                                    recodes = recodes_str,
+                                    levels = c('1_6', levels(cis_2020_EB_df$ESCIDEOLPAR_5)[c(8:10, 2)], "NS_NC"))
+pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_5_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `ESCIDEOLPAR_5` y se deja la nueva agrupación `ESCIDEOLPAR_5_GRUPO`.
@@ -3364,14 +3370,17 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'E
 cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOLPAR_6)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-Se reagrupan todas en una sola.
+Se reagrupan por un lado `1 Izquierda`+`2`+`3`+`4`+`5` y por otro `N.S.`+`N.C.`.
 ```{r}
+# levels(cis_2020_EB_df$ESCIDEOLPAR_6)
+
 # Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$ESCIDEOLPAR_6)[aux_idx], collapse = "', '"), "') = '1_4'")
+recodes_str <- "c('1 Izquierda', '2', '3', '4', '5') = '1_5'; c('N.S.', 'N.C.') = 'NS_NC'"
+# Recode
 cis_2020_EB_df$ESCIDEOLPAR_6_GRUPO <- car::recode(var = cis_2020_EB_df$ESCIDEOLPAR_6, 
-                                    recodes = recodes_str, 
-                                    levels = c('1_4', levels(cis_2020_EB_df$ESCIDEOLPAR_6)[c(6:10,2)], levels(cis_2020_EB_df$ESCIDEOLPAR_6)[11:12]))
-pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_6_GRUPO), .drop=FALSE)
+                                    recodes = recodes_str,
+                                    levels = c('1_5', levels(cis_2020_EB_df$ESCIDEOLPAR_6)[c(7:10, 2)], "NS_NC"))
+pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_6_GRUPO, .drop=FALSE))
 ```
 
 Se excluye la variable `ESCIDEOLPAR_6` y se deja la nueva agrupación `ESCIDEOLPAR_6_GRUPO`.
@@ -3393,15 +3402,16 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'E
 cat(paste0("`", levels(cis_2020_EB_df$ESCIDEOLPAR_7)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-Se reagrupan por un lado `2`+`3`+`4`+`5` y por otro `6`+`7`:
-
+Se reagrupan por un lado `1 Izquierda`+`2`+`3`+`4`+`5`+`6`+`7`+`8` y por otro `N.S.`+`N.C.`.
 ```{r}
+# levels(cis_2020_EB_df$ESCIDEOLPAR_7)
+
 # Create recodes parameter
-recodes_str <- "c('2', '3', '4', '5') = '2_5'; c('6', '7') = '6_7'"
+recodes_str <- "c('1 Izquierda', '2', '3', '4', '5', '6', '7', '8') = '1_8'; c('N.S.', 'N.C.') = 'NS_NC'"
 # Recode
 cis_2020_EB_df$ESCIDEOLPAR_7_GRUPO <- car::recode(var = cis_2020_EB_df$ESCIDEOLPAR_7, 
                                     recodes = recodes_str,
-                                    levels = c(levels(cis_2020_EB_df$ESCIDEOLPAR_7)[1], "2_5", "6_7", levels(cis_2020_EB_df$ESCIDEOLPAR_7)[c(9,10,2,11,12)]))
+                                    levels = c('1_8', levels(cis_2020_EB_df$ESCIDEOLPAR_7)[c(10, 2)], "NS_NC"))
 pander(cis_2020_EB_df %>% dplyr::count(ESCIDEOLPAR_7_GRUPO, .drop=FALSE))
 ```
 
@@ -3411,32 +3421,19 @@ excluded_cols <- c(excluded_cols, "ESCIDEOLPAR_7")
 ```
 
 
-### Variable *P33*, `ESCUELA`: *Escolarización de la persona entrevistada*
+### Variable `ESCUELA`: *P33, Escolarización de la persona entrevistada*
 ```{r}
 require(pander)
-pander(cis_2020_EB_df %>% dplyr::count(ESCUELA, .drop=FALSE))
+aux_tbl <- cis_2020_EB_df %>% dplyr::count(ESCUELA, .drop=FALSE)
+pander(aux_tbl)
 ```
 
-Esta pregunta tiene efectivos pequeños en las modalidades:  
+En esta pregunta, todas las encuestas excepto una dicen que 
 ```{r echo=FALSE, results='asis'}
-# Select factor numbers from efectivo_peq_EB_df
-aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'ESCUELA'),"modalidad"])
-# Write factors
-cat(paste0("`", levels(cis_2020_EB_df$ESCUELA)[aux_idx], "`", collapse = ", "), sep = "", ".")
+cat("`", levels(cis_2020_EB_df$ESCUELA)[which.max(aux_tbl$n)], "`.", sep = "")
 ```
 
-Se reagrupan dos de ellas en una sola:
-
-```{r}
-# Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$ESCUELA)[aux_idx[c(1,2)]], collapse = "', '"), "') = 'No, pero sabe leer y escribir-'")
-cis_2020_EB_df$ESCUELA_GRUPO <- car::recode(var = cis_2020_EB_df$ESCUELA, 
-                                    recodes = recodes_str, 
-                                    levels = c('No, pero sabe leer y escribir-', levels(cis_2020_EB_df$ESCUELA)[c(3,4)]))
-pander(cis_2020_EB_df %>% dplyr::count(ESCUELA_GRUPO), .drop=FALSE)
-```
-
-Se excluye la variable `ESCUELA` y se deja la nueva agrupación `ESCUELA_GRUPO`.
+Esto nos dice que para esta pregunta *"todos"* los encuestados son *"iguales"*. O sea que no nos ayuda a discriminar o a clasificar elementos. Por tanto se excluye la variable `ESCUELA` de este ACM.
 ```{r}
 excluded_cols <- c(excluded_cols, "ESCUELA")
 ```
