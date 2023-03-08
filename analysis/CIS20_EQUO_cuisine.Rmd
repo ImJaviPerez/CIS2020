@@ -63,13 +63,13 @@ library(log4r)
 # Create a new logger object with create.logger().
 logger <- create.logger()
 # Set the logger's file output.
-logfile(logger) <- 'cis_2020_equo_cuisine..log'
+logfile(logger) <- 'cis_2020_equo_cuisine.log'
 # Set the current level of the logger.
 level(logger) <- "DEBUG"
 #level(logger) <- "INFO"
 # At priority level INFO, a call to debug() won't print anything.
 # debug(logger, 'A Debugging Message')
-info(logger, 'Starting script')
+info(logger,  paste(Sys.time(), 'Starting script'))
 # warn(logger, 'A Warning Message')
 # error(logger, 'An Error Message')
 # fatal(logger, 'A Fatal Error Message')
@@ -333,24 +333,6 @@ cat(sprintf("### Variable `%s`: *%s*\n",
             attributes(cis_2020_EB_df)$variable.labels[unique(efectivo_peq_EB_df$variable)]),
     sep = "")
 ```
-
-
-
-### Variable `IA_C3`: *Resultado final*
-
-ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
-
-
-### Variable `P19ACOM`: *Partidos políticos entre los que se duda el voto en las elecciones autonómicas del País Vasco de 2020 (2)[recodificada]*
-### Variable `RVAUTO20`: *Recuerdo de voto en las elecciones autonómicas del País Vasco de 2020*
-### Variable `RVAUTO16`: *Recuerdo de voto en las elecciones autonómicas del País Vasco de 2016 [recodificada]*
-### Variable `RECUERDO`: *Recuerdo de voto en las elecciones generales de noviembre de 2019 [recodificada]*
-### Variable `ESTUDIOS`: *Estudios de la persona entrevistada [recodificada]*
-### Variable `CLASESUB`: *Identificación subjetiva de clase [recodificada]*
-
-
-
-
 
 
 ### Variable `TAMUNI`: *Tamaño de municipio*
@@ -790,6 +772,7 @@ Se excluye la variable `P4` y se deja la nueva agrupación `P4_GRUPO`.
 ```{r}
 excluded_cols <- c(excluded_cols, "P4")
 ```
+
 ### Variable `P5`: *Autodefinición de su ideología política*
 ```{r}
 pander(cis_2020_EB_df %>% dplyr::count(P5, .drop=FALSE))
@@ -3654,10 +3637,8 @@ excluded_cols <- c(excluded_cols, "CLASESOCIAL")
 Desconozco el significado de las modalidades que tienen la variables que van desde `IA_I501` hasta `IA_I537`. Por tanto las excluyo hasta que tenga un mejor conocimiento de ellas.
 
 ```{r}
-i <- which(unique(efectivo_peq_EB_df$variable) == "IA_I506")
-j <- which(unique(efectivo_peq_EB_df$variable) == "IA_I537")
-### aux_idx <- paste0(unique(efectivo_peq_EB_df$variable)[i:j], collapse = ", ")
-aux_idx <- unique(efectivo_peq_EB_df$variable)[i:j]
+# list of variables
+str_aux_1 <- unique(efectivo_peq_EB_df$variable[startsWith(efectivo_peq_EB_df$variable, 'IA_I5')])
 excluded_cols <- c(excluded_cols, aux_idx)
 ```
 
@@ -3958,7 +3939,6 @@ cis_2020_EB_df$P19ACOM_GRUPO <- car::recode(var = cis_2020_EB_df$P19ACOM,
 pander(cis_2020_EB_df %>% dplyr::count(P19ACOM_GRUPO, .drop=FALSE))
 ```
 
-
 Se excluye la variable `P19ACOM` y se deja la nueva agrupación `P19ACOM_GRUPO`.
 ```{r}
 excluded_cols <- c(excluded_cols, "P19ACOM")
@@ -3983,6 +3963,31 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'R
 cat(paste0("`", levels(cis_2020_EB_df$RVAUTO20)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
+Se eliminan las modalidades con cero efectivos.
+
+```{r}
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'RVAUTO20' & efectivo_peq_EB_df$freq == 0),"modalidad"])
+# Replace ' character with escape character \\'
+str_aux_1 <- levels(cis_2020_EB_df$RVAUTO20)[aux_idx]
+str_aux_2 <- gsub(pattern = "'", replacement = "\\\\'", x = str_aux_1)
+
+# Create recodes parameter
+recodes_str <- sprintf("c(%s) = NA",
+                       paste0("'", str_aux_2, "'", collapse = ", "))
+
+# Recode
+cis_2020_EB_df$RVAUTO20_GRUPO <- car::recode(var = cis_2020_EB_df$RVAUTO20, 
+                                    recodes = recodes_str,
+                                    levels = c(levels(cis_2020_EB_df$RVAUTO20)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(RVAUTO20_GRUPO, .drop=FALSE))
+```
+
+Se excluye la variable `RVAUTO20` y se deja la nueva agrupación `RVAUTO20_GRUPO`.
+```{r}
+excluded_cols <- c(excluded_cols, "RVAUTO20")
+```
+
 **En este caso no tengo criterio para hacer reagrupaciones. Quedo pendiente de la respuesta que me de JRB.**
 
 
@@ -4001,6 +4006,31 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'R
 cat(paste0("`", levels(cis_2020_EB_df$RVAUTO16)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
+Se eliminan las modalidades con cero efectivos.
+
+```{r}
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'RVAUTO16' & efectivo_peq_EB_df$freq == 0),"modalidad"])
+# Replace ' character with escape character \\'
+str_aux_1 <- levels(cis_2020_EB_df$RVAUTO16)[aux_idx]
+str_aux_2 <- gsub(pattern = "'", replacement = "\\\\'", x = str_aux_1)
+
+# Create recodes parameter
+recodes_str <- sprintf("c(%s) = NA",
+                       paste0("'", str_aux_2, "'", collapse = ", "))
+
+# Recode
+cis_2020_EB_df$RVAUTO16_GRUPO <- car::recode(var = cis_2020_EB_df$RVAUTO16, 
+                                    recodes = recodes_str,
+                                    levels = c(levels(cis_2020_EB_df$RVAUTO16)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(RVAUTO16_GRUPO, .drop=FALSE))
+```
+
+Se excluye la variable `RVAUTO16` y se deja la nueva agrupación `RVAUTO16_GRUPO`.
+```{r}
+excluded_cols <- c(excluded_cols, "RVAUTO16")
+```
+
 **En este caso no tengo criterio para hacer reagrupaciones. Quedo pendiente de la respuesta que me de JRB.**
 
 
@@ -4017,6 +4047,32 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'R
 # Write factors
 cat(paste0("`", levels(cis_2020_EB_df$RECUERDO)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
+
+Se eliminan las modalidades con cero efectivos.
+
+```{r}
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'RECUERDO' & efectivo_peq_EB_df$freq == 0),"modalidad"])
+# Replace ' character with escape character \\'
+str_aux_1 <- levels(cis_2020_EB_df$RECUERDO)[aux_idx]
+str_aux_2 <- gsub(pattern = "'", replacement = "\\\\'", x = str_aux_1)
+
+# Create recodes parameter
+recodes_str <- sprintf("c(%s) = NA",
+                       paste0("'", str_aux_2, "'", collapse = ", "))
+
+# Recode
+cis_2020_EB_df$RECUERDO_GRUPO <- car::recode(var = cis_2020_EB_df$RECUERDO, 
+                                    recodes = recodes_str,
+                                    levels = c(levels(cis_2020_EB_df$RECUERDO)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(RECUERDO_GRUPO, .drop=FALSE))
+```
+
+Se excluye la variable `RECUERDO` y se deja la nueva agrupación `RECUERDO_GRUPO`.
+```{r}
+excluded_cols <- c(excluded_cols, "RECUERDO")
+```
+
 
 **En este caso no tengo criterio para hacer reagrupaciones. Quedo pendiente de la respuesta que me de JRB.**
 
@@ -4037,6 +4093,31 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'E
 cat(paste0("`", levels(cis_2020_EB_df$ESTUDIOS)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
+Se eliminan las modalidades con cero efectivos.
+
+```{r}
+# Select factor numbers from efectivo_peq_EB_df
+aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'ESTUDIOS' & efectivo_peq_EB_df$freq == 0),"modalidad"])
+# Replace ' character with escape character \\'
+str_aux_1 <- levels(cis_2020_EB_df$ESTUDIOS)[aux_idx]
+str_aux_2 <- gsub(pattern = "'", replacement = "\\\\'", x = str_aux_1)
+
+# Create recodes parameter
+recodes_str <- sprintf("c(%s) = NA",
+                       paste0("'", str_aux_2, "'", collapse = ", "))
+
+# Recode
+cis_2020_EB_df$ESTUDIOS_GRUPO <- car::recode(var = cis_2020_EB_df$ESTUDIOS, 
+                                    recodes = recodes_str,
+                                    levels = c(levels(cis_2020_EB_df$ESTUDIOS)[-aux_idx]))
+pander(cis_2020_EB_df %>% dplyr::count(ESTUDIOS_GRUPO, .drop=FALSE))
+```
+
+Se excluye la variable `ESTUDIOS` y se deja la nueva agrupación `ESTUDIOS_GRUPO`.
+```{r}
+excluded_cols <- c(excluded_cols, "ESTUDIOS")
+```
+
 
 **En este caso no tengo criterio para hacer reagrupaciones. Quedo pendiente de la respuesta que me de JRB.**
 
@@ -4055,7 +4136,19 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'C
 cat(paste0("`", levels(cis_2020_EB_df$CLASESUB)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-En este caso no se reagrupa nada.
+Se reagrupan `N.S.`+`N.C.` en una sola.
+```{r}
+# Create recodes parameter
+recodes_str <- "c('N.S.', 'N.C.') = 'NS_NC'"
+cis_2020_EB_df$CLASESUB_GRUPO <- car::recode(var = cis_2020_EB_df$CLASESUB, 
+                                    recodes = recodes_str, 
+                                    levels = c(levels(cis_2020_EB_df$CLASESUB)[-aux_idx], 'NS_NC'))
+pander(cis_2020_EB_df %>% dplyr::count(CLASESUB_GRUPO), .drop=FALSE)
+```
+Se excluye la variable `CLASESUB` y se deja la nueva agrupación `CLASESUB_GRUPO`.
+```{r}
+excluded_cols <- c(excluded_cols, "CLASESUB")
+```
 
 
 
@@ -4078,17 +4171,19 @@ cat(Q)
 
 
 ```{r save_variables}
-# Save data variables to cis_2020_equo_cuisine._file.RData
-# cis_2020_equo_cuisine._file <- file.path(getwd(), "data", "cis_2020_equo_cuisine._file.RData")
-cis_2020_equo_cuisine._file <- file.path(getwd(), "cis_2020_equo_cuisine._file.RData")
+# Save data variables to cis_2020_equo_cuisine.RData
+# cis_2020_equo_cuisine <- file.path(getwd(), "data", "cis_2020_equo_cuisine.RData")
+cis_2020_equo_cuisine <- file.path(getwd(), "cis_2020_equo_cuisine.RData")
 
 require(log4r)
-log4r::debug(logger, paste("cis_2020_equo_cuisine._file (", cis_2020_equo_cuisine._file, ") exists =", file.exists(cis_2020_equo_cuisine._file)))
+log4r::debug(logger, paste("cis_2020_equo_cuisine (", cis_2020_equo_cuisine, ") exists =", file.exists(cis_2020_equo_cuisine)))
 
 # Save every data in an RData file.
 # It will be used later in the Rmd file.
-save(list = ls(), file=cis_2020_equo_cuisine._file)
-log4r::debug(logger, paste("Saved cis_2020_equo_cuisine._file dataset"))
+save(list = ls(), file=cis_2020_equo_cuisine)
+log4r::debug(logger, paste("Saved cis_2020_equo_cuisine dataset"))
+
+log4r::info(logger,  paste(Sys.time(), 'Ending script'))
 ```
 
 
