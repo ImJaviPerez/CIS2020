@@ -4181,7 +4181,7 @@ log4r::debug(logger, paste("cis_2020_equo_cuisine (", cis_2020_equo_cuisine, ") 
 # Save every data in an RData file.
 # It will be used later in the Rmd file.
 save(list = ls(), file=cis_2020_equo_cuisine)
-log4r::debug(logger, paste("Saved cis_2020_equo_cuisine dataset"))
+log4r::debug(logger, paste("Saved cis_2020_equo_cuisine.RData dataset"))
 
 log4r::info(logger,  paste(Sys.time(), 'Ending script'))
 ```
