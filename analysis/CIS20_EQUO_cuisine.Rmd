@@ -4152,6 +4152,12 @@ excluded_cols <- c(excluded_cols, "CLASESUB")
 
 
 ## Resumen estadístico. Datos cualitativos.
+```{r}
+# Declare included cols
+included_cols_EB_idx <- which(!(colnames(cis_2020_EB_df) %in% excluded_cols))
+included_cols_EB <- colnames(cis_2020_EB_df)[included_cols_idx]
+```
+
 
 O sea que finalmente se va a realizar un ACM con $Q =$ 
 ```{r echo=FALSE, results='asis'}
