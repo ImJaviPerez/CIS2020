@@ -17,7 +17,7 @@ header-includes:
 - \usepackage{framed}
 - \usepackage{fancyhdr}
 - \pagestyle{fancy}
-- \fancyhead[RO,RE]{AnálisiS total}
+- \fancyhead[RO,RE]{AnálisiS parcial}
 - \fancyfoot{}
 - \fancyfoot[RE,LO]{Votos 2020}
 - \fancyfoot[LE,RO]{\thepage}
@@ -62,7 +62,7 @@ level(logger) <- "DEBUG"
 #level(logger) <- "INFO"
 # At priority level INFO, a call to debug() won't print anything.
 # debug(logger, 'A Debugging Message')
-info(logger, 'Starting script')
+info(logger,  paste(Sys.time(), 'Starting script'))
 # warn(logger, 'A Warning Message')
 # error(logger, 'An Error Message')
 # fatal(logger, 'A Fatal Error Message')
@@ -123,33 +123,16 @@ Debemos tener en cuenta que hay una serie de variables que son datos objetivos d
 ```{r echo=FALSE, results='asis'}
 # cat(paste0("'", colnames(cis_2020_EB_df[which(!(colnames(cis_2020_EB_df) %in% excluded_cols))]), "'", collapse = ", "), sep = "")
 
-'P10_2', 'P10_3', 'P10IMPRESA', 'P10DIGITAL', 'P10TV', 'P10RADIO', 'P11_1', 'P11_2', 'P11_3', 'P11_4', 'P11_5', 'P11_7', 'P12_1', 'P12_2', 'P12_3', 'P12_4', 'P12_5', 'P12_6', 'P12_7', 'P14A_11', 'P14A_12', 'P14A_2', 'P14A_21', 'P14A_1', 'P14A_18', 'P14A_95', 'P14A_98', 'P15A_11', 'P15A_12', 'P15A_2', 'P15A_21', 'P15A_1', 'P15A_18', 'P15A_95', 'P15A_98', 'P16', 'P16A_11', 'P16A_12', 'P16A_2', 'P16A_21', 'P16A_1', 'P16A_18', 'P16A_95', 'P16A_98', 'P17_3', 'P20A_2', 
-'P27', 'RELIGION', 'ESTADOCIVIL', 'CNO11', 'RELALAB', 'IA_I506', 'IA_I509', 'IA_I510', 'IA_I516', 'IA_I517', 'IA_I520', 'IA_I521', 'IA_I523', 'IA_I524', 'IA_I525', 'IA_I526', 'IA_I528', 'IA_I529', 'IA_I530', 'IA_I531', 'IA_I532', 'IA_I535', 'IA_I536', 'IA_APLAZADA', 'IA_MODIFICADA', 'IA_SUPERVISADA', 'TAMUNI_GRUPO', 'EDAD_GRUPO', 'P1_GRUPO', 'P1A_GRUPO', 'P1B_GRUPO', 'P2_GRUPO', 'P3_1_GRUPO', 'P3_2_GRUPO', 'P3_3_GRUPO', 'P3_4_GRUPO', 'P4_GRUPO', 'P5_GRUPO', 'P5A_GRUPO', 'P6_GRUPO', 'P7_GRUPO', 'P8_1_GRUPO', 'P8_2_GRUPO', 'P8_3_GRUPO', 'P8_4_GRUPO', 'P9_GRUPO', 'P9A_GRUPO', 'P9B_GRUPO', 'P10_1_GRUPO', 'P10A_GRUPO', 'P10B_GRUPO', 'P10C_GRUPO', 'P10D_GRUPO', 'P13_1_GRUPO', 'P13_2_GRUPO', 'P13_3_GRUPO', 'P13_4_GRUPO', 'P13_5_GRUPO', 'P14_GRUPO', 'P15_GRUPO', 'P17_1_GRUPO', 'P17_2_GRUPO', 'P18_GRUPO', 'P18A_GRUPO', 'P18B_GRUPO', 'P19_GRUPO', 'P19A01_GRUPO', 'P19A02_GRUPO', 'P20_GRUPO', 'P20A_1_GRUPO', 'P21_GRUPO', 'P21A_GRUPO', 'P21B_1_GRUPO', 'P21B_2_GRUPO', 'P22_GRUPO', 'P23_GRUPO', 'P24_1_GRUPO', 'P24_2_GRUPO', 'P24_3_GRUPO', 'P24_4_GRUPO', 'P24_5_GRUPO', 'P24_6_GRUPO', 'P24_7_GRUPO', 
-'P26_1_GRUPO', 'P26_2_GRUPO', 'P26_3_GRUPO', 'P26_4_GRUPO', 'P26_5_GRUPO', 'P26_6_GRUPO', 'P28_GRUPO', 'P29_GRUPO', 
 
-'ESCIDEOL_GRUPO', 'ESCIDEOLPAR_1_GRUPO', 'ESCIDEOLPAR_2_GRUPO', 'ESCIDEOLPAR_3_GRUPO', 'ESCIDEOLPAR_4_GRUPO', 'ESCIDEOLPAR_5_GRUPO', 'ESCIDEOLPAR_6_GRUPO', 'ESCIDEOLPAR_7_GRUPO', 'NIVELESTENTREV_GRUPO', 'FRECUENCIARELI_GRUPO', 'SITLAB_GRUPO', 'CLASESOCIAL_GRUPO', 'IA_E1_DIA_GRUPO', 'IA_E2_GRUPO', 'IA_E4_GRUPO', 'IA_C2_GRUPO', 'P19ACOM_GRUPO', 'RVAUTO20_GRUPO', 'RVAUTO16_GRUPO', 'RECUERDO_GRUPO', 'ESTUDIOS_GRUPO', 'CLASESUB_GRUPO'
+opinion_vars <- c('PROV', 'MUN', 'CAPITAL', 'TIPO_TEL', 'SEXO', 'A0a', 'P10_2', 'P10_3', 'P10IMPRESA', 'P10DIGITAL', 'P10TV', 'P10RADIO', 'P11_1', 'P11_2', 'P11_3', 'P11_4', 'P11_5', 'P11_7', 'P12_1', 'P12_2', 'P12_3', 'P12_4', 'P12_5', 'P12_6', 'P12_7', 'P14A_11', 'P14A_12', 'P14A_2', 'P14A_21', 'P14A_1', 'P14A_18', 'P14A_95', 'P14A_98', 'P15A_11', 'P15A_12', 'P15A_2', 'P15A_21', 'P15A_1', 'P15A_18', 'P15A_95', 'P15A_98', 'P16', 'P16A_11', 'P16A_12', 'P16A_2', 'P16A_21', 'P16A_1', 'P16A_18', 'P16A_95', 'P16A_98', 'P17_3', 'P20A_2', 'PARTICIPACIONA', 'P27', 'RELIGION', 'ESTADOCIVIL', 'CNO11', 'RELALAB', 'IA_I506', 'IA_I509', 'IA_I510', 'IA_I516', 'IA_I517', 'IA_I520', 'IA_I521', 'IA_I523', 'IA_I524', 'IA_I525', 'IA_I526', 'IA_I528', 'IA_I529', 'IA_I530', 'IA_I531', 'IA_I532', 'IA_I535', 'IA_I536', 'IA_APLAZADA', 'IA_MODIFICADA', 'IA_SUPERVISADA', 'TAMUNI_GRUPO', 'EDAD_GRUPO', 'P1_GRUPO', 'P1A_GRUPO', 'P1B_GRUPO', 'P2_GRUPO', 'P3_1_GRUPO', 'P3_2_GRUPO', 'P3_3_GRUPO', 'P3_4_GRUPO', 'P4_GRUPO', 'P5_GRUPO', 'P5A_GRUPO', 'P6_GRUPO', 'P7_GRUPO', 'P8_1_GRUPO', 'P8_2_GRUPO', 'P8_3_GRUPO', 'P8_4_GRUPO', 'P9_GRUPO', 'P9A_GRUPO', 'P9B_GRUPO', 'P10_1_GRUPO', 'P10A_GRUPO', 'P10B_GRUPO', 'P10C_GRUPO', 'P10D_GRUPO', 'P13_1_GRUPO', 'P13_2_GRUPO', 'P13_3_GRUPO', 'P13_4_GRUPO', 'P13_5_GRUPO', 'P14_GRUPO', 'P15_GRUPO', 'P17_1_GRUPO', 'P17_2_GRUPO', 'P18_GRUPO', 'P18A_GRUPO', 'P18B_GRUPO', 'P19_GRUPO', 'P19A01_GRUPO', 'P19A02_GRUPO', 'P20_GRUPO', 'P20A_1_GRUPO', 'P21_GRUPO', 'P21A_GRUPO', 'P21B_1_GRUPO', 'P21B_2_GRUPO', 'P22_GRUPO', 'P23_GRUPO', 'P24_1_GRUPO', 'P24_2_GRUPO', 'P24_3_GRUPO', 'P24_4_GRUPO', 'P24_5_GRUPO', 'P24_6_GRUPO', 'P24_7_GRUPO', 
+                  'P26_1_GRUPO', 'P26_2_GRUPO', 'P26_3_GRUPO', 'P26_4_GRUPO', 'P26_5_GRUPO', 'P26_6_GRUPO', 'P28_GRUPO', 'P29_GRUPO', 'PARTICIPACIONG_GRUPO', 
+                  'ESCIDEOL_GRUPO', 'ESCIDEOLPAR_1_GRUPO', 'ESCIDEOLPAR_2_GRUPO', 'ESCIDEOLPAR_3_GRUPO', 'ESCIDEOLPAR_4_GRUPO', 'ESCIDEOLPAR_5_GRUPO', 'ESCIDEOLPAR_6_GRUPO', 'ESCIDEOLPAR_7_GRUPO', 'NIVELESTENTREV_GRUPO', 'FRECUENCIARELI_GRUPO', 'SITLAB_GRUPO', 'CLASESOCIAL_GRUPO', 'IA_E1_DIA_GRUPO', 'IA_E2_GRUPO', 'IA_E4_GRUPO', 'IA_C2_GRUPO', 'P19ACOM_GRUPO', 
+                  'ESTUDIOS_GRUPO', 'CLASESUB_GRUPO')
 
-illustrative_vars <- c('PROV', 'MUN', 'CAPITAL', 'TIPO_TEL', 'SEXO', 'A0a', 
-                       'PARTICIPACIONA', 'RECUVOTOA_GRUPO', 
-                       'PARTICIPACIONG_GRUPO', 'RECUVOTOG_GRUPO', 
-                       'ESTADOCIVIL', 'SITLAB', 'CNO11', 'RELALAB', 
-                       'IA_APLAZADA', 'IA_MODIFICADA', 'IA_SUPERVISADA', 
-                       'RVAUTO20', 'RVAUTO16', 'RECUERDO', 'ESTUDIOS', 
-                       'TAMUNI_GRUPO', 'EDAD_GRUPO', 'P1_GRUPO', 'P1A_GRUPO', 'P1B_GRUPO', 'P2_GRUPO', 
-                       'ESCUELA_GRUPO', 'NIVELESTENTREV_GRUPO', 
-                       'IA_E1_DIA_GRUPO', 'IA_E2_GRUPO', 'IA_E4_GRUPO', 'IA_C2_GRUPO')
 
-opinion_vars <- c('P3_1', 'P3_2', 'P3_3', 'P3_4', 'P5', 'P6', 'P8_1', 'P8_2', 'P8_3', 'P8_4', 'P10_2', 'P10_3', 'P10IMPRESA', 'P10DIGITAL', 'P10TV', 'P10RADIO', 'P11_1', 'P11_2', 'P11_3', 'P11_4', 'P11_5', 'P11_7', 'P11_9', 'P12_1', 'P12_2', 'P12_3', 'P12_4', 'P12_5', 'P12_6', 'P12_7', 'P12_9', 'P13_1', 'P13_2', 'P13_3', 'P13_4', 'P13_5', 'P14', 'P14A_11', 'P14A_12', 'P14A_2', 'P14A_21', 'P14A_1', 'P14A_18', 'P14A_95', 'P14A_98', 'P14A_99', 'P15', 'P15A_11', 'P15A_12', 'P15A_2', 'P15A_21', 'P15A_1', 'P15A_18', 'P15A_95', 'P15A_98', 'P15A_99', 'P16', 'P16A_11', 'P16A_12', 'P16A_2', 'P16A_21', 'P16A_1', 'P16A_18', 'P16A_95', 'P16A_98', 'P16A_99', 'P17_1', 'P17_2', 'P17_3', 'P18', 'P19', 'P19A01', 'P19A02', 'P20', 'P20A_2', 'P21', 'P21A', 'P21B_2', 'P22', 'P23', 'P24_1', 'P24_2', 'P24_3', 'P24_4',
-                  'P26_1', 'P26_2', 'P27', 'P29', 
-                  'RELIGION', 'FRECUENCIARELI', 
-                  'CLASESUB', 
-                  'P4_GRUPO', 'P5A_GRUPO', 'P7_GRUPO', 'P9_GRUPO', 'P9A_GRUPO', 'P9B_GRUPO', 'P10_1_GRUPO', 'P10A_GRUPO', 'P10B_GRUPO', 'P10C_GRUPO', 'P10D_GRUPO',
-                  'P18A_GRUPO', 'P18B_GRUPO', 
-                  'P20A_1_GRUPO', 'P21B_1_GRUPO', 'P21C_GRUPO', 'P24_5_GRUPO', 'P24_6_GRUPO', 'P24_7_GRUPO', 
-                  'P26_3_GRUPO', 'P26_4_GRUPO', 'P26_5_GRUPO', 'P26_6_GRUPO', 'P28_GRUPO',
-                  'ESCIDEOL_GRUPO', 'ESCIDEOLPAR_1_GRUPO', 'ESCIDEOLPAR_2_GRUPO', 'ESCIDEOLPAR_3_GRUPO', 'ESCIDEOLPAR_4_GRUPO', 'ESCIDEOLPAR_5_GRUPO', 'ESCIDEOLPAR_6_GRUPO', 'ESCIDEOLPAR_7_GRUPO', 
-                  'CLASESOCIAL_GRUPO', 
-                  'P19ACOM_GRUPO')
+
+illustrative_vars <- c('RECUVOTOA_GRUPO', 'RECUVOTOG_GRUPO', 'RVAUTO20_GRUPO', 'RVAUTO16_GRUPO', 'RECUERDO_GRUPO')
+
 
 cat(paste0("`",illustrative_vars, "`", collapse = ", "), sep = "")
 
@@ -235,9 +218,7 @@ Estas representan el
 round(100*sum(cis_2020_ca_opi01_k2_ctr_sort$x[1:nModalidadesVisualiza])/ sum(cis_2020_ca_opi01_k2_ctr_sort$x), digits = 1)
 ```
 
-```{r include=FALSE, eval=FALSE}
-
-
+```{r}
 aux_tbl <- data.frame(cbind(1:length(cis_2020_ca_opi01_summ_k1_ctr),
                             cis_2020_ca_opi01_summ$columns$name,
                             cis_2020_ca_opi01_summ_k1_ctr,
@@ -288,6 +269,9 @@ pander(head(aux_tbl))
 
 
 
+```{r}
+log4r::info(logger,  paste(Sys.time(), 'Ending script'))
+```
 
 
 
