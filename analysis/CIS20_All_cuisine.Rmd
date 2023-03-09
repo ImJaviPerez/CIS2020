@@ -3026,6 +3026,14 @@ En este caso no se reagrupa nada.
 
 
 ## Resumen estadístico. Datos cualitativos.
+```{r}
+# Cleaning
+excluded_cols <- unique(excluded_cols)
+# Declare included cols
+included_cols_idx <- which(!(colnames(cis_2020_df) %in% excluded_cols))
+included_cols <- colnames(cis_2020_df)[included_cols_idx]
+```
+
 
 O sea que finalmente se va a realizar un ACM con $Q =$ 
 ```{r echo=FALSE, results='asis'}
