@@ -2624,8 +2624,7 @@ Desconozco el significado de las modalidades que tienen la variables que van des
 
 ```{r}
 # list of variables
-str_aux_1 <- unique(efectivo_peq_EB_df$variable[startsWith(efectivo_peq_EB_df$variable, 'IA_I5')])
-excluded_cols <- c(excluded_cols, str_aux_1)
+excluded_cols <- c(excluded_cols, colnames(cis_2020_df)[startsWith(colnames(cis_2020_df), 'IA_I5')])
 ```
 
 **Dejo a criterio de JRB si incluir estas variables o no y cómo hacerlo**
