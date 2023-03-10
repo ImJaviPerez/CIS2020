@@ -3425,6 +3425,24 @@ cis_2020_EB_df$NIVELESTENTREV_GRUPO <- car::recode(var = cis_2020_EB_df$NIVELEST
 pander(cis_2020_EB_df %>% dplyr::count(NIVELESTENTREV_GRUPO, .drop=FALSE))
 ```
 
+Se reagrupan por un lado 
+ + `Menos de 5 años de escolarización `+`Educación Primaria (Educación Primaria de LOGSE, 5º curso de EGB, enseñanza primaria antigua) `.
+
+y por otro:
+ + `Doctorado`+`Títulos propios de posgrado (máster no oficial, etc.) `.
+ 
+```{r}
+# levels(cis_2020_EB_df$NIVELESTENTREV_GRUPO)
+
+# Create recodes parameter
+recodes_str <- "c('Menos de 5 años de escolarización ', 'Educación Primaria (Educación Primaria de LOGSE, 5º curso de EGB, enseñanza primaria antigua) ') = 'Educación Primaria (Educación Primaria de LOGSE, 5º curso de EGB, enseñanza primaria antigua)-'; c('Doctorado', 'Títulos propios de posgrado (máster no oficial, etc.) ') = 'Doctorado+'"
+# Recode
+cis_2020_EB_df$NIVELESTENTREV_GRUPO <- car::recode(var = cis_2020_EB_df$NIVELESTENTREV_GRUPO, 
+                                    recodes = recodes_str,
+                                    levels = c('Educación Primaria (Educación Primaria de LOGSE, 5º curso de EGB, enseñanza primaria antigua)-', levels(cis_2020_EB_df$NIVELESTENTREV_GRUPO)[c(3:12)], "Doctorado+"))
+pander(cis_2020_EB_df %>% dplyr::count(NIVELESTENTREV_GRUPO, .drop=FALSE))
+```
+
 Se excluye la variable `NIVELESTENTREV` y se deja la nueva agrupación `NIVELESTENTREV_GRUPO`.
 ```{r}
 excluded_cols_EB <- c(excluded_cols_EB, "NIVELESTENTREV")
@@ -4111,6 +4129,21 @@ cis_2020_EB_df$ESTUDIOS_GRUPO <- car::recode(var = cis_2020_EB_df$ESTUDIOS,
                                     levels = c(levels(cis_2020_EB_df$ESTUDIOS)[-aux_idx]))
 pander(cis_2020_EB_df %>% dplyr::count(ESTUDIOS_GRUPO, .drop=FALSE))
 ```
+
+Además, en este caso, se reagrupan: `Sin estudios`+`Primaria`  y se elimina la respuesta `N.C.`.
+
+```{r}
+# levels(cis_2020_EB_df$ESTUDIOS_GRUPO)
+
+# Create recodes parameter
+recodes_str <- "c('Sin estudios' ,'Primaria') = 'Primaria-'; c('N.C.') = NA"
+# Recode
+cis_2020_EB_df$ESTUDIOS_GRUPO <- car::recode(var = cis_2020_EB_df$ESTUDIOS_GRUPO, 
+                                    recodes = recodes_str,
+                                    levels = c("Primaria-", levels(cis_2020_EB_df$ESTUDIOS_GRUPO)[c(3:6)]))
+pander(cis_2020_EB_df %>% dplyr::count(ESTUDIOS_GRUPO, .drop=FALSE))
+```
+
 
 Se excluye la variable `ESTUDIOS` y se deja la nueva agrupación `ESTUDIOS_GRUPO`.
 ```{r}
