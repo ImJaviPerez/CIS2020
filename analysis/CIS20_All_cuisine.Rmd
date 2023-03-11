@@ -1,6 +1,6 @@
 ---
-title: "CIS 2020"
-subtitle: "Cocinando todas las encuestas"
+title: "CIS 2020 cocina"
+subtitle: "Todas las encuestas"
 author: "ImJaviPerez"
 date: "Diciembre 2022"
 output:
