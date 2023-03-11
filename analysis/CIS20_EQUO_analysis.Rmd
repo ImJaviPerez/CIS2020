@@ -1,6 +1,6 @@
 ---
-title: "CIS 2020"
-subtitle: "Análisis de datos de encuestas de EQUO"
+title: "CIS 2020 analisis EQUO"
+subtitle: "Análisis de datos de encuestas de EQUO y Podemos"
 author: "ImJaviPerez"
 date: "Marzo 2023"
 output:
