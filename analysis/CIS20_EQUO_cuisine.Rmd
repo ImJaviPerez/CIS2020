@@ -2163,7 +2163,7 @@ Se excluye la variable `P20` y se deja la nueva agrupación `P20_GRUPO`.
 excluded_cols_EB <- c(excluded_cols_EB, "P20")
 ```
 
-**En este caso no tengo criterio para hacer agrupaciones. Quedo pendiente de la respuesta que me de JRB.**
+**En este caso no tengo criterio para hacer otras agrupaciones diferentes. Quedo pendiente de la respuesta que me de JRB.**
 
 
 #### Variable `P20A_1`: *Primer lugar*
