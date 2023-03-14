@@ -785,13 +785,13 @@ Se hacen varias reagrupaciones[^P5JRB],
 ```{r}
 # levels(cis_2020_EB_df$P5)
 # Create recodes parameter
-recodes_str <- "c('Conservador/a', 'Demócrata cristiano/a', 'Liberal') = 'Centro derecha'; c('Progresista', 'Socialdemócrata') = 'Socialdemocracia'; c('Socialista', 'Comunista', 'Otras respuestas ') = 'Izquierda';  c('(NO LEER) Apolítico/a ', 'N.S.') = 'No alineado/a'"
+recodes_str <- "c('Conservador/a', 'Demócrata cristiano/a', 'Liberal') = 'Centro derecha'; c('Progresista', 'Socialdemócrata') = 'Socialdemocracia'; c('Socialista', 'Comunista', 'Otras respuestas ') = 'Izquierda';  c('(NO LEER) Apolítico/a ', 'N.S.', 'N.C.') = 'No alineado/a'"
 # select old levels indices
 aux_idx <- which(levels(cis_2020_EB_df$P5) %in% c('PP', 'Ciudadanos'))
 # Recode
 cis_2020_EB_df$P5_GRUPO <- car::recode(var = cis_2020_EB_df$P5, 
                                     recodes = recodes_str,
-                                    levels = c('Centro derecha', 'Socialdemocracia', 'Izquierda', 'Nacionalista', 'Feminista', 'Ecologista', 'No alineado/a', 'N.C.'))
+                                    levels = c('Centro derecha', 'Socialdemocracia', 'Izquierda', 'Nacionalista', 'Feminista', 'Ecologista', 'No alineado/a'))
 pander(cis_2020_EB_df %>% dplyr::count(P5_GRUPO, .drop=FALSE))
 ```
 
