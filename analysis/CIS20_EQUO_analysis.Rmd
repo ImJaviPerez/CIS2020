@@ -110,12 +110,19 @@ cis_2020_equo_ca_00 <- mjca(cis_2020_EB_df[, included_cols_EB_idx])
 
 Por defecto la función `mjca` toma el método de escalado `lambda = "adjusted"`, con lo que únicamente se consideran los valores propios obtenidos en el ACM mayores que $\frac{1}{Q} =$
 ```{r echo=FALSE, results='asis'}
+eigen_inertia_e <- 1/Q
 cat("\\frac{1}{", Q, "} = ",round(1/Q, digits = 4), ".", sep = "")
 ```
 
 ```{r}
-# summary(cis_2020_equo_ca_00)
+cis_2020_equo_ca_00_summ <- summary(cis_2020_equo_ca_00)
+numDim <- length(which(cis_2020_equo_ca_00_summ$scree[,2] > (eigen_inertia_e/2)))
 ```
+Por lo tanto en nuestro caso el número de dimensiones será:
+```{r echo=FALSE, results='asis'}
+cat(numDim)
+```
+
 
 ## Datos objetivos y datos de opinión
 Debemos tener en cuenta que hay una serie de variables que son datos objetivos de la persona como por ejemplo su provincia de empadronamiento. A estas características las llamaremos variables *ilustrativas*, que son:
@@ -137,27 +144,37 @@ El resto de preguntas pueden considerarse de opinión. El ACM trata de ubicar lo
 
 Se realiza una primera tentativa de ACM sólo con las variables de opinión:
 ```{r ACM01}
-cis_2020_ca_opi01 <- mjca(cis_2020_EB_df[,opinion_vars], nd = 6)
+cis_2020_ca_opi01 <- mjca(cis_2020_EB_df[,opinion_vars], nd = numDim)
 
 (cis_2020_ca_opi01_summ <- summary(cis_2020_ca_opi01))
+
 plot.mjca(cis_2020_ca_opi01)
 ```
 ```{r}
-# Contributions of each dimension
-# colnames(cis_2020_ca_opi01_summ$columns)
-cis_2020_ca_opi01_summ_k1_ctr <- cis_2020_ca_opi01_summ$columns[,7]
-cis_2020_ca_opi01_summ_k2_ctr <- cis_2020_ca_opi01_summ$columns[,10]
-cis_2020_ca_opi01_summ_k3_ctr <- cis_2020_ca_opi01_summ$columns[,13]
-cis_2020_ca_opi01_summ_k4_ctr <- cis_2020_ca_opi01_summ$columns[,16]
-cis_2020_ca_opi01_summ_k5_ctr <- cis_2020_ca_opi01_summ$columns[,19]
-cis_2020_ca_opi01_summ_k6_ctr <- cis_2020_ca_opi01_summ$columns[,22]
+# PRUEBAS 
+cis_2020_ca_opi01$inertia.e[1:5]
+cis_2020_ca_opi01$inertia.t
+
+cis_2020_ca_opi01_summ$scree[2,]
+
+cis_2020_ca_opi01_summ$scree[1:5,]
+
+
 ```
 
 
+```{r}
+# Create data frame with numDim columns. Each column is a factor and each row is the contribution
+cis_2020_EB_ctr_df <- data.frame(matrix(ncol = numDim, nrow = length(cis_2020_ca_opi01_summ$columns[,7])))
+colnames(cis_2020_EB_ctr_df) <- paste0("k", seq(1:numDim))
+# Contributions of each dimension
+for (i in 1:numDim) {
+  cis_2020_EB_ctr_df[,i] <- cis_2020_ca_opi01_summ$columns[,7+(i-1)*3]
+}
+```
 
 Con 
 ```{r echo=FALSE, results='asis'}
-numDim <- 7
 cat(numDim)
 ```
  dimensiones se explica el 
@@ -178,7 +195,7 @@ cat(nModalidadesVisualiza <- 60)
  variables+modalidades que representan el primer factor y su porcentaje contribución son:
 
 ```{r}
-cis_2020_ca_opi01_k1_ctr_sort <- sort(cis_2020_ca_opi01_summ_k1_ctr, decreasing = TRUE, index.return = TRUE)
+cis_2020_ca_opi01_k1_ctr_sort <- sort(cis_2020_EB_ctr_df$k1, decreasing = TRUE, index.return = TRUE)
 
 require(pander)
 aux_tbl <- data.frame(cbind(1:nModalidadesVisualiza,
@@ -196,7 +213,7 @@ round(100*sum(cis_2020_ca_opi01_k1_ctr_sort$x[1:nModalidadesVisualiza])/ sum(cis
  % del peso de ese factor. O sea que lo que mejor representa a los encuestados es `N.S.` y `N.C.` y esto no nos aporta *ninguna* información. Por tanto para realizar este ACM hay que tener en cuenta más dimensiones, o sea más factores.
 
 ```{r}
-cis_2020_ca_opi01_k2_ctr_sort <- sort(cis_2020_ca_opi01_summ_k2_ctr, decreasing = TRUE, index.return = TRUE)
+cis_2020_ca_opi01_k2_ctr_sort <- sort(cis_2020_EB_ctr_df$k2, decreasing = TRUE, index.return = TRUE)
 
 require(pander)
 aux_tbl <- data.frame(cbind(1:nModalidadesVisualiza,
@@ -213,14 +230,14 @@ round(100*sum(cis_2020_ca_opi01_k2_ctr_sort$x[1:nModalidadesVisualiza])/ sum(cis
 ```
 
 ```{r}
-aux_tbl <- data.frame(cbind(1:length(cis_2020_ca_opi01_summ_k1_ctr),
+aux_tbl <- data.frame(cbind(1:length(cis_2020_EB_ctr_df$k1),
                             cis_2020_ca_opi01_summ$columns$name,
-                            cis_2020_ca_opi01_summ_k1_ctr,
-                            cis_2020_ca_opi01_summ_k2_ctr,
-                            cis_2020_ca_opi01_summ_k3_ctr,
-                            cis_2020_ca_opi01_summ_k4_ctr,
-                            cis_2020_ca_opi01_summ_k5_ctr,
-                            cis_2020_ca_opi01_summ_k6_ctr))
+                            cis_2020_EB_ctr_df$k1,
+                            cis_2020_EB_ctr_df$k2,
+                            cis_2020_EB_ctr_df$k3,
+                            cis_2020_EB_ctr_df$k4,
+                            cis_2020_EB_ctr_df$k5,
+                            cis_2020_EB_ctr_df$k6))
 colnames(aux_tbl) <- c("n", "Variable:modalidad", "ctr 1", "ctr 2", "ctr 3", "ctr 4", "ctr 5", "ctr 6")
 
 require(pander)
