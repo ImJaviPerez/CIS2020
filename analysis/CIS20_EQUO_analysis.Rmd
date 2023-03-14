@@ -165,11 +165,13 @@ cis_2020_ca_opi01_summ$scree[1:5,]
 
 ```{r}
 # Create data frame with numDim columns. Each column is a factor and each row is the contribution
-cis_2020_EB_ctr_df <- data.frame(matrix(ncol = numDim, nrow = length(cis_2020_ca_opi01_summ$columns[,7])))
-colnames(cis_2020_EB_ctr_df) <- paste0("k", seq(1:numDim))
+cis_2020_EB_ctr_df <- data.frame(matrix(ncol = numDim+1, nrow = length(cis_2020_ca_opi01_summ$columns$name)))
+colnames(cis_2020_EB_ctr_df) <- c("name", paste0("k", seq(1:numDim)))
+
+cis_2020_EB_ctr_df$name <- cis_2020_ca_opi01_summ$columns$name
 # Contributions of each dimension
 for (i in 1:numDim) {
-  cis_2020_EB_ctr_df[,i] <- cis_2020_ca_opi01_summ$columns[,7+(i-1)*3]
+  cis_2020_EB_ctr_df[,i+1] <- cis_2020_ca_opi01_summ$columns[,7+(i-1)*3]
 }
 ```
 
