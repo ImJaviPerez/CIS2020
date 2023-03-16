@@ -196,6 +196,15 @@ cat(cis_2020_ca_opi01_summ$scree[numDim,][4])
 ```
  % de la varianza.
 
+Seleccionamos las modalidades más importantes de este factor, las que representan un
+```{r echo=FALSE, results='asis'}
+percet_eigenvalue <- 0.75
+cat(100*percet_eigenvalue, "%")
+```
+ de esa dimensión.
+ 
+
+
 Las primeras
 ```{r echo=FALSE, results='asis'}
 cat(nModalidadesVisualiza <- 60)
@@ -203,14 +212,30 @@ cat(nModalidadesVisualiza <- 60)
  variables+modalidades que representan el primer factor y su porcentaje contribución son:
 
 ```{r}
-cis_2020_ca_opi01_k1_ctr_sort <- sort(cis_2020_EB_ctr_df$k1, decreasing = TRUE, index.return = TRUE)
+cis_2020_ca_opi01_k1_ctr_sort <- base::sort(cis_2020_EB_ctr_df$k1, decreasing = TRUE, index.return = TRUE)
+
+i <- round(percet_eigenvalue*sum(cis_2020_EB_ctr_df$k1))
+
+
+# ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   
+j <- length(which(cumsum(cis_2020_ca_opi01_k1_ctr_sort$x) <= i))
+
+which.max(cumsum(cis_2020_ca_opi01_k1_ctr_sort$x) >= i)
+
+sum(cis_2020_ca_opi01_k1_ctr_sort$x[1:j])
+sum(cis_2020_EB_ctr_df$k1[cis_2020_ca_opi01_k1_ctr_sort$ix[1:j]])
+
+#######################################################################################
+
+
+
 
 require(pander)
 aux_tbl <- data.frame(cbind(1:nModalidadesVisualiza,
                             cis_2020_ca_opi01_summ$columns$name[cis_2020_ca_opi01_k1_ctr_sort$ix[1:nModalidadesVisualiza]],
                             cis_2020_ca_opi01_k1_ctr_sort$x[1:nModalidadesVisualiza],
                             round(100*cis_2020_ca_opi01_k1_ctr_sort$x[1:nModalidadesVisualiza] / sum(cis_2020_ca_opi01_k1_ctr_sort$x), digits = 1)))
-colnames(aux_tbl) <- c("n", "Variable", "Contribución", "%")
+colnames(aux_tbl) <- c("n", "Variable:modalidad", "Contribución", "%")
 pander(aux_tbl)
 ```
 
@@ -228,7 +253,7 @@ aux_tbl <- data.frame(cbind(1:nModalidadesVisualiza,
                             cis_2020_ca_opi01_summ$columns$name[cis_2020_ca_opi01_k2_ctr_sort$ix[1:nModalidadesVisualiza]],
                             cis_2020_ca_opi01_k2_ctr_sort$x[1:nModalidadesVisualiza],
                             round(100*cis_2020_ca_opi01_k2_ctr_sort$x[1:nModalidadesVisualiza] / sum(cis_2020_ca_opi01_k2_ctr_sort$x), digits = 1)))
-colnames(aux_tbl) <- c("n", "Variable", "Contribución", "%")
+colnames(aux_tbl) <- c("n", "Variable:modalidad", "Contribución", "%")
 pander(aux_tbl)
 ```
 
@@ -236,55 +261,6 @@ Estas representan el
 ```{r echo=FALSE, results='asis'}
 round(100*sum(cis_2020_ca_opi01_k2_ctr_sort$x[1:nModalidadesVisualiza])/ sum(cis_2020_ca_opi01_k2_ctr_sort$x), digits = 1)
 ```
-
-```{r}
-aux_tbl <- data.frame(cbind(1:length(cis_2020_EB_ctr_df$k1),
-                            cis_2020_ca_opi01_summ$columns$name,
-                            cis_2020_EB_ctr_df$k1,
-                            cis_2020_EB_ctr_df$k2,
-                            cis_2020_EB_ctr_df$k3,
-                            cis_2020_EB_ctr_df$k4,
-                            cis_2020_EB_ctr_df$k5,
-                            cis_2020_EB_ctr_df$k6))
-colnames(aux_tbl) <- c("n", "Variable:modalidad", "ctr 1", "ctr 2", "ctr 3", "ctr 4", "ctr 5", "ctr 6")
-
-require(pander)
-pander(head(aux_tbl))
-```
-
-
-
-1                                                                                                                       P3_1:Sí
-2                                                                                                                       P3_1:No
-3                                                                                                                     P3_1:N.C.
-4                                                                                                                       P3_2:Sí
-5                                                                                                                       P3_2:No
-6                                                                                                                     P3_2:N.C.
-7                                                                                                                       P3_3:Sí
-8                                                                                                                       P3_3:No
-9                                                                                                                     P3_3:N.C.
-10                                                                                                                      P3_4:Sí
-11                                                                                                                      P3_4:No
-12                                                                                                                    P3_4:N.C.
-13                                                                                                             P5:Conservador/a
-14                                                                                                     P5:Demócrata cristiano/a
-15                                                                                                                   P5:Liberal
-16                                                                                                               P5:Progresista
-17                                                                                                           P5:Socialdemócrata
-18                                                                                                                P5:Socialista
-19                                                                                                                 P5:Comunista
-20                                                                                                              P5:Nacionalista
-21                                                                                                                 P5:Feminista
-22                                                                                                                P5:Ecologista
-23                                                                                                         P5:Otras respuestas 
-24                                                                                                    P5:(NO LEER) Apolítico/a 
-25                                                                                                                      P5:N.S.
-26                                                                                                                      P5:N.C.
-27                                                                                                                     P6:Mucho
-28                                                                                                                  P6:Bastante
-29                                                                                                                      P6:Poco
-30                                                                                                                      P6:Nada
-
 
 
 
