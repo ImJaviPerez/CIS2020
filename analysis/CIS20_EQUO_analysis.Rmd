@@ -196,71 +196,65 @@ cat(cis_2020_ca_opi01_summ$scree[numDim,][4])
 ```
  % de la varianza.
 
-Seleccionamos las modalidades más importantes de este factor, las que representan un
+
+Seleccionamos las modalidades más importantes de cada factor; las que representan un
 ```{r echo=FALSE, results='asis'}
 percet_eigenvalue <- 0.75
 cat(100*percet_eigenvalue, "%")
 ```
  de esa dimensión.
- 
-
-
-Las primeras
-```{r echo=FALSE, results='asis'}
-cat(nModalidadesVisualiza <- 60)
-```
- variables+modalidades que representan el primer factor y su porcentaje contribución son:
-
 ```{r}
-cis_2020_ca_opi01_k1_ctr_sort <- base::sort(cis_2020_EB_ctr_df$k1, decreasing = TRUE, index.return = TRUE)
+# Returns a data.frame sorted by contribution. It includes the minimum number of categories that covers percet_eigenvalue
+factor_categories <- function(fctr_names, fctr_contribution, percet_eigenvalue){
+  
+  # Sort by its contribution
+  fctr_contribution_sort <- base::sort(fctr_contribution, decreasing = TRUE, index.return = TRUE)
+  # Calculate percet_eigenvalue of whole eigenvalue
+  i <- round(percet_eigenvalue*sum(fctr_contribution))
+  # Calculate number of variables
+  num_categories <- which.max(cumsum(fctr_contribution_sort$x) >= i)
+  
+  table <- data.frame(cbind(1:num_categories,
+                              fctr_names[fctr_contribution_sort$ix[1:num_categories]],
+                              fctr_contribution_sort$x[1:num_categories],
+                              round(100*fctr_contribution_sort$x[1:num_categories] / sum(fctr_contribution_sort$x), digits = 1)))
+  colnames(table) <- c("n", "Variable:modalidad", "Contribución", "%")
 
-i <- round(percet_eigenvalue*sum(cis_2020_EB_ctr_df$k1))
-
-
-# ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   
-j <- length(which(cumsum(cis_2020_ca_opi01_k1_ctr_sort$x) <= i))
-
-which.max(cumsum(cis_2020_ca_opi01_k1_ctr_sort$x) >= i)
-
-sum(cis_2020_ca_opi01_k1_ctr_sort$x[1:j])
-sum(cis_2020_EB_ctr_df$k1[cis_2020_ca_opi01_k1_ctr_sort$ix[1:j]])
-
-#######################################################################################
-
-
-
-
-require(pander)
-aux_tbl <- data.frame(cbind(1:nModalidadesVisualiza,
-                            cis_2020_ca_opi01_summ$columns$name[cis_2020_ca_opi01_k1_ctr_sort$ix[1:nModalidadesVisualiza]],
-                            cis_2020_ca_opi01_k1_ctr_sort$x[1:nModalidadesVisualiza],
-                            round(100*cis_2020_ca_opi01_k1_ctr_sort$x[1:nModalidadesVisualiza] / sum(cis_2020_ca_opi01_k1_ctr_sort$x), digits = 1)))
-colnames(aux_tbl) <- c("n", "Variable:modalidad", "Contribución", "%")
-pander(aux_tbl)
+  return(table)
+}
 ```
 
-Estas representan el 
+Ya se dijo que se iban a representar 
 ```{r echo=FALSE, results='asis'}
-round(100*sum(cis_2020_ca_opi01_k1_ctr_sort$x[1:nModalidadesVisualiza])/ sum(cis_2020_ca_opi01_k1_ctr_sort$x), digits = 1)
+cat(numDim)
 ```
- % del peso de ese factor. O sea que lo que mejor representa a los encuestados es `N.S.` y `N.C.` y esto no nos aporta *ninguna* información. Por tanto para realizar este ACM hay que tener en cuenta más dimensiones, o sea más factores.
-
-```{r}
-cis_2020_ca_opi01_k2_ctr_sort <- sort(cis_2020_EB_ctr_df$k2, decreasing = TRUE, index.return = TRUE)
-
-require(pander)
-aux_tbl <- data.frame(cbind(1:nModalidadesVisualiza,
-                            cis_2020_ca_opi01_summ$columns$name[cis_2020_ca_opi01_k2_ctr_sort$ix[1:nModalidadesVisualiza]],
-                            cis_2020_ca_opi01_k2_ctr_sort$x[1:nModalidadesVisualiza],
-                            round(100*cis_2020_ca_opi01_k2_ctr_sort$x[1:nModalidadesVisualiza] / sum(cis_2020_ca_opi01_k2_ctr_sort$x), digits = 1)))
-colnames(aux_tbl) <- c("n", "Variable:modalidad", "Contribución", "%")
-pander(aux_tbl)
-```
-
-Estas representan el 
+ dimensiones. A continuación se muestran 
 ```{r echo=FALSE, results='asis'}
-round(100*sum(cis_2020_ca_opi01_k2_ctr_sort$x[1:nModalidadesVisualiza])/ sum(cis_2020_ca_opi01_k2_ctr_sort$x), digits = 1)
+cat(numDim)
 ```
+ tablas que contienen la modalidades más representativas de cada factor (= dimensión). Esas modalidades cubren el 
+```{r echo=FALSE, results='asis'}
+cat(100 * percet_eigenvalue, "%")
+```
+ de cada dimensión.
+
+```{r echo=FALSE, results='asis'}
+# Line before
+cat()
+for (i in 1:numDim) {
+  aux_tbl <- factor_categories(cis_2020_EB_ctr_df$name, cis_2020_EB_ctr_df[,i+1], percet_eigenvalue)
+  
+  cat(pander(aux_tbl, caption = paste("Dimensión", i, "Contiene", nrow(aux_tbl), "factores que cubren el", 100 * percet_eigenvalue, "% de esta dimensión.")))
+  # Line after
+  cat()
+}
+```
+
+
+
+ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
+
+ % del peso de ese factor. Por tanto lo que mejor representa a los encuestados es `N.S.` y `N.C.` y esto no nos aporta *ninguna* información. Así que para realizar este ACM hay que tener en cuenta más dimensiones, o sea más factores.
 
 
 
