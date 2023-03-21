@@ -153,13 +153,16 @@ cat(paste0("`",illustrative_vars, "`", collapse = ", "), sep = "")
 
 El resto de preguntas pueden considerarse de opinión. El ACM trata de ubicar los datos objetivos entre las diferentes escalas de opiniones.
 
+# Selección de dimensiones más representativas
+
 Se realiza una primera tentativa de ACM sólo con las variables de opinión:
 ```{r ACM01}
 cis_2020_ca_opi01 <- mjca(cis_2020_EB_df[,opinion_vars], nd = numDim)
 
 cis_2020_ca_opi01_summ <- summary(cis_2020_ca_opi01)
 
-plot.mjca(cis_2020_ca_opi01, labels = c(2,0))
+# plot.mjca(cis_2020_ca_opi01, labels = c(2,0))
+plot.mjca(cis_2020_ca_opi01)
 ```
 
 Inercias de los autovalores principales:
@@ -172,17 +175,12 @@ colnames(aux_tbl) <- c("Dim", "Valor", "%", "% acumul")
 pander(aux_tbl, digits = c(1,5,3,3), keep.trailing.zeros = TRUE, caption = "Porcentaje de varianza explicada por cada autovalor.")
 ```
 
-
 ```{r}
-# Create data frame with numDim columns. Each column is a factor and each row is the contribution
-cis_2020_EB_ctr_df <- data.frame(matrix(ncol = numDim+1, nrow = length(cis_2020_ca_opi01_summ$columns$name)))
-colnames(cis_2020_EB_ctr_df) <- c("name", paste0("k", seq(1:numDim)))
-
-cis_2020_EB_ctr_df$name <- cis_2020_ca_opi01_summ$columns$name
-# Contributions of each dimension
-for (i in 1:numDim) {
-  cis_2020_EB_ctr_df[,i+1] <- cis_2020_ca_opi01_summ$columns[,7+(i-1)*3]
-}
+# Save factors information
+# We will get a data.frame with: "name", "mass", " qlt", " inr" and information of every factor: "k", "cor" and "ctr"
+require(dplyr)
+cis_2020_ca_opi01_factor <- dplyr::bind_rows(cis_2020_ca_opi01_summ$columns)
+colnames(cis_2020_ca_opi01_factor) <- c(c("name", "mass", "qlt", "inr"), paste0(c("k", "cor", "ctr"), rep(1:numDim, each=3)))
 ```
 
 Con 
@@ -205,20 +203,26 @@ cat(100*percet_eigenvalue, "%")
  de esa dimensión.
 ```{r}
 # Returns a data.frame sorted by contribution. It includes the minimum number of categories that covers percet_eigenvalue
-factor_categories <- function(fctr_names, fctr_contribution, percet_eigenvalue){
+factor_categories <- function(columns_factors, num_factor, percet_eigenvalue){
+  k_idx <-   4+3*(num_factor-1)+1
+  cor_idx <- 4+3*(num_factor-1)+2
+  ctr_idx <- 4+3*(num_factor-1)+3
   
   # Sort by its contribution
-  fctr_contribution_sort <- base::sort(fctr_contribution, decreasing = TRUE, index.return = TRUE)
+  fctr_contribution_sort <- base::sort(columns_factors[,ctr_idx], decreasing = TRUE, index.return = TRUE)
   # Calculate percet_eigenvalue of whole eigenvalue
-  i <- round(percet_eigenvalue*sum(fctr_contribution))
+  i <- round(percet_eigenvalue*sum(columns_factors[,ctr_idx]))
   # Calculate number of variables
   num_categories <- which.max(cumsum(fctr_contribution_sort$x) >= i)
   
   table <- data.frame(cbind(1:num_categories,
-                              fctr_names[fctr_contribution_sort$ix[1:num_categories]],
+                              columns_factors$name[fctr_contribution_sort$ix[1:num_categories]],
+                              columns_factors$qlt[fctr_contribution_sort$ix[1:num_categories]],
+                              columns_factors[,k_idx][fctr_contribution_sort$ix[1:num_categories]],
+                              columns_factors[,cor_idx][fctr_contribution_sort$ix[1:num_categories]],
                               fctr_contribution_sort$x[1:num_categories],
                               round(100*fctr_contribution_sort$x[1:num_categories] / sum(fctr_contribution_sort$x), digits = 1)))
-  colnames(table) <- c("n", "Variable:modalidad", "Contribución", "%")
+  colnames(table) <- c("n", "Variable:modalidad", "qlt", "k", "cor", "ctr", "%")
 
   return(table)
 }
@@ -228,7 +232,128 @@ Ya se dijo que se iban a representar
 ```{r echo=FALSE, results='asis'}
 cat(numDim)
 ```
- dimensiones. A continuación se muestran 
+ dimensiones.
+ 
+Se analiza el contenido de cada dimensión de una en una teniendo en cuenta el significado de cada parámetro obtenido:
+
+ + `qlt`: representa la *calidad* de esa modalidad. Es el $cos^2$ y mide el grado de asociación de una modalidad con esa dimensión.
+ + `k`: nos da las coordenadas de la modalidad en esa dimensión (en ese eje).
+ + `cor`: correlaciones al cuadrado entre la modalidad y la dimensión.
+ + `ctr`: para interpretar cada dimensión se analizan las contribuciones  absolutas (`ctr`). Esta columna es la que realmente representa cuánto de importante es una modalidad dentro de esa dimensión. 
+
+
+
+## Dimensión 1
+
+```{r}
+i <- 1
+aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
+require(pander)
+pander(aux_tbl, caption = paste0("Dimensión ", i, ". Contiene ", nrow(aux_tbl), " modalidades que cubren el ", 100 * percet_eigenvalue, " % de esta dimensión."))
+
+```
+
+En el lado positivo del eje las modalidades mejor representadas son:
+
+```{r echo=FALSE, results='asis'}
+j <- 20
+cat(paste0("`", head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = j), "`", collapse = ", "), ".", sep = "")
+```
+
+O sea la "Abstención en 2020", "ningún interés" por la campaña, "Con toda seguridad no  votaría nunca" a Elkarrekin Podemos, no sabe o no conntesta sobre la escala ideológica de los los partidos: "Elkarrekin Podemos", "Ciudadanos", "PP", "Vox", "EH Bildu" ni "PSE-EE-PSOE", ni "EAJ-PNV", tenía decidido abstenerse en las elecciones autonómicas del
+País Vasco de 2020, , "Con toda seguridad no  votaría nunca" a EH Bildu, no sigue la campaña electoral en ningún sitio de internet, no ha recibido mensajes en el movil, no esta "Nada" interesado pòr la política y la campaña electoral no tiene "nada" de utilidad.
+
+
+En el lado negativo del eje están:
+```{r echo=FALSE, results='asis'}
+j <- 20
+cat(paste0("`", head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = j), "`", collapse = ", "), ".", sep = "")
+```
+
+O sea: No ha enviado mensaje de "EAJ-PNV", ni "EH Bildu", ha recibido mensajes en el móvil y recuerda de qué partido,  ha enviado mensajes de algún partido que no eran ni Bildu ni Vox, no ha recibido mensaje ni de "PP+C's", ni de "Vox", ni de "Otro", no ha enviado mensajes de "EAJ-PNV" pero sí de "Elkarrekin Podemos", habló con sus amigos de política habitualmente.
+
+
+**Necesito una interpretación *certera* del significado de este eje por parte de JRB. A falta de esa interpretación diremos que:** Este eje representa a las personas que votan abstención o no les interesa la política y en el ládo contrario a las que sí les interesa, envía mensajes al respecto y habla habitualmente con sus amistades.
+
+
+
+## Dimensión 2
+
+```{r}
+i <- 2
+aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
+require(pander)
+pander(aux_tbl, caption = paste0("Dimensión ", i, ". Contiene ", nrow(aux_tbl), " modalidades que cubren el ", 100 * percet_eigenvalue, " % de esta dimensión."))
+
+```
+
+En el lado positivo del eje las modalidades mejor representadas son:
+
+```{r echo=FALSE, results='asis'}
+j <- 20
+cat(paste0("`", head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = j), "`", collapse = ", "), ".", sep = "")
+```
+
+No sabe o no contesta a qué partido votar, no sabe o no contesta la escala ideológica  de varios partidos, sí envía mensajes electrónicos que además son de "Elkarrekin Podemos", de "EH Bildu" y  de "Vox".
+
+
+En el lado negativo del eje están:
+```{r echo=FALSE, results='asis'}
+j <- 20
+cat(paste0("`", head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = j), "`", collapse = ", "), ".", sep = "")
+```
+
+No recibe mensajes electrónicos, no ha enviado mensajes electrónicos, Se informó a través de prensa impresa, radio, no sigue la campaña en redes sociales, lee grupos editoriales de centro derecha.
+
+**Necesito una interpretación *certera* del significado de este eje por parte de JRB. A falta de esa interpretación diremos que:** Este eje representa a las personas que envían mensajes electrónicos y en el lado negativo del eje a los que no envían mensajes ni siguen redes sociales.
+
+
+ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    
+
+
+```{r}
+# plot(ACM_coches)
+# plot(ACM_coches, mass = c(FALSE, TRUE))
+# plot(ACM_coches, mass = c(FALSE, TRUE), contrib="absolute")
+
+gg_active_vars <- function(dimA = 1, dimB = 2){
+  library(ggplot2)
+  library(ggrepel)
+
+  # Se calculan las distancias al cuadrado
+  col_coord_df<-cbind.data.frame(cis_2020_ca_opi01$colcoord[,dimA],
+                       cis_2020_ca_opi01$colcoord[,dimB],
+                       cis_2020_ca_opi01$levelnames)  ### paste(rownames(df_coches.ac), df_coches.ac$MARCA)
+  # Se crea el objeto con el grafico de las variables activas
+  var_act_grob <- ggplot(col_coord_df, aes(x=col_coord_df[,1], y=col_coord_df[,2])) +
+    geom_point() + geom_rug() +
+    # xlim(-2.6, 3.5) + ylim(-2.1,3.8)+
+    geom_text_repel(aes(label=col_coord_df[,3]),hjust=0, vjust=0,size=3.3) +
+    scale_colour_brewer(palette = "Set1") +
+    geom_vline(xintercept = 0) + geom_hline(yintercept = 0) + 
+    ggtitle("Variables activas en el plano factorial") +
+    xlab(paste("Dimension ", dimA, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimA], digits = 1) , "% )", sep = "")) +
+    ylab(paste("Dimension ", dimB, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimB], digits = 1) , "% )", sep = ""))
+  
+  var_act_grob
+}
+
+```
+
+
+
+
+ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    ESTAS AQUI   
+```{r}
+gg_active_vars(1,2)
+gg_active_vars(1,3)
+gg_active_vars(2, 3)
+```
+
+
+
+
+A continuación se muestran 
 ```{r echo=FALSE, results='asis'}
 cat(numDim)
 ```
@@ -238,13 +363,14 @@ cat(100 * percet_eigenvalue, "%")
 ```
  de cada dimensión.
 
-```{r echo=FALSE, results='asis'}
+```{r eigenTables, eval=FALSE, echo=FALSE, results='asis'}
+require(pander)
 # Line before
 cat()
 for (i in 1:numDim) {
-  aux_tbl <- factor_categories(cis_2020_EB_ctr_df$name, cis_2020_EB_ctr_df[,i+1], percet_eigenvalue)
-  
-  cat(pander(aux_tbl, caption = paste("Dimensión", i, "Contiene", nrow(aux_tbl), "factores que cubren el", 100 * percet_eigenvalue, "% de esta dimensión.")))
+  aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
+  # In the for loop there is not 'output screen' unless you use the print(x) function or cat() Specifically for pandoc
+  cat(pander(aux_tbl, caption = paste0("Dimensión ", i, ". Contiene ", nrow(aux_tbl), " modalidades que cubren el ", 100 * percet_eigenvalue, " % de esta dimensión.")))
   # Line after
   cat()
 }
@@ -252,7 +378,6 @@ for (i in 1:numDim) {
 
 
 
-ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
 
  % del peso de ese factor. Por tanto lo que mejor representa a los encuestados es `N.S.` y `N.C.` y esto no nos aporta *ninguna* información. Así que para realizar este ACM hay que tener en cuenta más dimensiones, o sea más factores.
 
