@@ -49,6 +49,10 @@ library(dplyr)
 library(pander)
 library(car)
 library(ca)
+
+library(ggplot2)
+library(ggrepel)
+
 ```
 
 ```{r}
@@ -317,18 +321,26 @@ ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    ESTAS AQUI
 # plot(ACM_coches, mass = c(FALSE, TRUE), contrib="absolute")
 
 gg_active_vars <- function(dimA = 1, dimB = 2){
-  library(ggplot2)
-  library(ggrepel)
+  require(ca)
+  # Extracting principal coordinates from mjca objects
+  aux_coord <- ca::cacoord(cis_2020_ca_opi01, type = "colprincipal", dim = c(dimA, dimB), cols = TRUE)
 
-  # Se calculan las distancias al cuadrado
-  col_coord_df<-cbind.data.frame(cis_2020_ca_opi01$colcoord[,dimA],
-                       cis_2020_ca_opi01$colcoord[,dimB],
-                       cis_2020_ca_opi01$levelnames)  ### paste(rownames(df_coches.ac), df_coches.ac$MARCA)
+  ### # Se calculan las distancias al cuadrado
+  ### col_coord_df <- cbind.data.frame(cis_2020_ca_opi01$colcoord[,dimA],
+  ###                      cis_2020_ca_opi01$colcoord[,dimB],
+  ###                      cis_2020_ca_opi01$levelnames)
+  col_coord_df <- cbind.data.frame(aux_coord[,1],
+                                 aux_coord[,2],
+                                 cis_2020_ca_opi01$levelnames)
+  colnames(col_coord_df) <- c("dimA", "dimB", "name")
+
+  require(ggplot2)
+  require(ggrepel)
   # Se crea el objeto con el grafico de las variables activas
-  var_act_grob <- ggplot(col_coord_df, aes(x=col_coord_df[,1], y=col_coord_df[,2])) +
+  var_act_grob <- ggplot(col_coord_df, aes(x=col_coord_df$dimA, y=col_coord_df$dimB)) +
     geom_point() + geom_rug() +
     # xlim(-2.6, 3.5) + ylim(-2.1,3.8)+
-    geom_text_repel(aes(label=col_coord_df[,3]),hjust=0, vjust=0,size=3.3) +
+    geom_text_repel(aes(label=col_coord_df$name),hjust=0, vjust=0,size=3.3) +
     scale_colour_brewer(palette = "Set1") +
     geom_vline(xintercept = 0) + geom_hline(yintercept = 0) + 
     ggtitle("Variables activas en el plano factorial") +
@@ -337,7 +349,6 @@ gg_active_vars <- function(dimA = 1, dimB = 2){
   
   var_act_grob
 }
-
 ```
 
 
@@ -351,6 +362,7 @@ gg_active_vars(2, 3)
 ```
 
 
+## Individuos
 
 
 A continuación se muestran 
