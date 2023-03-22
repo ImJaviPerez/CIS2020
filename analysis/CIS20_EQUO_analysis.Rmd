@@ -165,8 +165,8 @@ cis_2020_ca_opi01 <- mjca(cis_2020_EB_df[,opinion_vars], nd = numDim)
 
 cis_2020_ca_opi01_summ <- summary(cis_2020_ca_opi01)
 
-# plot.mjca(cis_2020_ca_opi01, labels = c(2,0))
-plot.mjca(cis_2020_ca_opi01)
+plot.mjca(cis_2020_ca_opi01, labels = c(2,0))
+# plot.mjca(cis_2020_ca_opi01)
 ```
 
 Inercias de los autovalores principales:
@@ -320,10 +320,11 @@ ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    ESTAS AQUI
 # plot(ACM_coches, mass = c(FALSE, TRUE))
 # plot(ACM_coches, mass = c(FALSE, TRUE), contrib="absolute")
 
-gg_active_vars <- function(dimA = 1, dimB = 2){
+gg_active_vars <- function(dimA = 1, dimB = 2, coord_type = "standard"){
   require(ca)
   # Extracting principal coordinates from mjca objects
-  aux_coord <- ca::cacoord(cis_2020_ca_opi01, type = "colprincipal", dim = c(dimA, dimB), cols = TRUE)
+  # type = c("standard", "principal", "symmetric", "rowprincipal", "colprincipal", "symbiplot", "rowgab", "colgab", "rowgreen", "colgreen")
+  aux_coord <- ca::cacoord(cis_2020_ca_opi01, type = coord_type, dim = c(dimA, dimB), cols = TRUE)
 
   ### # Se calculan las distancias al cuadrado
   ### col_coord_df <- cbind.data.frame(cis_2020_ca_opi01$colcoord[,dimA],
