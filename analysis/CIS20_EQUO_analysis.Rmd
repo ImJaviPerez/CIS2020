@@ -311,8 +311,108 @@ No recibe mensajes electrónicos, no ha enviado mensajes electrónicos, Se infor
 
 **Necesito una interpretación *certera* del significado de este eje por parte de JRB. A falta de esa interpretación diremos que:** Este eje representa a las personas que envían mensajes electrónicos y en el lado negativo del eje a los que no envían mensajes ni siguen redes sociales.
 
+## Dimensión 3
 
-ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    
+```{r}
+i <- 3
+aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
+require(pander)
+pander(aux_tbl, caption = paste0("Dimensión ", i, ". Contiene ", nrow(aux_tbl), " modalidades que cubren el ", 100 * percet_eigenvalue, " % de esta dimensión."))
+```
+
+En el lado positivo del eje las modalidades mejor representadas son:
+
+```{r echo=FALSE, results='asis'}
+j <- 20
+cat(paste0("`", head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = j), "`", collapse = ", "), ".", sep = "")
+```
+
+`P24_7_GRUPO:2_10`: No descartan votar a "Vox", `P26_4_GRUPO:1 Muy mal`:  valoran muy mal a "Miren Gorrotxategi", `ESCIDEOLPAR_7_GRUPO:1_8`: Opinan que "Vox" no es ultraderecha, `P27:Un Estado con un único Gobierno central sin autonomías `: es su organización territorial preferida, etc.
+
+En el lado negativo del eje están:
+```{r echo=FALSE, results='asis'}
+j <- 20
+cat(paste0("`", head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = j), "`", collapse = ", "), ".", sep = "")
+```
+
+`ESCIDEOLPAR_5_GRUPO:NS_NC`, `ESCIDEOLPAR_7_GRUPO:NS_NC`, `ESCIDEOLPAR_4_GRUPO:NS_NC`, `ESCIDEOLPAR_6_GRUPO:NS_NC`, `ESCIDEOLPAR_1_GRUPO:NS_NC`: no saben o no contestan sobre la escala ideológica de los partidos: "PP", "Vox", "Elkarrekin-Podemos", "Ciudadanos" ni "EAJ-PNV". `P14_GRUPO:No`: no fueron contactados por ningún partido político para pedirles el voto, `P24_3_GRUPO:NS_NC`, `P24_5_GRUPO:NS_NC`, `P24_2_GRUPO:NS_NC`, `P24_4_GRUPO:NS_NC`, `P24_7_GRUPO:NS_NC`, `P24_6_GRUPO:NS_NC`, : No sabe o no contesta sobre la probabilidad de votar a "PSE-EE-PSOE", "PP", "EH-Bildu", "Elkarrekin Podemos" ni "vox".
+
+**Necesito una interpretación *certera* del significado de este eje por parte de JRB. A falta de esa interpretación diremos que:** Este eje representa a las personas que se manifiestan  conservadoras y centralistas y en el lado negativo del eje a los que no saben o no contestan a quien votar.
+
+## Dimensión 4
+
+Se muestran la tabla con las variables más representativas de esta dimensión:
+
+```{r}
+percet_eigenvalue <- 0.5
+```
+
+
+```{r}
+i <- 4
+aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
+require(pander)
+pander(aux_tbl, caption = paste0("Dimensión ", i, ". Contiene ", nrow(aux_tbl), " modalidades que cubren el ", 100 * percet_eigenvalue, " % de esta dimensión."))
+```
+
+## Dimensión 5
+
+Se muestran la tabla con las variables más representativas de esta dimensión:
+
+```{r}
+i <- 5
+aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
+require(pander)
+pander(aux_tbl, caption = paste0("Dimensión ", i, ". Contiene ", nrow(aux_tbl), " modalidades que cubren el ", 100 * percet_eigenvalue, " % de esta dimensión."))
+```
+
+## Dimensión 6
+
+Se muestran la tabla con las variables más representativas de esta dimensión:
+
+```{r}
+i <- 6
+aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
+require(pander)
+pander(aux_tbl, caption = paste0("Dimensión ", i, ". Contiene ", nrow(aux_tbl), " modalidades que cubren el ", 100 * percet_eigenvalue, " % de esta dimensión."))
+```
+
+## Dimensión 7
+
+Se muestran la tabla con las variables más representativas de esta dimensión:
+
+```{r}
+i <- 7
+aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
+require(pander)
+pander(aux_tbl, caption = paste0("Dimensión ", i, ". Contiene ", nrow(aux_tbl), " modalidades que cubren el ", 100 * percet_eigenvalue, " % de esta dimensión."))
+```
+
+
+## Dimensión 8
+
+Se muestran la tabla con las variables más representativas de esta dimensión:
+
+```{r}
+i <- 8
+aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
+require(pander)
+pander(aux_tbl, caption = paste0("Dimensión ", i, ". Contiene ", nrow(aux_tbl), " modalidades que cubren el ", 100 * percet_eigenvalue, " % de esta dimensión."))
+```
+
+## Dimensión 9
+
+Se muestran la tabla con las variables más representativas de esta dimensión:
+
+```{r}
+i <- 9
+aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
+require(pander)
+pander(aux_tbl, caption = paste0("Dimensión ", i, ". Contiene ", nrow(aux_tbl), " modalidades que cubren el ", 100 * percet_eigenvalue, " % de esta dimensión."))
+```
+
+
+
 
 
 ```{r}
@@ -371,6 +471,18 @@ gg_plot_MCA(dimX = 2, dimY = 3)
 ## Individuos
 ```{r}
 gg_plot_MCA(dimX = 1, dimY = 2, col_coord = FALSE, row_coord = TRUE)
+```
+
+```{r}
+gg_plot_MCA(dimX = 1, dimY = 3, col_coord = FALSE, row_coord = TRUE)
+```
+
+```{r}
+gg_plot_MCA(dimX = 2, dimY = 3, col_coord = FALSE, row_coord = TRUE)
+```
+
+```{r}
+gg_plot_MCA(dimX = 2, dimY = 4, col_coord = FALSE, row_coord = TRUE)
 ```
 
 
