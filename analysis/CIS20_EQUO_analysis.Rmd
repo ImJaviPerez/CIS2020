@@ -121,6 +121,8 @@ cat("\\frac{1}{", Q, "} = ",round(1/Q, digits = 4), ".", sep = "")
 ```{r}
 cis_2020_equo_ca_00_summ <- summary(cis_2020_equo_ca_00)
 numDim <- length(which(cis_2020_equo_ca_00_summ$scree[,2] > (eigen_inertia_e/2)))
+
+if (numDim < 9) numDim <- 9
 ```
 Por lo tanto en nuestro caso el número de dimensiones será:
 ```{r echo=FALSE, results='asis'}
@@ -161,9 +163,11 @@ El resto de preguntas pueden considerarse de opinión. El ACM trata de ubicar lo
 
 Se realiza una primera tentativa de ACM sólo con las variables de opinión:
 ```{r ACM01}
+require(ca)
 cis_2020_ca_opi01 <- mjca(cis_2020_EB_df[,opinion_vars], nd = numDim)
 
 cis_2020_ca_opi01_summ <- summary(cis_2020_ca_opi01)
+# print(cis_2020_ca_opi01_summ)
 
 plot.mjca(cis_2020_ca_opi01, labels = c(2,0))
 # plot.mjca(cis_2020_ca_opi01)
@@ -201,7 +205,7 @@ cat(cis_2020_ca_opi01_summ$scree[numDim,][4])
 
 Seleccionamos las modalidades más importantes de cada factor; las que representan un
 ```{r echo=FALSE, results='asis'}
-percet_eigenvalue <- 0.75
+percet_eigenvalue <- 0.60
 cat(100*percet_eigenvalue, "%")
 ```
  de esa dimensión.
@@ -257,27 +261,66 @@ pander(aux_tbl, caption = paste0("Dimensión ", i, ". Contiene ", nrow(aux_tbl),
 
 ```
 
-En el lado positivo del eje las modalidades mejor representadas son:
+```{r include=FALSE, eval=FALSE}
+i <- 'P16'
+attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == i]
+```
+
+En el **lado positivo del eje** las modalidades mejor representadas son:
 
 ```{r echo=FALSE, results='asis'}
 j <- 20
 cat(paste0("`", head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = j), "`", collapse = ", "), ".", sep = "")
 ```
 
-O sea la "Abstención en 2020", "ningún interés" por la campaña, "Con toda seguridad no  votaría nunca" a Elkarrekin Podemos, no sabe o no conntesta sobre la escala ideológica de los los partidos: "Elkarrekin Podemos", "Ciudadanos", "PP", "Vox", "EH Bildu" ni "PSE-EE-PSOE", ni "EAJ-PNV", tenía decidido abstenerse en las elecciones autonómicas del
-País Vasco de 2020, , "Con toda seguridad no  votaría nunca" a EH Bildu, no sigue la campaña electoral en ningún sitio de internet, no ha recibido mensajes en el movil, no esta "Nada" interesado pòr la política y la campaña electoral no tiene "nada" de utilidad.
+ + `P15_GRUPO:Sí`: 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P15'])
+```
+
+ + `P15A_2:No menciona`, `P15A_1:No menciona`, `P15A_95:No menciona`, `P15A_98:No menciona`, `P15A_11:No menciona`, `P15A_12:No menciona`, `P15A_21:Menciona`, `P15A_18:No menciona`: Los mensajes enviados no han sido de:
+```{r echo=FALSE, results='asis'}
+# levels(cis_2020_EB_df$P20)
+cat(paste(levels(cis_2020_EB_df$P20)[c(2, 1, 14, 5, 6, 10, 8)], collapse = ", "))
+```
+  + `P16A_95:No menciona`, `P16A_98:No menciona`, `P16A_2:No menciona`, `P16A_1:No menciona`, `P16A_18:No menciona`, `P16A_21:Menciona`: 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P16'])
+```
+. Ha recibido mensajes de:
+```{r echo=FALSE, results='asis'}
+# levels(cis_2020_EB_df$P20)
+cat(paste(levels(cis_2020_EB_df$P20)[c(14, 17, 2, 1, 8, 10)], collapse = ", "))
+```
+  + `P6_GRUPO:Mucho`: está muy interesado en la política.
+  + `P17_2_GRUPO:Habitualmente`: Las elecciones fueron tema de conversación 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P17_2'])
+```
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P17_2_GRUPO)[1])
+```
+
+En resumen: son personas que envían y reciben mensajes relacionados con la política y están interesados en la política
 
 
-En el lado negativo del eje están:
+En el **lado negativo del eje** están:
 ```{r echo=FALSE, results='asis'}
 j <- 20
 cat(paste0("`", head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = j), "`", collapse = ", "), ".", sep = "")
 ```
 
-O sea: No ha enviado mensaje de "EAJ-PNV", ni "EH Bildu", ha recibido mensajes en el móvil y recuerda de qué partido,  ha enviado mensajes de algún partido que no eran ni Bildu ni Vox, no ha recibido mensaje ni de "PP+C's", ni de "Vox", ni de "Otro", no ha enviado mensajes de "EAJ-PNV" pero sí de "Elkarrekin Podemos", habló con sus amigos de política habitualmente.
+ + `P7_GRUPO:Con ningún interés`: No pusieron ningún interés en seguir la campaña.
+ + `ESCIDEOLPAR_6_GRUPO:NS_NC`, `ESCIDEOLPAR_1_GRUPO:NS_NC`, `ESCIDEOLPAR_5_GRUPO:NS_NC`, `ESCIDEOLPAR_2_GRUPO:NS_NC`, `ESCIDEOLPAR_7_GRUPO:NS_NC`, `ESCIDEOLPAR_3_GRUPO:NS_NC`, `ESCIDEOLPAR_4_GRUPO:NS_NC`: No sabe o no contesta sobre la escala ideológica de ningún partido.
+ + `RVAUTO20:No votó/abstención`, `P20_GRUPO:Abstención+`: Se abstuvo en el 2020.
+ + `P12_7:Menciona`: No tiene cuenta en redes sociales.
+ + `P6_GRUPO:Nada`: Lo le interesa nada la política.
+ + `P8_1_GRUPO:Nada`: La campaña electoral no le sirvió para nada.
+
+En resumen: personas que no les interesa la campaña electoral, ni la política y que se abstuvieron.
 
 
-**Necesito una interpretación *certera* del significado de este eje por parte de JRB. A falta de esa interpretación diremos que:** Este eje representa a las personas que votan abstención o no les interesa la política y en el ládo contrario a las que sí les interesa, envía mensajes al respecto y habla habitualmente con sus amistades.
+**Necesito una interpretación *certera* del significado de este eje por parte de JRB. A falta de esa interpretación diremos que:** Este eje representa a las personas que sí les interesa, envía mensajes al respecto y habla habitualmente con sus amistades y en el ládo contrario a las que votan abstención o no les interesa la política.
 
 
 
@@ -291,17 +334,24 @@ pander(aux_tbl, caption = paste0("Dimensión ", i, ". Contiene ", nrow(aux_tbl),
 
 ```
 
-En el lado positivo del eje las modalidades mejor representadas son:
+En el **lado positivo del eje** las modalidades mejor representadas son:
 
 ```{r echo=FALSE, results='asis'}
 j <- 20
 cat(paste0("`", head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = j), "`", collapse = ", "), ".", sep = "")
 ```
 
+
+ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI  
+
+ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
+
+ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
+
 No sabe o no contesta a qué partido votar, no sabe o no contesta la escala ideológica  de varios partidos, sí envía mensajes electrónicos que además son de "Elkarrekin Podemos", de "EH Bildu" y  de "Vox".
 
 
-En el lado negativo del eje están:
+En el **lado negativo del eje** están:
 ```{r echo=FALSE, results='asis'}
 j <- 20
 cat(paste0("`", head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = j), "`", collapse = ", "), ".", sep = "")
@@ -377,39 +427,6 @@ require(pander)
 pander(aux_tbl, caption = paste0("Dimensión ", i, ". Contiene ", nrow(aux_tbl), " modalidades que cubren el ", 100 * percet_eigenvalue, " % de esta dimensión."))
 ```
 
-## Dimensión 7
-
-Se muestran la tabla con las variables más representativas de esta dimensión:
-
-```{r}
-i <- 7
-aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
-require(pander)
-pander(aux_tbl, caption = paste0("Dimensión ", i, ". Contiene ", nrow(aux_tbl), " modalidades que cubren el ", 100 * percet_eigenvalue, " % de esta dimensión."))
-```
-
-
-## Dimensión 8
-
-Se muestran la tabla con las variables más representativas de esta dimensión:
-
-```{r}
-i <- 8
-aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
-require(pander)
-pander(aux_tbl, caption = paste0("Dimensión ", i, ". Contiene ", nrow(aux_tbl), " modalidades que cubren el ", 100 * percet_eigenvalue, " % de esta dimensión."))
-```
-
-## Dimensión 9
-
-Se muestran la tabla con las variables más representativas de esta dimensión:
-
-```{r}
-i <- 9
-aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
-require(pander)
-pander(aux_tbl, caption = paste0("Dimensión ", i, ". Contiene ", nrow(aux_tbl), " modalidades que cubren el ", 100 * percet_eigenvalue, " % de esta dimensión."))
-```
 
 
 
