@@ -81,6 +81,7 @@ info(logger,  paste(Sys.time(), 'Starting script'))
 # TODO
 # http://destio.us.es/calvo/asignaturas/ge_esco/tutorialusargitgithubrstudio/UsarGitGithubconRStudio.html
 # Seguir indicaciones de JRB
+# REVISAR EL COCINADO DE TODAS LAS VARIABLES
 ```
 
 
@@ -135,11 +136,11 @@ cat(paste0("`", levels(cis_2020_df$P5), "`", collapse = ", "), ".", sep = "")
 ```
 
 ## Selección de encuestas realtivas a *EQUO Berdeak*
-Nos interesa conocer las características del grupo de votantes afín a *EQUO Berdeak*. Para ello, siguiendo el criterio de JRB, se entresacan las entrevistas de las personas que dijeron votar a `Elkarrekin Podemos` o que votaron a `Otro partido` en las siguientes ocasiones:
+Nos interesa conocer las características del grupo de votantes afín a *EQUO Berdeak*. Para ello, siguiendo el criterio de JRB, se entresacan las entrevistas de las personas que dijeron votar a `Elkarrekin Podemos` o que votaron a `Otro partido` a `Los Verdes` o a `EQUO` en las siguientes ocasiones:
 
- + elecciones autonómicas del 2020: preguntas: `P20` y `P20R` = `RVAUTO20`: `Elkarrekin Podemos`.
- + elecciones generales de noviembre de 2019: preguntas` P30a` = `RECUVOTOG` y `P30aa` = `RECUERDO`: `Otros partidos`.
- + elecciones autonómicas de 2016: preguntas `P25a` = `RECUVOTOA` y `P25aa` = `RVAUTO16`: `Otros partidos`
+ + elecciones autonómicas del 2020: preguntas: `P20` y `P20R` = `RVAUTO20`: `Elkarrekin Podemos` O `Los Verdes` o `EQUO` U `Otro partido`.
+ + elecciones generales de noviembre de 2019: preguntas` P30a` = `RECUVOTOG` y `P30aa` = `RECUERDO`: `Elkarrekin Podemos` u `Otros partidos`.
+ + elecciones autonómicas de 2016: preguntas `P25a` = `RECUVOTOA` y `P25aa` = `RVAUTO16`: `Elkarrekin Podemos` u `Otros partidos`.
 
 
 ```{r}
@@ -152,12 +153,39 @@ Nos interesa conocer las características del grupo de votantes afín a *EQUO Be
 # Autonomicas 2016
 # levels(cis_2020_df$RECUVOTOA)
 # levels(cis_2020_df$RVAUTO16)
-rows_ElkBer <-unique(which(cis_2020_df$P20 == 'Elkarrekin Podemos' | 
-                       cis_2020_df$RVAUTO20 == 'Elkarrekin Podemos' |
-                         cis_2020_df$RECUERDO == 'Otros partidos' | 
-                         cis_2020_df$RECUVOTOG == 'Otros partidos' | 
-                         cis_2020_df$RECUVOTOA == 'Otros partidos' | 
-                         cis_2020_df$RVAUTO16 == 'Otros partidos'))
+rows_ElkBer <- unique(which(cis_2020_df$P20 == 'Elkarrekin Podemos' |
+                             cis_2020_df$P20 == 'Los Verdes' | 
+                             cis_2020_df$P20 == 'EQUO' | 
+                             cis_2020_df$P20 == 'Otro partido' | 
+                             cis_2020_df$RVAUTO20 == 'Elkarrekin Podemos' |
+                             cis_2020_df$RVAUTO20 == 'Otro partido' |
+                             cis_2020_df$RECUERDO == 'Elkarrekin Podemos' | 
+                             cis_2020_df$RECUERDO == 'Otros partidos' | 
+                             cis_2020_df$RECUVOTOG == 'Elkarrekin Podemos' | 
+                             cis_2020_df$RECUVOTOG == 'Otros partidos' | 
+                             cis_2020_df$RECUVOTOA == 'Elkarrekin Podemos' | 
+                             cis_2020_df$RECUVOTOA == 'Otros partidos' | 
+                             cis_2020_df$RVAUTO16 == 'Elkarrekin Podemos' | 
+                             cis_2020_df$RVAUTO16 == 'Otros partidos'))
+```
+
+```{r include=FALSE}
+cosa_BORRAME <- unique(which(#cis_2020_df$P20 == 'Elkarrekin Podemos' 
+                             #| 
+                               cis_2020_df$P20 == 'Los Verdes' 
+                             | cis_2020_df$P20 == 'EQUO' 
+                             | cis_2020_df$P20 == 'Otro partido'  
+                             # | cis_2020_df$RVAUTO20 == 'Elkarrekin Podemos' 
+                             | cis_2020_df$RVAUTO20 == 'Otro partido' 
+                             # | cis_2020_df$RECUERDO == 'Elkarrekin Podemos'  
+                             | cis_2020_df$RECUERDO == 'Otros partidos'  
+                             # | cis_2020_df$RECUVOTOG == 'Elkarrekin Podemos'  
+                             | cis_2020_df$RECUVOTOG == 'Otros partidos'  
+                             # | cis_2020_df$RECUVOTOA == 'Elkarrekin Podemos'  
+                             | cis_2020_df$RECUVOTOA == 'Otros partidos'  
+                             # | cis_2020_df$RVAUTO16 == 'Elkarrekin Podemos'  
+                             | cis_2020_df$RVAUTO16 == 'Otros partidos'
+                             ))
 ```
 
 
@@ -378,7 +406,7 @@ cat("(", efectivo_min_abs, ").", sep = "")
 
 ```{r}
 require(pander)
-pander(head(cis_2020_EB_df %>% dplyr::count(EDAD)))
+pander(head(cis_2020_EB_df %>% dplyr::count(EDAD), n = 8))
 ```
 Table: Edades de los votantes. Sólo se visualizan los primeros elementos de la muestra.
 
