@@ -169,7 +169,7 @@ rows_ElkBer <- unique(which(cis_2020_df$P20 == 'Elkarrekin Podemos' |
                              cis_2020_df$RVAUTO16 == 'Otros partidos'))
 ```
 
-```{r include=FALSE}
+```{r include=FALSE, eval=FALSE}
 cosa_BORRAME <- unique(which(#cis_2020_df$P20 == 'Elkarrekin Podemos' 
                              #| 
                                cis_2020_df$P20 == 'Los Verdes' 
@@ -858,17 +858,21 @@ excluded_cols_EB <- c(excluded_cols_EB, "P5A")
 pander(cis_2020_EB_df %>% dplyr::count(P6, .drop=FALSE))
 ```
 
-Se elimina la modalidad nula.
+Se elimina la modalidad nula si existe y también se elimina la modalidad `N.C.`.
 ```{r}
-aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P6' & efectivo_peq_EB_df$freq == 0), "modalidad"])
+aux_idx <- unique(c(as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P6' & efectivo_peq_EB_df$freq == 0), "modalidad"]),
+             which(levels(cis_2020_EB_df$P6) == 'N.C.')))
 
-# Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P6)[aux_idx], collapse = "', '"), "') = NA")
-cis_2020_EB_df$P6_GRUPO <- car::recode(var = cis_2020_EB_df$P6, 
-                                    recodes = recodes_str, 
-                                    levels = c(levels(cis_2020_EB_df$P6)[-aux_idx]))
-pander(cis_2020_EB_df %>% dplyr::count(P6_GRUPO), .drop=FALSE)
+if (length(aux_idx) > 0) {
+  # Create recodes parameter
+  recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P6)[aux_idx], collapse = "', '"), "') = NA")
+  cis_2020_EB_df$P6_GRUPO <- car::recode(var = cis_2020_EB_df$P6, 
+                                      recodes = recodes_str, 
+                                      levels = c(levels(cis_2020_EB_df$P6)[-aux_idx]))
+  pander(cis_2020_EB_df %>% dplyr::count(P6_GRUPO), .drop=FALSE)
+}
 ```
+
 
 No se reagrupa más.
 
@@ -891,9 +895,11 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P
 cat(paste0("`", levels(cis_2020_EB_df$P7)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-Se eliminan ambas modalidades nulas.
+Se eliminan ambas modalidades.
 ```{r}
-aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P7' & efectivo_peq_EB_df$freq == 0), "modalidad"])
+aux_idx <- unique(c(as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P7' & efectivo_peq_EB_df$freq == 0), "modalidad"]),
+             which(levels(cis_2020_EB_df$P7) == 'N.S.'),
+             which(levels(cis_2020_EB_df$P7) == 'N.C.')))
 
 # Create recodes parameter
 recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P7)[aux_idx], collapse = "', '"), "') = NA")
@@ -1247,7 +1253,8 @@ Se hacen varias reagrupaciones[^P10AJRB],
 # Create recodes parameter
 recodes_str <- "c('El Mundo', 'ABC', 'El Correo', 'El Diario Vasco') = 'Editoriales centro-derecha';
 c('El País', 'Noticias de Guipúzcoa', 'Deia', 'Diario de Noticias (Álava, Navarra)', 'Cualquiera') = 'Editoriales centro-izquierda';
-c('Berria', 'Gara', 'Otro') = 'Editoriales izquierda'"
+c('Berria', 'Gara', 'Otro') = 'Editoriales izquierda';
+c('N.C.') = NA"
 
 # Recode
 cis_2020_EB_df$P10A_GRUPO <- car::recode(var = cis_2020_EB_df$P10A_GRUPO, 
@@ -1369,7 +1376,7 @@ c('Antena 3', '13TV', 'Intereconomia TV') = 'A3Media+Derecha';
 c('La Sexta') = 'A3Media+Izquierda';
 c('La Cuatro', 'Telecinco') = 'Mediaset';
 c('ETB1', 'ETB2', 'ETB') = 'TV vascas públicas';
-c('Televisiones locales', 'Cualquiera sin especificar', 'Otra') ='Sin referencias claras'"
+c('Televisiones locales', 'Cualquiera sin especificar', 'Otra', 'N.C.') ='Sin referencias claras'"
 
 # Recode
 cis_2020_EB_df$P10C_GRUPO <- car::recode(var = cis_2020_EB_df$P10C_GRUPO, 
@@ -1567,9 +1574,10 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P
 cat(paste0("`", levels(cis_2020_EB_df$P13_4)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-En este caso se elimina esa modalidad.
+En este caso se elimina la modalidad `N.C.`.
 ```{r}
 # Create recodes parameter
+aux_idx <- which(levels(cis_2020_EB_df$P13_4) == 'N.C.')
 recodes_str <- paste0("c('N.C.') = NA")
 cis_2020_EB_df$P13_4_GRUPO <- car::recode(var = cis_2020_EB_df$P13_4, 
                                     recodes = recodes_str, 
@@ -1828,9 +1836,9 @@ cat(paste0("`", levels(cis_2020_EB_df$P17_2)[aux_idx], "`", collapse = ", "), se
 
 Sus respuestas son: `N.C.`.
 
-Se eliminan las modalidades nulas.
+Se eliminan ambas modalidades.
 ```{r}
-aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P17_2' & efectivo_peq_EB_df$freq == 0), "modalidad"])
+aux_idx <- which(levels(cis_2020_EB_df$P17_2) %in% c('(NO LEER) No procede', 'N.C.'))
 
 # Create recodes parameter
 recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P17_2)[aux_idx], collapse = "', '"), "') = NA")
@@ -1969,11 +1977,12 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P
 cat(paste0("`", levels(cis_2020_EB_df$P18B)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-En primer lugar se eliminan las modalidades con cero efectivos.
+En primer lugar se eliminan las modalidades con cero efectivos y las modalidades `N.S.` y `N.C.`.
 
 ```{r}
 # Select factor numbers from efectivo_peq_EB_df
 aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P18B' & efectivo_peq_EB_df$freq == 0),"modalidad"])
+aux_idx <- unique(c(aux_idx, which(levels(cis_2020_EB_df$P18B) %in% c('N.S.', 'N.C.'))))
 # # Write factors
 # cat(paste0("`", levels(cis_2020_EB_df$P18B)[aux_idx], "`", collapse = ", "), sep = "", ".")
 
@@ -2204,11 +2213,12 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P
 cat(paste0("`", levels(cis_2020_EB_df$P20A_1)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-Se eliminan las modalidades con cero efectivos.
+Se eliminan ambas modalidades efectivos.
 
 ```{r}
 # Select factor numbers from efectivo_peq_EB_df
 aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P20A_1' & efectivo_peq_EB_df$freq == 0),"modalidad"])
+aux_idx <- unique(c(aux_idx, which(levels(cis_2020_EB_df$P20A_1) %in% c('N.S.', 'N.C.'))))
 
 # Create recodes parameter
 recodes_str <- sprintf("c(%s) = NA",
@@ -2248,11 +2258,12 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P
 cat(paste0("`", levels(cis_2020_EB_df$P21)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-Se eliminan las modalidades con cero efectivos.
+Se eliminan las modalidades con cero efectivos y la modalidad `N.C.`.
 
 ```{r}
 # Select factor numbers from efectivo_peq_EB_df
 aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P21' & efectivo_peq_EB_df$freq == 0),"modalidad"])
+aux_idx <- unique(c(aux_idx, which(levels(cis_2020_EB_df$P21) %in% c('N.S.', 'N.C.'))))
 
 # Create recodes parameter
 recodes_str <- sprintf("c(%s) = NA",
@@ -2382,32 +2393,36 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P
 cat(paste0("`", levels(cis_2020_EB_df$P21B_2)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-Se eliminan las modalidades con cero efectivos.
+Se eliminan las modalidades con cero efectivos si las hubiera.
 
 ```{r}
 # Select factor numbers from efectivo_peq_EB_df
 aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P21B_2' & efectivo_peq_EB_df$freq == 0),"modalidad"])
 
-# Create recodes parameter
-recodes_str <- sprintf("c(%s) = NA",
-                       paste0("'", 
-                              # Replace ' character with escape character \\'
-                              gsub(pattern = "'",
-                                   replacement = "\\\\'", 
-                                   x = levels(cis_2020_EB_df$P21B_2)[aux_idx]),
-                              "'", 
-                              collapse = ", "))
-
-# Recode
-cis_2020_EB_df$P21B_2_GRUPO <- car::recode(var = cis_2020_EB_df$P21B_2, 
-                                    recodes = recodes_str,
-                                    levels = c(levels(cis_2020_EB_df$P21B_2)[-aux_idx]))
-pander(cis_2020_EB_df %>% dplyr::count(P21B_2_GRUPO, .drop=FALSE))
+if (length(aux_idx) > 0){
+  # Create recodes parameter
+  recodes_str <- sprintf("c(%s) = NA",
+                         paste0("'", 
+                                # Replace ' character with escape character \\'
+                                gsub(pattern = "'",
+                                     replacement = "\\\\'", 
+                                     x = levels(cis_2020_EB_df$P21B_2)[aux_idx]),
+                                "'", 
+                                collapse = ", "))
+  
+  # Recode
+  cis_2020_EB_df$P21B_2_GRUPO <- car::recode(var = cis_2020_EB_df$P21B_2, 
+                                      recodes = recodes_str,
+                                      levels = c(levels(cis_2020_EB_df$P21B_2)[-aux_idx]))
+  pander(cis_2020_EB_df %>% dplyr::count(P21B_2_GRUPO, .drop=FALSE))
+}
 ```
 
 Se excluye la variable `P21B_2` y se deja la nueva agrupación `P21B_2_GRUPO`.
 ```{r}
-excluded_cols_EB <- c(excluded_cols_EB, "P21B_2")
+if (length(aux_idx) > 0){
+  excluded_cols_EB <- c(excluded_cols_EB, "P21B_2")
+}
 ```
 
 **En este caso no tengo criterio para hacer agrupaciones. Quedo pendiente de la respuesta que me de JRB.**
@@ -2427,11 +2442,12 @@ cat(paste0("`", levels(cis_2020_EB_df$P22)[aux_idx], "`", collapse = ", "), sep 
 ```
 
 
-Se eliminan las modalidades con cero efectivos.
+Se eliminan las modalidades con cero efectivos y la modalidad `N.C.`.
 
 ```{r}
 # Select factor numbers from efectivo_peq_EB_df
 aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P22' & efectivo_peq_EB_df$freq == 0),"modalidad"])
+aux_idx <- unique(c(aux_idx, which(levels(cis_2020_EB_df$P22) %in% c('N.S.', 'N.C.'))))
 
 # Create recodes parameter
 recodes_str <- sprintf("c(%s) = NA",
@@ -3472,7 +3488,7 @@ pander(cis_2020_EB_df %>% dplyr::count(NIVELESTENTREV_GRUPO, .drop=FALSE))
 ```
 
 Se reagrupan por un lado 
- + `Menos de 5 años de escolarización `+`Educación Primaria (Educación Primaria de LOGSE, 5º curso de EGB, enseñanza primaria antigua) `.
+ + `N.S./No recuerda `+`Menos de 5 años de escolarización `+`Educación Primaria (Educación Primaria de LOGSE, 5º curso de EGB, enseñanza primaria antigua) `.
 
 y por otro:
  + `Doctorado`+`Títulos propios de posgrado (máster no oficial, etc.) `.
@@ -3481,7 +3497,7 @@ y por otro:
 # levels(cis_2020_EB_df$NIVELESTENTREV_GRUPO)
 
 # Create recodes parameter
-recodes_str <- "c('Menos de 5 años de escolarización ', 'Educación Primaria (Educación Primaria de LOGSE, 5º curso de EGB, enseñanza primaria antigua) ') = 'Educación Primaria (Educación Primaria de LOGSE, 5º curso de EGB, enseñanza primaria antigua)-'; c('Doctorado', 'Títulos propios de posgrado (máster no oficial, etc.) ') = 'Doctorado+'"
+recodes_str <- "c('N.S./No recuerda ', 'Menos de 5 años de escolarización ', 'Educación Primaria (Educación Primaria de LOGSE, 5º curso de EGB, enseñanza primaria antigua) ') = 'Educación Primaria (Educación Primaria de LOGSE, 5º curso de EGB, enseñanza primaria antigua)-'; c('Doctorado', 'Títulos propios de posgrado (máster no oficial, etc.) ') = 'Doctorado+'"
 # Recode
 cis_2020_EB_df$NIVELESTENTREV_GRUPO <- car::recode(var = cis_2020_EB_df$NIVELESTENTREV_GRUPO, 
                                     recodes = recodes_str,
@@ -3596,10 +3612,11 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'S
 cat(paste0("`", levels(cis_2020_EB_df$SITLAB)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-Se eliminan las modalidades con cero efectivos.
+Se eliminan las modalidades con cero efectivos y la modalidad `N.C.`.
 ```{r}
 # Select factor numbers from efectivo_peq_EB_df
 aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'SITLAB' & efectivo_peq_EB_df$freq == 0),"modalidad"])
+aux_idx <- unique(c(aux_idx, which(levels(cis_2020_EB_df$SITLAB) %in% c('N.S.', 'N.C.'))))
 
 # Create recodes parameter
 recodes_str <- sprintf("c(%s) = NA",
@@ -4026,29 +4043,34 @@ aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'R
 cat(paste0("`", levels(cis_2020_EB_df$RVAUTO20)[aux_idx], "`", collapse = ", "), sep = "", ".")
 ```
 
-Se eliminan las modalidades con cero efectivos.
+Se eliminan las modalidades con cero efectivos si las hubiera.
 
 ```{r}
 # Select factor numbers from efectivo_peq_EB_df
 aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'RVAUTO20' & efectivo_peq_EB_df$freq == 0),"modalidad"])
-# Replace ' character with escape character \\'
-str_aux_1 <- levels(cis_2020_EB_df$RVAUTO20)[aux_idx]
-str_aux_2 <- gsub(pattern = "'", replacement = "\\\\'", x = str_aux_1)
 
-# Create recodes parameter
-recodes_str <- sprintf("c(%s) = NA",
-                       paste0("'", str_aux_2, "'", collapse = ", "))
-
-# Recode
-cis_2020_EB_df$RVAUTO20_GRUPO <- car::recode(var = cis_2020_EB_df$RVAUTO20, 
-                                    recodes = recodes_str,
-                                    levels = c(levels(cis_2020_EB_df$RVAUTO20)[-aux_idx]))
-pander(cis_2020_EB_df %>% dplyr::count(RVAUTO20_GRUPO, .drop=FALSE))
+if (length(aux_idx) > 0){
+  # Replace ' character with escape character \\'
+  str_aux_1 <- levels(cis_2020_EB_df$RVAUTO20)[aux_idx]
+  str_aux_2 <- gsub(pattern = "'", replacement = "\\\\'", x = str_aux_1)
+  
+  # Create recodes parameter
+  recodes_str <- sprintf("c(%s) = NA",
+                         paste0("'", str_aux_2, "'", collapse = ", "))
+  
+  # Recode
+  cis_2020_EB_df$RVAUTO20_GRUPO <- car::recode(var = cis_2020_EB_df$RVAUTO20, 
+                                      recodes = recodes_str,
+                                      levels = c(levels(cis_2020_EB_df$RVAUTO20)[-aux_idx]))
+  pander(cis_2020_EB_df %>% dplyr::count(RVAUTO20_GRUPO, .drop=FALSE))
+}
 ```
 
 Se excluye la variable `RVAUTO20` y se deja la nueva agrupación `RVAUTO20_GRUPO`.
 ```{r}
-excluded_cols_EB <- c(excluded_cols_EB, "RVAUTO20")
+if (length(aux_idx) > 0){
+  excluded_cols_EB <- c(excluded_cols_EB, "RVAUTO20")
+}
 ```
 
 **En este caso no tengo criterio para hacer reagrupaciones. Quedo pendiente de la respuesta que me de JRB.**
