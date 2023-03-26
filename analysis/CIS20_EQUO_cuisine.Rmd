@@ -194,6 +194,16 @@ cosa_BORRAME <- unique(which(#cis_2020_df$P20 == 'Elkarrekin Podemos'
 cis_2020_EB_df <- cis_2020_df[rows_ElkBer,]
 ```
 
+Se han seleccionado 
+```{r echo=FALSE, results='asis'}
+cat(nrow(cis_2020_EB_df))
+```
+ encuestas que cumplen esas características; o sea un 
+```{r echo=FALSE, results='asis'}
+cat(round(100 * nrow(cis_2020_EB_df)/nrow(cis_2020_df), digits = 1))
+```
+% del total.
+
 
 ### Datos numéricos y datos cualitativos
 ```{r}
@@ -576,30 +586,16 @@ cat(length(cis_2020_EB_df$P1B[!is.na(cis_2020_EB_df$P1B)]))
 ```
  encuestas con votantes nacidos en otros países.
 
-Se eliminan las modalidades nulas.
-```{r}
-aux_idx <- as.numeric(efectivo_peq_EB_df[which(efectivo_peq_EB_df$variable == 'P1B' & efectivo_peq_EB_df$freq == 0), "modalidad"])
-
-# Create recodes parameter
-recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P1B)[aux_idx], collapse = "', '"), "') = 'Otra'")
-cis_2020_EB_df$P1B_GRUPO <- car::recode(var = cis_2020_EB_df$P1B, 
-                                    recodes = recodes_str, 
-                                    levels = c(levels(cis_2020_EB_df$P1B)[-aux_idx]))
-pander(cis_2020_EB_df %>% dplyr::count(P1B_GRUPO), .drop=FALSE)
-```
-
 Se recodifican en dos grupos: `Europa` y `No Europa`:
 
 
 ```{r}
-# cat(paste0("'", levels(cis_2020_EB_df$P1B_GRUPO), "'", collapse = ", "), sep = "")
-
+# Last Europe country
+i <- which(levels(cis_2020_EB_df$P1B) == "Otros territorios de Europa")
 # Create recodes parameter
-recodes_str <- "c('Andorra', 'Alemania') = 'Europa';
-c('Cuba', 'Argentina', 'Colombia', 'Chile', 'N.S./N.C.') = 'No Europa'"
-
+recodes_str <- paste0("c('", paste0(levels(cis_2020_EB_df$P1B)[1:i], collapse = "', '"), "') = 'Europa'; c('", paste0(levels(cis_2020_EB_df$P1B)[-(1:i)], collapse = "', '"),  "') = 'No Europa'")
 # Recode
-cis_2020_EB_df$P1B_GRUPO <- car::recode(var = cis_2020_EB_df$P1B_GRUPO, 
+cis_2020_EB_df$P1B_GRUPO <- car::recode(var = cis_2020_EB_df$P1B, 
                                     recodes = recodes_str,
                                     levels = c('Europa', 'No Europa'))
 pander(cis_2020_EB_df %>% dplyr::count(P1B_GRUPO, .drop=FALSE))
