@@ -102,9 +102,36 @@ if (file.exists(cis_2020_cuisine_file)) {
   log4r::info(logger, paste("cis_2020_cuisine_file (", cis_2020_cuisine_file, ") exists =", file.exists(cis_2020_cuisine_file)))
 }else{
   log4r::error(logger, paste("File", cis_2020_cuisine_file, "DO NOT EXISTS. You must create this file using the script Cuisine.Rmd"))
-  stop(paste("File", cis_2020_cuisine_file, "DO NOT EXISTS. You must create this file using the script Cuisine.Rmd"))
-}
+  stop(paste("File", cis_2020_cuisine_file, "DO NOT EXISTS. You must create this file using the script Cuisine.Rmd"))}
 ```
+
+```{r}
+# P20 pollitical parties indices
+# levels(cis_2020_df$P20)
+P20_idx_11_pnv <- 5
+P20_idx_12_bildu <- 6
+P20_idx_2_psoe <- 2
+P20_idx_21_podem <- 10
+P20_idx_1_pp <- 1
+P20_idx_18_vox <- 8
+P20_idx_95_otro <- 14
+P20_idx_96_blan <- 15
+P20_idx_77_nul <- 13
+P20_idx_97_abs <- 16
+P20_idx_98_nr <- 17
+P20_idx_99_nc <- 18
+
+P20_idx_ciu <- 3
+P20_idx_iu <- 4
+P20_idx_pacm <- 7
+P20_idx_ver <- 9
+P20_idx_equ <- 11
+P20_idx_escBl <- 12
+
+# Test
+# levels(cis_2020_df$P20)[c(P20_idx_1_pp, P20_idx_2_psoe, P20_idx_ciu, P20_idx_iu, P20_idx_11_pnv, P20_idx_12_bildu, P20_idx_pacm, P20_idx_18_vox, P20_idx_ver, P20_idx_21_podem, P20_idx_equ, P20_idx_escBl, P20_idx_77_nul, P20_idx_95_otro, P20_idx_96_blan,  P20_idx_97_abs, P20_idx_98_nr, P20_idx_99_nc)]
+```
+
 
 Ahora, realizamos el ACM en todas las columnas seleccionadas:
 ```{r ACM}
@@ -261,11 +288,6 @@ pander(aux_tbl, caption = paste0("Dimensión ", i, ". Contiene ", nrow(aux_tbl),
 
 ```
 
-```{r include=FALSE, eval=FALSE}
-i <- 'P16'
-attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == i]
-```
-
 En el **lado positivo del eje** las modalidades mejor representadas son:
 
 ```{r echo=FALSE, results='asis'}
@@ -313,9 +335,28 @@ cat(paste0("`", head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = j),
  + `P7_GRUPO:Con ningún interés`: No pusieron ningún interés en seguir la campaña.
  + `ESCIDEOLPAR_6_GRUPO:NS_NC`, `ESCIDEOLPAR_1_GRUPO:NS_NC`, `ESCIDEOLPAR_5_GRUPO:NS_NC`, `ESCIDEOLPAR_2_GRUPO:NS_NC`, `ESCIDEOLPAR_7_GRUPO:NS_NC`, `ESCIDEOLPAR_3_GRUPO:NS_NC`, `ESCIDEOLPAR_4_GRUPO:NS_NC`: No sabe o no contesta sobre la escala ideológica de ningún partido.
  + `RVAUTO20:No votó/abstención`, `P20_GRUPO:Abstención+`: Se abstuvo en el 2020.
- + `P12_7:Menciona`: No tiene cuenta en redes sociales.
- + `P6_GRUPO:Nada`: Lo le interesa nada la política.
- + `P8_1_GRUPO:Nada`: La campaña electoral no le sirvió para nada.
+ + `P12_7:Menciona`: Tipos de páginas de Internet desde las que se ha seguido la información de las elecciones autonómicas del País Vasco de 2020:
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P12_7'])
+```
+ 
+ + `P6_GRUPO:Nada`: 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P6'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P6_GRUPO)[4])
+```
+
+ + `P8_1_GRUPO:Nada`: Grado de utilidad de la campaña electoral de las elecciones autonómicas del País Vasco de 2020 en diferentes aspectos de la decisión de voto: 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P8_1'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P8_1_GRUPO)[4])
+```
 
 En resumen: personas que no les interesa la campaña electoral, ni la política y que se abstuvieron.
 
@@ -341,12 +382,23 @@ j <- 20
 cat(paste0("`", head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = j), "`", collapse = ", "), ".", sep = "")
 ```
 
-
-ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI  
-
-ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
-
-ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
+ + `P24_5_GRUPO:NS_NC`, `P24_3_GRUPO:NS_NC`, `P24_4_GRUPO:NS_NC`, `P24_7_GRUPO:NS_NC`, `P24_6_GRUPO:NS_NC`, `P24_2_GRUPO:NS_NC`, `P24_1_GRUPO:NS_NC`: Escala de probabilidad (0-10) de votar a diferentes partidos políticos: No saben o no contestan.
+ + `ESCIDEOLPAR_6_GRUPO:NS_NC`, `ESCIDEOLPAR_4_GRUPO:NS_NC`, `ESCIDEOLPAR_1_GRUPO:NS_NC`, `ESCIDEOLPAR_7_GRUPO:NS_NC`, `ESCIDEOLPAR_2_GRUPO:NS_NC`, `ESCIDEOLPAR_5_GRUPO:NS_NC``ESCIDEOLPAR_3_GRUPO:NS_NC`: Escala de ubicación ideológica (1-10) de partidos políticos de la comunidad autónoma: No saben o no contestan.
+ + `P15_GRUPO:Sí`
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P15'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P15)[1])
+```
+ + `P15A_98:No menciona`, `P15A_95:No menciona`, `P15A_21:Menciona`, `P15A_1:No menciona`, `P15A_2:No menciona`: Los mensajes enviados no son de:
+ 
+ ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    ESTAS AQUI   
+```{r echo=FALSE, results='asis'}
+levels(cis_2020_EB_df$P20)
+cat(paste(levels(cis_2020_EB_df$P20)[c(17, 14, 10)], collapse = ", "))
+```
 
 No sabe o no contesta a qué partido votar, no sabe o no contesta la escala ideológica  de varios partidos, sí envía mensajes electrónicos que además son de "Elkarrekin Podemos", de "EH Bildu" y  de "Vox".
 
