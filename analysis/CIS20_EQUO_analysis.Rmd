@@ -583,7 +583,7 @@ require(pander)
 pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,4+3*(i-1)+3])), " % de la dimensión."))
 ```
 ```{r eval=FALSE, include=FALSE, echo=FALSE}
-cat(paste0("`", head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = num_categories_per_side), "`", collapse = ", "), ".", sep = "")
+cat(paste0("`", head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = num_categories_per_side+10), "`", collapse = ", "), ".", sep = "")
 ```
 
 
@@ -654,7 +654,17 @@ cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P24_
 ```{r echo=FALSE, results='asis'}
 cat(levels(cis_2020_EB_df$P24_7_GRUPO)[3])
 ```
+ + `P26_2_GRUPO:1 Muy mal`, `P26_4_GRUPO:1 Muy mal`, , `P26_1_GRUPO:1 Muy mal` = Conocimiento y escala de valoración (1-10) de líderes políticos autonómicos del País Vasco. Valoran "Muy mal" a: 
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P26_2', 'P26_4', 'P26_1')], collapse = ", "))
+```
+ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
 
+TODO: EXPLICAR MAS MODALIDADES
+
+ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
+
+El lado positivo de esta dimensión puede representar a las personas que fueron contactadas por algún partido, pero está claro cual o cuales. Dicen que se abstuvieron de votar y lo tenían decidido antes de la campaña y no descartan votar a "Vox".
 ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
 
 
