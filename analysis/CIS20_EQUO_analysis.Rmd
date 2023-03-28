@@ -230,12 +230,10 @@ cat(cis_2020_ca_opi01_summ$scree[numDim,][4])
  % de la varianza.
 
 
-Seleccionamos las modalidades más importantes de cada factor; las que representan un
-```{r echo=FALSE, results='asis'}
+Seleccionamos las modalidades más importantes de cada factor.
+```{r}
 percet_eigenvalue <- 0.75
-cat(100*percet_eigenvalue, "%")
 ```
- de esa dimensión.
 ```{r}
 # Returns a data.frame sorted by contribution. It includes the minimum number of categories that covers percet_eigenvalue
 factor_categories <- function(columns_factors, num_factor, percet_eigenvalue){
@@ -379,8 +377,6 @@ En resumen: personas que no les interesa la campaña electoral, ni la política 
 
 
 ## Dimensión 2
-
-En el **lado positivo del eje** las modalidades mejor representadas son:
 
 ```{r}
 i <- 2
@@ -557,24 +553,104 @@ No recibe ni envía mensajes electrónicos. Se informó a través de prensa impr
 
 ## Dimensión 3
 
-ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
-
-
-ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
-
 ```{r}
 i <- 3
-aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
+# table with big percentage of eigenvalue
+aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, 0.95)
+# Select number of positive categories of table
+n_categories_k_positive <- ifelse(length(which(aux_tbl$k > 0)) < num_categories_per_side, length(which(aux_tbl$k > 0)), num_categories_per_side)
+# Select number of positive categories of table
+n_categories_k_negative <- ifelse(length(which(aux_tbl$k < 0)) < num_categories_per_side, length(which(aux_tbl$k < 0)), num_categories_per_side)
+```
+
+En el **lado positivo del eje** las modalidades mejor representadas son:
+
+```{r}
+# Show positive categories
+aux_idx <- which(aux_tbl$k > 0)[1:n_categories_k_positive]
 require(pander)
-pander(aux_tbl, caption = paste0("Dimensión ", i, ". Contiene ", nrow(aux_tbl), " modalidades que cubren el ", 100 * percet_eigenvalue, " % de esta dimensión."))
+pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo."))
+```
+```{r eval=FALSE, include=FALSE, echo=FALSE}
+cat(paste0("`", head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = num_categories_per_side), "`", collapse = ", "), ".", sep = "")
 ```
 
-En el lado positivo del eje las modalidades mejor representadas son:
 
+ + `P14_GRUPO:Sí` = 
 ```{r echo=FALSE, results='asis'}
-j <- 20
-cat(paste0("`", head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = j), "`", collapse = ", "), ".", sep = "")
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P14'])
 ```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P14)[1])
+```
+ + `P14A_98:No menciona`, `P14A_95:No menciona`, `P14A_12:No menciona`, `P14A_2:No menciona`, `P14A_21:No menciona`, `P14A_1:No menciona`, `P14A_18:No menciona` = No fue contactado por: 
+```{r echo=FALSE, results='asis'}
+# levels(cis_2020_EB_df$P20)
+cat(paste(levels(cis_2020_EB_df$P20)[c(P20_idx_98_nr, P20_idx_95_otro, P20_idx_12_bildu, P20_idx_2_psoe, P20_idx_21_podem, P20_idx_1_pp, P20_idx_18_vox)], collapse = ", "))
+```
+ + `P14A_11:Menciona`, `P14A_12:Menciona`, `P14A_2:Menciona`, `P14A_21:Menciona`, `P14A_1:Menciona`, `P14A_18:Menciona` = Sí fue contactado por: 
+```{r echo=FALSE, results='asis'}
+# levels(cis_2020_EB_df$P20)
+cat(paste(levels(cis_2020_EB_df$P20)[c(P20_idx_11_pnv, P20_idx_12_bildu, P20_idx_2_psoe, P20_idx_21_podem, P20_idx_1_pp, P20_idx_18_vox)], collapse = ", "))
+```
+ + `P23_GRUPO:Se habría abstenido o habría votado en blanco ` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P23'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P23)[2])
+```
+ + `RVAUTO20:No votó/abstención` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'RVAUTO20'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$RVAUTO20)[11])
+```
+ + `P20_GRUPO:Abstención+` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P20'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P20_GRUPO)[6])
+```
+
+ + `P21_GRUPO:No quiso ir a votar` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P21'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P21_GRUPO)[2])
+```
+ + `P21A_GRUPO:Lo tenía decidido hace bastante tiempo (antes del inicio de la campaña electoral) ` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P21A'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P21A_GRUPO)[2])
+```
+ + `P24_7_GRUPO:2_10` = Escala de probabilidad (0-10) de votar a 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P24_7'])
+```
+ en las elecciones autonómicas del País Vasco : 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P24_7_GRUPO)[3])
+```
+
+ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
+
+
+ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
+
+
+
 
 `P24_7_GRUPO:2_10`: No descartan votar a "Vox", `P26_4_GRUPO:1 Muy mal`:  valoran muy mal a "Miren Gorrotxategi", `ESCIDEOLPAR_7_GRUPO:1_8`: Opinan que "Vox" no es ultraderecha, `P27:Un Estado con un único Gobierno central sin autonomías `: es su organización territorial preferida, etc.
 
