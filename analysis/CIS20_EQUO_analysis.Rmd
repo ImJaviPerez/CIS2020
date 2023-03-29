@@ -291,7 +291,6 @@ cat(length(cis_2020_ca_opi01$levelnames))
 num_categories_to_show <- 35
 ```
 
-
 ```{r}
 i <- 1
 # We want to show positive and negative categories of this dimension. And it is possible that only one side explains the desaired percentage, so we have to take extra categories from the other side to show.
@@ -314,37 +313,85 @@ aux_idx <- which(aux_tbl$k > 0)[1:n_categories_k_positive]
 require(pander)
 pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)])), " % de la dimensión."))
 ```
+```{r eval=FALSE, include=FALSE, echo=FALSE}
+str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = n_categories_k_positive))
+cat(paste0("`", str_aux_1, "`", collapse = ", "), ".", sep = "")
+```
 
- + `P15_GRUPO:Sí`: 
+Para explicar el significado de un eje, hay que ver la contribución (`ctr`) de cada modalidad dentro de esa parte del eje. A continuación se explican las modalidades más significativa de este lado del eje en orden de preguntas (no por su contribución):
+
+ + `P6_GRUPO:Mucho` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P6'])
+```
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P6_GRUPO)[1])
+```
+ + `P7_GRUPO:Con mucho interés` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P7'])
+```
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P7_GRUPO)[1])
+```
+ + `P9A_GRUPO:Elkarrekin Berdeak` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P9A'])
+```
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P9A_GRUPO)[8])
+```
+ + `P10B_GRUPO:Editoriales izquierda`, `P10DIGITAL:Menciona`
+```{r echo=FALSE, results='asis'}
+paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P10B', 'P10DIGITAL')], collapse = " / ")
+```
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P10B_GRUPO)[3])
+```
+ + `P11_3:Menciona` = Redes sociales en Internet en las que se tiene cuenta: 
+```{r echo=FALSE, results='asis'}
+paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P11_3')], collapse = " / ")
+```
+ + `P12_1:Menciona`, `P12_5:Menciona` = Tipos de páginas de Internet desde las que se ha seguido la información de las elecciones autonómicas del País Vasco de 2020: 
+```{r echo=FALSE, results='asis'}
+paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P12_1', 'P12_5')], collapse = " / ")
+```
+ + `P15_GRUPO:Sí` = 
 ```{r echo=FALSE, results='asis'}
 cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P15'])
 ```
-
- + `P15A_2:No menciona`, `P15A_1:No menciona`, `P15A_95:No menciona`, `P15A_98:No menciona`, `P15A_11:No menciona`, `P15A_12:No menciona`, `P15A_21:Menciona`, `P15A_18:No menciona`: Los mensajes enviados no han sido de:
+ + `P15A_1:No menciona`, `P15A_11:Menciona`, `P15A_11:No menciona`, `P15A_12:Menciona`, `P15A_12:No menciona`, `P15A_18:No menciona`, `P15A_2:No menciona`, `P15A_21:Menciona`, `P15A_21:No menciona`, `P15A_95:No menciona`, `P15A_98:No menciona` = Ha enviado mensajes de:
 ```{r echo=FALSE, results='asis'}
 # levels(cis_2020_EB_df$P20)
-cat(paste(levels(cis_2020_EB_df$P20)[c(P20_idx_2_psoe, P20_idx_1_pp, P20_idx_95_otro, P20_idx_98_nr, P20_idx_11_pnv, P20_idx_12_bildu, P20_idx_21_podem, P20_idx_18_vox)], collapse = ", "))
-
+cat(paste(levels(cis_2020_EB_df$P20)[c(P20_idx_11_pnv, P20_idx_12_bildu, P20_idx_21_podem)], collapse = ", "))
 ```
-  + `P16A_95:No menciona`, `P16A_98:No menciona`, `P16A_2:No menciona`, `P16A_1:No menciona`, `P16A_18:No menciona`, `P16A_21:Menciona`: 
+ + `P16:Sí` = 
 ```{r echo=FALSE, results='asis'}
 cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P16'])
 ```
-. Ha recibido mensajes de:
+ + `P16A_1:No menciona`, `P16A_11:Menciona`, `P16A_11:No menciona`, `P16A_12:Menciona`, `P16A_12:No menciona`, `P16A_18:No menciona`, `P16A_2:No menciona`, `P16A_21:Menciona`, `P16A_21:No menciona`, `P16A_95:No menciona`, `P16A_98:No menciona` = Ha recibido mensajes de:
 ```{r echo=FALSE, results='asis'}
 # levels(cis_2020_EB_df$P20)
-cat(paste(levels(cis_2020_EB_df$P20)[c(P20_idx_95_otro, P20_idx_98_nr, P20_idx_2_psoe, P20_idx_1_pp, P20_idx_18_vox, P20_idx_21_podem)], collapse = ", "))
+cat(paste(levels(cis_2020_EB_df$P20)[c(P20_idx_11_pnv, P20_idx_12_bildu, P20_idx_21_podem)], collapse = ", "))
 ```
-  + `P6_GRUPO:Mucho`: está muy interesado en la política.
-  + `P17_2_GRUPO:Habitualmente`: Las elecciones fueron tema de conversación 
+ + `P17_1_GRUPO:Habitualmente`, `P17_2_GRUPO:Habitualmente` = 
+Las elecciones fueron tema de conversación 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P17_2'])
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P17_1', 'P17_2')], collapse = ", "))
 ```
 ```{r echo=FALSE, results='asis'}
 cat(levels(cis_2020_EB_df$P17_2_GRUPO)[1])
 ```
 
-En resumen: son personas que envían y reciben mensajes relacionados con la política y están interesados en la política
+ + `P19ACOM_GRUPO:EH Bildu/Elkarrekin Podemos`
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P19ACOM')], collapse = ", "))
+```
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P19ACOM_GRUPO)[12])
+```
+
+En resumen: son personas que envían y reciben mensajes relacionados con la política y están interesados en la política "nacionalista" y/o de izquierdas.
 
 
 En el **lado negativo del eje** están las "variables:modalidades":
@@ -357,16 +404,39 @@ require(pander)
 pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_negative, " modalidades más significativas del eje negativo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)])), " % de la dimensión."))
 ```
 
-
- + `P7_GRUPO:Con ningún interés`: No pusieron ningún interés en seguir la campaña.
- + `ESCIDEOLPAR_6_GRUPO:NS_NC`, `ESCIDEOLPAR_1_GRUPO:NS_NC`, `ESCIDEOLPAR_5_GRUPO:NS_NC`, `ESCIDEOLPAR_2_GRUPO:NS_NC`, `ESCIDEOLPAR_7_GRUPO:NS_NC`, `ESCIDEOLPAR_3_GRUPO:NS_NC`, `ESCIDEOLPAR_4_GRUPO:NS_NC`: No sabe o no contesta sobre la escala ideológica de ningún partido.
- + `RVAUTO20:No votó/abstención`, `P20_GRUPO:Abstención+`: Se abstuvo en el 2020.
- + `P12_7:Menciona`: Tipos de páginas de Internet desde las que se ha seguido la información de las elecciones autonómicas del País Vasco de 2020:
-```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P12_7'])
+```{r eval=FALSE, include=FALSE, echo=FALSE}
+str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = n_categories_k_negative))
+cat(paste0("`", str_aux_1, "`", collapse = ", "), ".", sep = "")
 ```
- 
- + `P6_GRUPO:Nada`: 
+
+Para explicar el significado de un eje, hay que ver la contribución (`ctr`) de cada modalidad dentro de esa parte del eje. A continuación se explican las modalidades más significativa de este lado del eje en orden de preguntas (no por su contribución):
+
+ + `ESCIDEOLPAR_1_GRUPO:NS_NC`, `ESCIDEOLPAR_2_GRUPO:NS_NC`, `ESCIDEOLPAR_3_GRUPO:NS_NC`, `ESCIDEOLPAR_4_GRUPO:NS_NC`, `ESCIDEOLPAR_5_GRUPO:NS_NC`, `ESCIDEOLPAR_6_GRUPO:NS_NC`, `ESCIDEOLPAR_7_GRUPO:NS_NC` =  No sabe o no contesta sobre la escala ideológica de ningún partido.
+ +  `RVAUTO20:No votó/abstención`, `P20_GRUPO:Abstención+` = 
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('RVAUTO20')], collapse = ", "))
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$RVAUTO20)[11])
+```
+ + `P5_GRUPO:No alineado/a` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P5'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P5_GRUPO)[7])
+```
+ + `P5A_GRUPO:N.C.` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P5A'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P5A_GRUPO)[8])
+```
+ + `P6_GRUPO:Nada` = 
 ```{r echo=FALSE, results='asis'}
 cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P6'])
 ```
@@ -374,29 +444,130 @@ cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P6']
 ```{r echo=FALSE, results='asis'}
 cat(levels(cis_2020_EB_df$P6_GRUPO)[4])
 ```
-
- + `P8_1_GRUPO:Nada`: Grado de utilidad de la campaña electoral de las elecciones autonómicas del País Vasco de 2020 en diferentes aspectos de la decisión de voto: 
+ + `P7_GRUPO:Con ningún interés` = No pusieron ningún interés en seguir la campaña.
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P8_1'])
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P7')], collapse = ", "))
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P7_GRUPO)[4])
+```
+ 
+
+ + `P8_1_GRUPO:Nada`, `P8_2_GRUPO:Nada`, `P8_3_GRUPO:Nada` = Grado de utilidad de la campaña electoral de las elecciones autonómicas del País Vasco de 2020 en diferentes aspectos de la decisión de voto: 
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P8_1', 'P8_2', 'P8_3')], collapse = " / "))
 ```
 : 
 ```{r echo=FALSE, results='asis'}
 cat(levels(cis_2020_EB_df$P8_1_GRUPO)[4])
 ```
 
-En resumen: personas que no les interesa la campaña electoral, ni la política y que se abstuvieron.
+ + `P9_GRUPO:N.S.`
+ + `P10_1_GRUPO:(NO LEER) No se informó, no le interesa la política`, `P10_2:N.C.`, `P10DIGITAL:No menciona`
+ + `P12_1:No menciona`, `P12_7:Menciona` = Tipos de páginas de Internet desde las que se ha seguido la información de las elecciones autonómicas del País Vasco de 2020:
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P12_7'])
+```
+ + `P15_GRUPO:No` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P15'])
+```
+ + `P16:No` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P16'])
+```
+ + `P17_1_GRUPO:Casi nunca o nunca`, `P17_2_GRUPO:Casi nunca o nunca` = Frecuencia con la que se ha hablado en diferentes entornos sociales de las elecciones autonómicas del País Vasco de 2020: 
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P17_1', 'P17_2')], collapse = ", "))
+```
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P17_2_GRUPO)[4])
+```
+ + `P18_GRUPO:No` = 
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P18')], collapse = ", "))
+```
+ + `P21_GRUPO:No quiso ir a votar` = 
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P21')], collapse = ", "))
+```
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P21_GRUPO)[2])
+```
+ + `P21A_GRUPO:Lo tenía decidido hace bastante tiempo (antes del inicio de la campaña electoral) `
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P21A')], collapse = ", "))
+```
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P21A_GRUPO)[2])
+```
+ + `P23_GRUPO:Se habría abstenido o habría votado en blanco `
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P23')], collapse = ", "))
+```
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P23_GRUPO)[2])
+```
+ + `P24_2_GRUPO:0 Con toda seguridad, no lo votaría nunca`, `P24_3_GRUPO:NS_NC`, `P24_4_GRUPO:0 Con toda seguridad, no lo votaría nunca`, `P24_5_GRUPO:NS_NC` = Escala de probabilidad (0-10) de votar a diferentes partidos políticos en las elecciones autonómicas del País Vasco:
+    +
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P24_2')], collapse = ", "))
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P24_2_GRUPO)[1])
+```
+    +
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P24_3')], collapse = ", "))
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P24_3_GRUPO)[11])
+```
+    +
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P24_4')], collapse = ", "))
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P24_4_GRUPO)[1])
+```
+    +
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P24_5')], collapse = ", "))
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P24_5_GRUPO)[6])
+```
+ + `P26_2_GRUPO:No conoce` = Conocimiento y escala de valoración (1-10) de líderes políticos autonómicos del País Vasco
+    +
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P26_2')], collapse = ", "))
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P26_2_GRUPO)[10])
+```
 
+En resumen: Este eje lado del eje representa a las personas que no les interesa la campaña electoral, ni la política, que se abstuvieron o no votaron y nunca votarían a EH Bildu.
 
-**Necesito una interpretación *certera* del significado de este eje por parte de JRB. A falta de esa interpretación diremos que:** Este eje representa a las personas que sí les interesa, envía mensajes al respecto y habla habitualmente con sus amistades y en el ládo contrario a las que votan abstención o no les interesa la política.
+**Necesito una interpretación *certera* del significado de este eje por parte de JRB:**
 
+En resumen: Este eje representa a las personas que por un extremo les interesa la política y por el otro no les interesa la campaña electoral, ni la política, que se abstuvieron o no votaron y nunca votarían a EH Bildu.
 
 
 ## Dimensión 2
 
 ```{r}
 i <- 2
+# We want to show positive and negative categories of this dimension. And it is possible that only one side explains the desaired percentage, so we have to take extra categories from the other side to show.
 # table with big percentage of eigenvalue
 aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
+
+
 # Select number of positive categories of table
 n_categories_k_positive <- ifelse(length(which(aux_tbl$k > 0)) < num_categories_to_show, length(which(aux_tbl$k > 0)), num_categories_to_show)
 # Select number of positive categories of table
@@ -408,22 +579,43 @@ En el **lado positivo del eje** las modalidades mejor representadas son:
 ```{r}
 # Show positive categories
 aux_idx <- which(aux_tbl$k > 0)[1:n_categories_k_positive]
+
 require(pander)
 pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)])), " % de la dimensión."))
 ```
 ```{r eval=FALSE, include=FALSE, echo=FALSE}
-str_aux_1 <- head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = num_categories_to_show)
-# ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   
-
-# ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   
-str_aux_2 <- sort(str_aux_1)
-cat(paste0("`", str_aux_1, "`", collapse = ", "), ".", sep = "")
+str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = n_categories_k_positive))
+cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
 ```
 
+Para explicar el significado de un eje, hay que ver la contribución (`ctr`) de cada modalidad dentro de esa parte del eje. A continuación se explican las modalidades más significativa de este lado del eje en orden de preguntas (no por su contribución):
 
- + `P24_5_GRUPO:NS_NC`, `P24_3_GRUPO:NS_NC`, `P24_4_GRUPO:NS_NC`, `P24_7_GRUPO:NS_NC`, `P24_6_GRUPO:NS_NC`, `P24_2_GRUPO:NS_NC`, `P24_1_GRUPO:NS_NC`: Escala de probabilidad (0-10) de votar a diferentes partidos políticos: No saben o no contestan.
- + `ESCIDEOLPAR_6_GRUPO:NS_NC`, `ESCIDEOLPAR_4_GRUPO:NS_NC`, `ESCIDEOLPAR_1_GRUPO:NS_NC`, `ESCIDEOLPAR_7_GRUPO:NS_NC`, `ESCIDEOLPAR_2_GRUPO:NS_NC`, `ESCIDEOLPAR_5_GRUPO:NS_NC``ESCIDEOLPAR_3_GRUPO:NS_NC`: Escala de ubicación ideológica (1-10) de partidos políticos de la comunidad autónoma: No saben o no contestan.
- + `P15_GRUPO:Sí`
+  + `ESCIDEOLPAR_1_GRUPO:NS_NC`, `ESCIDEOLPAR_2_GRUPO:NS_NC`, `ESCIDEOLPAR_3_GRUPO:NS_NC`, `ESCIDEOLPAR_4_GRUPO:NS_NC`, `ESCIDEOLPAR_5_GRUPO:NS_NC`, `ESCIDEOLPAR_6_GRUPO:NS_NC`, `ESCIDEOLPAR_7_GRUPO:NS_NC` = Escala de ubicación ideológica (1-10) de partidos políticos de la comunidad autónoma: No saben o no contestan.
+  + `CLASESOCIAL_GRUPO:Clase pobre-` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'CLASESOCIAL'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$CLASESOCIAL_GRUPO)[5])
+```
+  + `ESCIDEOL_GRUPO:N.S.`
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'ESCIDEOL'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$ESCIDEOL_GRUPO)[8])
+```
+  + `P4_GRUPO:NS_NC` = 
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P4')], collapse = " / "))
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P4_GRUPO)[5])
+```
+  + `P15_GRUPO:Sí`
 ```{r echo=FALSE, results='asis'}
 cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P15'])
 ```
@@ -431,11 +623,37 @@ cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P15'
 ```{r echo=FALSE, results='asis'}
 cat(levels(cis_2020_EB_df$P15)[1])
 ```
- + `P15A_98:No menciona`, `P15A_95:No menciona`, `P15A_21:Menciona`, `P15A_1:No menciona`, `P15A_2:No menciona`: Los mensajes enviados no son de: 
+  + `P15A_1:No menciona`, `P15A_11:Menciona`, `P15A_11:No menciona`, `P15A_12:Menciona`, `P15A_12:No menciona`, `P15A_18:Menciona`, `P15A_18:No menciona`, `P15A_2:Menciona`, `P15A_2:No menciona`, `P15A_21:Menciona`, `P15A_95:No menciona`, `P15A_98:No menciona` =
+    + Los mensajes enviados no está claro de qué partido son.
+
+  + `P16:Sí`
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P16'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P15)[1])
+```
+    + `P16A_21:Menciona`, `P16A_95:No menciona`, `P16A_98:No menciona` = 
 ```{r echo=FALSE, results='asis'}
 # levels(cis_2020_EB_df$P20)
-cat(paste(levels(cis_2020_EB_df$P20)[c(P20_idx_98_nr, P20_idx_95_otro, P20_idx_21_podem, P20_idx_1_pp, P20_idx_2_psoe)], collapse = ", "))
+cat(paste(levels(cis_2020_EB_df$P20)[c(P20_idx_21_podem)], collapse = ", "))
 ```
+
+  + `P24_1_GRUPO:NS_NC`, `P24_2_GRUPO:NS_NC`, `P24_3_GRUPO:NS_NC`, `P24_4_GRUPO:NS_NC`, `P24_5_GRUPO:NS_NC`, `P24_6_GRUPO:NS_NC`, `P24_7_GRUPO:NS_NC` = Escala de probabilidad (0-10) de votar a diferentes partidos políticos en las elecciones autonómicas del País Vasco: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P24_1_GRUPO)[11])
+```
+  + `P26_1_GRUPO:No conoce` = Conocimiento y escala de valoración (1-10) de líderes políticos autonómicos del País Vasco
+    +
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P26_1')], collapse = ", "))
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P26_1_GRUPO)[10])
+```
+
 
 No sabe o no contesta a qué partido votar, no sabe o no contesta la escala ideológica  de varios partidos, sí envía mensajes electrónicos de ciertos partidos.
 
@@ -569,14 +787,19 @@ cat(levels(cis_2020_EB_df$P8_1_GRUPO)[3])
  
 No recibe ni envía mensajes electrónicos. Se informó a través de prensa impresa, radio y TV. No sigue la campaña en redes sociales. Se siente más vasco que español. Se abstuvo de votar. Se siente socialdemócrata.
 
-**Necesito una interpretación *certera* del significado de este eje por parte de JRB. A falta de esa interpretación diremos que:** Este eje representa a las personas que envían mensajes electrónicos y dicen que no saben a quién votar y en el lado negativo del eje a los que no envían mensajes ni siguen redes sociales y se sienten socialdemócratas.
+**Necesito una interpretación *certera* del significado de este eje por parte de JRB. A falta de esa interpretación diremos que:** 
+
+Este eje representa a las personas que envían mensajes electrónicos y dicen que no saben a quién votar y en el lado negativo del eje a los que no envían mensajes ni siguen redes sociales y se sienten socialdemócratas.
 
 ## Dimensión 3
 
 ```{r}
 i <- 3
+# We want to show positive and negative categories of this dimension. And it is possible that only one side explains the desaired percentage, so we have to take extra categories from the other side to show.
 # table with big percentage of eigenvalue
 aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
+
+
 # Select number of positive categories of table
 n_categories_k_positive <- ifelse(length(which(aux_tbl$k > 0)) < num_categories_to_show, length(which(aux_tbl$k > 0)), num_categories_to_show)
 # Select number of positive categories of table
@@ -588,32 +811,88 @@ En el **lado positivo del eje** las modalidades mejor representadas son:
 ```{r}
 # Show positive categories
 aux_idx <- which(aux_tbl$k > 0)[1:n_categories_k_positive]
+
 require(pander)
 pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)])), " % de la dimensión."))
 ```
 ```{r eval=FALSE, include=FALSE, echo=FALSE}
-cat(paste0("`", head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = num_categories_to_show+10), "`", collapse = ", "), ".", sep = "")
+str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = n_categories_k_positive))
+cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
 ```
 
+Para explicar el significado de un eje, hay que ver la contribución (`ctr`) de cada modalidad dentro de esa parte del eje. A continuación se explican las modalidades más significativa de este lado del eje en orden de preguntas (no por su contribución):
 
- + `P14_GRUPO:Sí` = 
+  + `P9A_GRUPO:Conservador` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P9A'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P9A_GRUPO)[1])
+```
+  + `P14_GRUPO:Sí` = 
 ```{r echo=FALSE, results='asis'}
 cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P14'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P14)[1])
+cat(levels(cis_2020_EB_df$P14_GRUPO)[1])
 ```
- + `P14A_98:No menciona`, `P14A_95:No menciona`, `P14A_12:No menciona`, `P14A_2:No menciona`, `P14A_21:No menciona`, `P14A_1:No menciona`, `P14A_18:No menciona` = No fue contactado por: 
+
+    + `P14A_1:Menciona`, `P14A_11:Menciona`, `P14A_12:Menciona`, `P14A_18:Menciona`, `P14A_2:Menciona`, `P14A_21:Menciona`
+    + `P14A_1:No menciona`, `P14A_11:No menciona`, `P14A_12:No menciona`, `P14A_18:No menciona`, `P14A_2:No menciona`, `P14A_21:No menciona`, `P14A_95:No menciona`, `P14A_98:No menciona` = Pero no queda claro por quienes fue contactado.
+  + `P20_GRUPO:Abstención+`, `P20_GRUPO:Conservador`, `RVAUTO20:No votó/abstención`, `RVAUTO20:VOX`
 ```{r echo=FALSE, results='asis'}
-# levels(cis_2020_EB_df$P20)
-cat(paste(levels(cis_2020_EB_df$P20)[c(P20_idx_98_nr, P20_idx_95_otro, P20_idx_12_bildu, P20_idx_2_psoe, P20_idx_21_podem, P20_idx_1_pp, P20_idx_18_vox)], collapse = ", "))
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P20'])
 ```
- + `P14A_11:Menciona`, `P14A_12:Menciona`, `P14A_2:Menciona`, `P14A_21:Menciona`, `P14A_1:Menciona`, `P14A_18:Menciona` = Sí fue contactado por: 
+: 
 ```{r echo=FALSE, results='asis'}
-# levels(cis_2020_EB_df$P20)
-cat(paste(levels(cis_2020_EB_df$P20)[c(P20_idx_11_pnv, P20_idx_12_bildu, P20_idx_2_psoe, P20_idx_21_podem, P20_idx_1_pp, P20_idx_18_vox)], collapse = ", "))
+cat(paste0(levels(cis_2020_EB_df$P20_GRUPO)[c(6, 1)], collapse = ", "), levels(cis_2020_EB_df$RVAUTO20)[6], sep = ", ")
 ```
+
+  + `P21_GRUPO:No quiso ir a votar`, `P21_GRUPO:Normalmente vota, pero esta vez no quiso hacerlo` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P21'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(paste(levels(cis_2020_EB_df$P21_GRUPO)[c(2,3)], collapse = " / "))
+```
+
+  + `P21A_GRUPO:Lo tenía decidido hace bastante tiempo (antes del inicio de la campaña electoral) ` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P21A'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P21A_GRUPO)[2])
+```
+  + `P21B_1_GRUPO:No había ninguna alternativa que le satisficiera`, `P21B_1_GRUPO:No le inspiraba confianza ningún partido ni ningún/a político/a` = Razones para no ir a votar en las elecciones autonómicas del País Vasco de 2020:
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P21B_1'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(paste(levels(cis_2020_EB_df$P21B_1_GRUPO)[c(1,5)], collapse = " / "))
+```
+  + `P21B_2:Da lo mismo votar que no votar, no sirve para nada`
+  + `P23_GRUPO:Se habría abstenido o habría votado en blanco `
+  + `P24_2_GRUPO:0 Con toda seguridad, no lo votaría nunca`, `P24_4_GRUPO:0 Con toda seguridad, no lo votaría nunca`, `P24_7_GRUPO:2_10`
+  + `P26_1_GRUPO:1 Muy mal`, `P26_2_GRUPO:1 Muy mal`, `P26_3_GRUPO:1 Muy mal`, `P26_4_GRUPO:1 Muy mal`
+  + `P29_GRUPO:1 Mínimo grado de nacionalismo vasco`
+  
+
+
+ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
+
+TODO: EXPLICAR MAS MODALIDADES
+
+ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
+
+
+
+ + `P14_GRUPO:Sí` = 
+ + `P14A_98:No menciona`, `P14A_95:No menciona`, `P14A_12:No menciona`, `P14A_2:No menciona`, `P14A_21:No menciona`, `P14A_1:No menciona`, `P14A_18:No menciona` =   + `P14A_11:Menciona`, `P14A_12:Menciona`, `P14A_2:Menciona`, `P14A_21:Menciona`, `P14A_1:Menciona`, `P14A_18:Menciona` = Sí fue contactado por: 
  + `P23_GRUPO:Se habría abstenido o habría votado en blanco ` = 
 ```{r echo=FALSE, results='asis'}
 cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P23'])
@@ -623,38 +902,9 @@ cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P23'
 cat(levels(cis_2020_EB_df$P23)[2])
 ```
  + `RVAUTO20:No votó/abstención` = 
-```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'RVAUTO20'])
-```
-: 
-```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$RVAUTO20)[11])
-```
  + `P20_GRUPO:Abstención+` = 
-```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P20'])
-```
-: 
-```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P20_GRUPO)[6])
-```
-
  + `P21_GRUPO:No quiso ir a votar` = 
-```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P21'])
-```
-: 
-```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P21_GRUPO)[2])
-```
  + `P21A_GRUPO:Lo tenía decidido hace bastante tiempo (antes del inicio de la campaña electoral) ` = 
-```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P21A'])
-```
-: 
-```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P21A_GRUPO)[2])
-```
  + `P24_7_GRUPO:2_10` = Escala de probabilidad (0-10) de votar a 
 ```{r echo=FALSE, results='asis'}
 cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P24_7'])
@@ -667,18 +917,11 @@ cat(levels(cis_2020_EB_df$P24_7_GRUPO)[3])
 ```{r echo=FALSE, results='asis'}
 cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P26_2', 'P26_4', 'P26_1')], collapse = ", "))
 ```
-ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
 
-TODO: EXPLICAR MAS MODALIDADES
 
-ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
+
 
 El lado positivo de esta dimensión puede representar a las personas que fueron contactadas por algún partido, pero está claro cual o cuales. Dicen que se abstuvieron de votar y lo tenían decidido antes de la campaña y no descartan votar a "Vox".
-ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
-
-
-ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
-
 
 
 
