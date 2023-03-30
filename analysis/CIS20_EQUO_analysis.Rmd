@@ -142,7 +142,8 @@ cis_2020_equo_ca_00 <- mjca(cis_2020_EB_df[, included_cols_EB_idx])
 Por defecto la función `mjca` toma el método de escalado `lambda = "adjusted"`, con lo que únicamente se consideran los valores propios obtenidos en el ACM mayores que $\frac{1}{Q} =$
 ```{r echo=FALSE, results='asis'}
 eigen_inertia_e <- 1/Q
-cat("\\frac{1}{", Q, "} = ",round(1/Q, digits = 4), ".", sep = "")
+### cat("\\frac{1}{", Q, "} = ",round(1/Q, digits = 4), ".", sep = "")
+cat(round(1/Q, digits = 4), ".", sep = "")
 ```
 
 ```{r}
