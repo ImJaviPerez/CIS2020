@@ -723,7 +723,7 @@ cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P10A
 ```{r echo=FALSE, results='asis'}
 cat(levels(cis_2020_EB_df$P10A_GRUPO)[1])
 ```
- + `P10C_GRUPO:TV vascas públicas`
+ + `P10C_GRUPO:TV vascas públicas` = 
 ```{r echo=FALSE, results='asis'}
 cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P10C'])
 ```
@@ -742,10 +742,6 @@ cat(levels(cis_2020_EB_df$P10_2)[4])
  + `P11_2:No menciona`, `P11_7:Menciona` = Redes sociales en Internet en las que se tiene cuenta: 
 ```{r echo=FALSE, results='asis'}
 cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P11_1', 'P11_7')], collapse = " / "))
-```
-: 
-```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P28_GRUPO)[4])
 ```
  + `P12_5:No menciona` = Tipos de páginas de Internet desde las que se ha seguido la información de las elecciones autonómicas del País Vasco de 2020: No ha seguido 
 ```{r echo=FALSE, results='asis'}
@@ -959,11 +955,125 @@ str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = n
 cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
 ```
 
+ + `ESCIDEOL_GRUPO:N.S.` = 
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('ESCIDEOL')], collapse = " / "))
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$ESCIDEOL_GRUPO)[9])
+```
+
+ + `ESCIDEOLPAR_1_GRUPO:NS_NC`, `ESCIDEOLPAR_2_GRUPO:NS_NC`, `ESCIDEOLPAR_3_GRUPO:NS_NC`, `ESCIDEOLPAR_4_GRUPO:NS_NC`, `ESCIDEOLPAR_5_GRUPO:NS_NC`, `ESCIDEOLPAR_6_GRUPO:NS_NC`, `ESCIDEOLPAR_7_GRUPO:NS_NC`  =  No sabe o no contesta sobre la escala ideológica de ningún partido.
+ + `CLASESOCIAL_GRUPO:Clase pobre-` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'CLASESOCIAL'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$CLASESOCIAL_GRUPO)[5])
+```
+ + `P10C_GRUPO:TV vascas públicas` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P10C'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P10C_GRUPO)[5])
+```
+
+ + `P10_2:Televisión` = Fuentes utilizadas para informarse sobre las elecciones autonómicas del País Vasco de 2020, 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P10_2'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P10_2)[4])
+```
+ + `P11_7:Menciona` = Redes sociales en Internet en las que se tiene cuenta: 
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P11_7')], collapse = " / "))
+```
+ + `P12_9:Menciona` = Tipos de páginas de Internet desde las que se ha seguido la información de las elecciones autonómicas del País Vasco de 2020: 
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P12_9')], collapse = " / "))
+```
+ + `P14_GRUPO:No` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P14'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P14_GRUPO)[2])
+```
+
+ + `P16:No` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P16'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P15)[2])
+```
+ + `P19A02_GRUPO:Elkarrekin Podemos` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P19A02'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P19A02_GRUPO)[6])
+```
+ + `P20_GRUPO:Resto` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P20'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P20_GRUPO)[5])
+```
+ + `P20A`, Razones para votar al partido político votado en las elecciones autonómicas del País Vasco de 2020:
+   + `P20A_1_GRUPO:Porque es el que mejor representa las ideas de la gente como Ud.` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P20A_1'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P20A_1_GRUPO)[4])
+```
+   + `P20A_2:N.C.`, `P20A_2:Por el/la candidato/a que presentaba a lehendakari` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P20A_2'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(paste(levels(cis_2020_EB_df$P20A_2)[c(9, 1)], collapse = " / "))
+```
+ + `P22_GRUPO:Lo decidió durante la última semana de la campaña electoral, unos días antes de las elecciones ` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P22'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(paste(levels(cis_2020_EB_df$P22_GRUPO)[3], collapse = " / "))
+```
+ + `P23_GRUPO:Habría votado por el mismo partido o coalición por el que lo hizo ` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P23'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(paste(levels(cis_2020_EB_df$P23_GRUPO)[1], collapse = " / "))
+```
+
+ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI  
 
 
-ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   
-
-ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   
+ + `P24_1_GRUPO:8`, `P24_1_GRUPO:NS_NC`, `P24_2_GRUPO:NS_NC`, `P24_3_GRUPO:NS_NC`, `P24_4_GRUPO:NS_NC`, `P24_5_GRUPO:NS_NC`, `P24_6_GRUPO:NS_NC`, `P24_7_GRUPO:NS_NC`
+ + `P26_1_GRUPO:No conoce`, `P26_2_GRUPO:7`, `P8_4_GRUPO:Poco`
+ + `RVAUTO20:EAJ-PNV`, `RVAUTO20:EH Bildu`
+ 
+ 
+ 
 
 
 `ESCIDEOLPAR_5_GRUPO:NS_NC`, `ESCIDEOLPAR_7_GRUPO:NS_NC`, `ESCIDEOLPAR_4_GRUPO:NS_NC`, `ESCIDEOLPAR_6_GRUPO:NS_NC`, `ESCIDEOLPAR_1_GRUPO:NS_NC`: no saben o no contestan sobre la escala ideológica de los partidos: "PP", "Vox", "Elkarrekin-Podemos", "Ciudadanos" ni "EAJ-PNV". `P14_GRUPO:No`: no fueron contactados por ningún partido político para pedirles el voto, `P24_3_GRUPO:NS_NC`, `P24_5_GRUPO:NS_NC`, `P24_2_GRUPO:NS_NC`, `P24_4_GRUPO:NS_NC`, `P24_7_GRUPO:NS_NC`, `P24_6_GRUPO:NS_NC`, : No sabe o no contesta sobre la probabilidad de votar a "PSE-EE-PSOE", "PP", "EH-Bildu", "Elkarrekin Podemos" ni "vox".
