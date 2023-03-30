@@ -4,14 +4,14 @@ subtitle: "Análisis de datos de encuestas de EQUO y Podemos"
 author: "ImJaviPerez"
 date: "Marzo 2023"
 output:
-  html_document:
-    toc: yes
-    toc_depth: '4'
-    df_print: paged
   pdf_document:
     number_sections: yes
     toc: yes
     toc_depth: 4
+  html_document:
+    toc: yes
+    toc_depth: '4'
+    df_print: paged
 header-includes:
 - \usepackage{xcolor}
 - \usepackage{framed}
@@ -162,17 +162,17 @@ Debemos tener en cuenta que hay una serie de variables que son datos objetivos d
 
 ```{r echo=FALSE, results='asis'}
 # cat(paste0("'", included_cols_EB, "'", collapse = ", "), sep = "")
-# 'PROV', 'MUN', 'CAPITAL', 'TIPO_TEL', 'SEXO', 'A0a', 'P10_2', 'P10_3', 'P10IMPRESA', 'P10DIGITAL', 'P10TV', 'P10RADIO', 'P11_1', 'P11_2', 'P11_3', 'P11_4', 'P11_5', 'P11_7', 'P12_1', 'P12_2', 'P12_3', 'P12_4', 'P12_5', 'P12_6', 'P12_7', 'P14A_11', 'P14A_12', 'P14A_2', 'P14A_21', 'P14A_1', 'P14A_18', 'P14A_95', 'P14A_98', 'P15A_11', 'P15A_12', 'P15A_2', 'P15A_21', 'P15A_1', 'P15A_18', 'P15A_95', 'P15A_98', 'P16', 'P16A_11', 'P16A_12', 'P16A_2', 'P16A_21', 'P16A_1', 'P16A_18', 'P16A_95', 'P16A_98', 'P17_3', 'P20A_2', 'PARTICIPACIONA', 'P27', 'RELIGION', 'ESTADOCIVIL', 'CNO11', 'RELALAB', 'IA_APLAZADA', 'IA_MODIFICADA', 'IA_SUPERVISADA', 'TAMUNI_GRUPO', 'EDAD_GRUPO', 'P1_GRUPO', 'P1A_GRUPO', 'P1B_GRUPO', 'P2_GRUPO', 'P3_1_GRUPO', 'P3_2_GRUPO', 'P3_3_GRUPO', 'P3_4_GRUPO', 'P4_GRUPO', 'P5_GRUPO', 'P5A_GRUPO', 'P6_GRUPO', 'P7_GRUPO', 'P8_1_GRUPO', 'P8_2_GRUPO', 'P8_3_GRUPO', 'P8_4_GRUPO', 'P9_GRUPO', 'P9A_GRUPO', 'P9B_GRUPO', 'P10_1_GRUPO', 'P10A_GRUPO', 'P10B_GRUPO', 'P10C_GRUPO', 'P10D_GRUPO', 'P13_1_GRUPO', 'P13_2_GRUPO', 'P13_3_GRUPO', 'P13_4_GRUPO', 'P13_5_GRUPO', 'P14_GRUPO', 'P15_GRUPO', 'P17_1_GRUPO', 'P17_2_GRUPO', 'P18_GRUPO', 'P18A_GRUPO', 'P18B_GRUPO', 'P19_GRUPO', 'P19A01_GRUPO', 'P19A02_GRUPO', 'P20_GRUPO', 'P20A_1_GRUPO', 'P21_GRUPO', 'P21A_GRUPO', 'P21B_1_GRUPO', 'P21B_2_GRUPO', 'P22_GRUPO', 'P23_GRUPO', 'P24_1_GRUPO', 'P24_2_GRUPO', 'P24_3_GRUPO', 'P24_4_GRUPO', 'P24_5_GRUPO', 'P24_6_GRUPO', 'P24_7_GRUPO', 'RECUVOTOA_GRUPO', 'P26_1_GRUPO', 'P26_2_GRUPO', 'P26_3_GRUPO', 'P26_4_GRUPO', 'P26_5_GRUPO', 'P26_6_GRUPO', 'P28_GRUPO', 'P29_GRUPO', 'PARTICIPACIONG_GRUPO', 'RECUVOTOG_GRUPO', 'ESCIDEOL_GRUPO', 'ESCIDEOLPAR_1_GRUPO', 'ESCIDEOLPAR_2_GRUPO', 'ESCIDEOLPAR_3_GRUPO', 'ESCIDEOLPAR_4_GRUPO', 'ESCIDEOLPAR_5_GRUPO', 'ESCIDEOLPAR_6_GRUPO', 'ESCIDEOLPAR_7_GRUPO', 'NIVELESTENTREV_GRUPO', 'FRECUENCIARELI_GRUPO', 'SITLAB_GRUPO', 'CLASESOCIAL_GRUPO', 'IA_E1_DIA_GRUPO', 'IA_E2_GRUPO', 'IA_E4_GRUPO', 'IA_C2_GRUPO', 'P19ACOM_GRUPO', 'RVAUTO20_GRUPO', 'RVAUTO16_GRUPO', 'RECUERDO_GRUPO', 'ESTUDIOS_GRUPO', 'CLASESUB_GRUPO'
+# 'PROV', 'MUN', 'CAPITAL', 'TIPO_TEL', 'SEXO', 'A0a', 'P10_2', 'P10_3', 'P10IMPRESA', 'P10DIGITAL', 'P10TV', 'P10RADIO', 'P11_1', 'P11_2', 'P11_3', 'P11_4', 'P11_5', 'P11_7', 'P11_9', 'P12_1', 'P12_2', 'P12_3', 'P12_4', 'P12_5', 'P12_6', 'P12_7', 'P12_9', 'P14A_11', 'P14A_12', 'P14A_2', 'P14A_21', 'P14A_1', 'P14A_18', 'P14A_95', 'P14A_98', 'P15A_11', 'P15A_12', 'P15A_2', 'P15A_21', 'P15A_1', 'P15A_18', 'P15A_95', 'P15A_98', 'P16', 'P16A_11', 'P16A_12', 'P16A_2', 'P16A_21', 'P16A_1', 'P16A_18', 'P16A_95', 'P16A_98', 'P17_3', 'P20A_2', 'P21B_2', 'P21C', 'PARTICIPACIONA', 'P27', 'RELIGION', 'ESTADOCIVIL', 'CNO11', 'RELALAB', 'IA_APLAZADA', 'IA_MODIFICADA', 'IA_SUPERVISADA', 'RVAUTO20', 'TAMUNI_GRUPO', 'EDAD_GRUPO', 'P1_GRUPO', 'P1A_GRUPO', 'P1B_GRUPO', 'P2_GRUPO', 'P3_1_GRUPO', 'P3_2_GRUPO', 'P3_3_GRUPO', 'P3_4_GRUPO', 'P4_GRUPO', 'P5_GRUPO', 'P5A_GRUPO', 'P6_GRUPO', 'P7_GRUPO', 'P8_1_GRUPO', 'P8_2_GRUPO', 'P8_3_GRUPO', 'P8_4_GRUPO', 'P9_GRUPO', 'P9A_GRUPO', 'P9B_GRUPO', 'P10_1_GRUPO', 'P10A_GRUPO', 'P10B_GRUPO', 'P10C_GRUPO', 'P10D_GRUPO', 'P13_1_GRUPO', 'P13_2_GRUPO', 'P13_3_GRUPO', 'P13_4_GRUPO', 'P13_5_GRUPO', 'P14_GRUPO', 'P15_GRUPO', 'P17_1_GRUPO', 'P17_2_GRUPO', 'P18_GRUPO', 'P18A_GRUPO', 'P18B_GRUPO', 'P19_GRUPO', 'P19A01_GRUPO', 'P19A02_GRUPO', 'P20_GRUPO', 'P20A_1_GRUPO', 'P21_GRUPO', 'P21A_GRUPO', 'P21B_1_GRUPO', 'P22_GRUPO', 'P23_GRUPO', 'P24_1_GRUPO', 'P24_2_GRUPO', 'P24_3_GRUPO', 'P24_4_GRUPO', 'P24_5_GRUPO', 'P24_6_GRUPO', 'P24_7_GRUPO', 'RECUVOTOA_GRUPO', 'P26_1_GRUPO', 'P26_2_GRUPO', 'P26_3_GRUPO', 'P26_4_GRUPO', 'P26_5_GRUPO', 'P26_6_GRUPO', 'P28_GRUPO', 'P29_GRUPO', 'PARTICIPACIONG_GRUPO', 'RECUVOTOG_GRUPO', 'ESCIDEOL_GRUPO', 'ESCIDEOLPAR_1_GRUPO', 'ESCIDEOLPAR_2_GRUPO', 'ESCIDEOLPAR_3_GRUPO', 'ESCIDEOLPAR_4_GRUPO', 'ESCIDEOLPAR_5_GRUPO', 'ESCIDEOLPAR_6_GRUPO', 'ESCIDEOLPAR_7_GRUPO', 'NIVELESTENTREV_GRUPO', 'FRECUENCIARELI_GRUPO', 'SITLAB_GRUPO', 'CLASESOCIAL_GRUPO', 'IA_E1_DIA_GRUPO', 'IA_E2_GRUPO', 'IA_E4_GRUPO', 'IA_C2_GRUPO', 'P19ACOM_GRUPO', 'RVAUTO16_GRUPO', 'RECUERDO_GRUPO', 'ESTUDIOS_GRUPO', 'CLASESUB_GRUPO'
 
 # Select some illustrative variables
 illustrative_vars <- c('PROV', 'MUN', 'CAPITAL', 'TIPO_TEL', 'SEXO', 'A0a', 
                        'PARTICIPACIONA', 'RECUVOTOA_GRUPO', 
                        'PARTICIPACIONG_GRUPO', 'RECUVOTOG_GRUPO', 
                        'ESTADOCIVIL', 'SITLAB_GRUPO', 'CNO11', 'RELALAB', 
-                       'IA_APLAZADA', 'IA_MODIFICADA', 'IA_SUPERVISADA', 
-                       'RVAUTO20_GRUPO', 'RVAUTO16_GRUPO', 'RECUERDO_GRUPO', 'ESTUDIOS_GRUPO', 
+                       'IA_APLAZADA', 'IA_MODIFICADA', 'IA_SUPERVISADA', 'P20_GRUPO',
+                       'RVAUTO20', 'RVAUTO16_GRUPO', 'RECUERDO_GRUPO', 'ESTUDIOS_GRUPO', 
                        'TAMUNI_GRUPO', 'EDAD_GRUPO', 'P1_GRUPO', 'P1A_GRUPO', 'P1B_GRUPO', 'P2_GRUPO', 
-                       'ESCUELA_GRUPO', 'NIVELESTENTREV_GRUPO', 
+                       'NIVELESTENTREV_GRUPO', 
                        'IA_E1_DIA_GRUPO', 'IA_E2_GRUPO', 'IA_E4_GRUPO', 'IA_C2_GRUPO')
 
 # illustrative_vars <- c('RECUVOTOA_GRUPO', 'RECUVOTOG_GRUPO', 'RVAUTO20_GRUPO', 'RVAUTO16_GRUPO', 'RECUERDO_GRUPO')
@@ -189,9 +189,27 @@ El resto de preguntas pueden considerarse de opinión. El ACM trata de ubicar lo
 # Selección de dimensiones más representativas
 
 Se realiza una primera tentativa de ACM sólo con las variables de opinión:
+```{r}
+# Queremos representar algunas variables ilustrativas como columnas suplementarias.
+# Por tanto hay que reordenar el dataframe poniendo las ilustrativas al final.
+# Ademas debemos elegir lambda = "Burt"
+cis_2020_EB_df <- cis_2020_EB_df[,c(opinion_vars, illustrative_vars)]
+# Seleccion de columnas suplementarias para mostar en el plano factorial
+suplementary_cols <- c('PARTICIPACIONA', 'RECUVOTOA_GRUPO', 
+                       'PARTICIPACIONG_GRUPO', 'RECUVOTOG_GRUPO', 
+                       'RVAUTO20', 'P20_GRUPO', 'RVAUTO16_GRUPO', 'RECUERDO_GRUPO', 
+                       'ESTUDIOS_GRUPO', 
+                       'TAMUNI_GRUPO', 'EDAD_GRUPO')
+
+suplementary_cols_idx <- which(colnames(cis_2020_EB_df) %in% suplementary_cols)
+opinion_vars_idx <- which(colnames(cis_2020_EB_df) %in% opinion_vars)
+```
+
+
 ```{r ACM01}
 require(ca)
-cis_2020_ca_opi01 <- mjca(cis_2020_EB_df[,opinion_vars], nd = numDim)
+### cis_2020_ca_opi01 <- mjca(cis_2020_EB_df[,opinion_vars], nd = numDim)
+cis_2020_ca_opi01 <- mjca(cis_2020_EB_df, nd = numDim, lambda = "Burt", supcol = suplementary_cols_idx, subsetcol = opinion_vars_idx)
 
 cis_2020_ca_opi01_summ <- summary(cis_2020_ca_opi01)
 # print(cis_2020_ca_opi01_summ)
@@ -244,7 +262,7 @@ factor_categories <- function(columns_factors, num_factor, percet_eigenvalue){
   # Sort by its contribution
   fctr_contribution_sort <- base::sort(columns_factors[,ctr_idx], decreasing = TRUE, index.return = TRUE)
   # Calculate percet_eigenvalue of whole eigenvalue
-  i <- round(percet_eigenvalue*sum(columns_factors[,ctr_idx]))
+  i <- round(percet_eigenvalue*sum(columns_factors[,ctr_idx], na.rm = TRUE))
   # Calculate number of variables
   num_categories <- which.max(cumsum(fctr_contribution_sort$x) >= i)
   #  cbind() returns a matrix, and a matrix can only hold one data type we must use data.frame()
@@ -293,7 +311,7 @@ num_categories_to_show <- 35
 
 ```{r}
 i <- 1
-# We want to show positive and negative categories of this dimension. And it is possible that only one side explains the desaired percentage, so we have to take extra categories from the other side to show.
+# We want to show positive and negative categories of this dimension. And it is possible that only one side explains the wanted percentage, so we have to take extra categories from the other side to show.
 # table with big percentage of eigenvalue
 aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
 
@@ -311,115 +329,17 @@ En el **lado positivo del eje** las modalidades mejor representadas son:
 aux_idx <- which(aux_tbl$k > 0)[1:n_categories_k_positive]
 
 require(pander)
-pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)])), " % de la dimensión."))
+pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
 ```
 ```{r eval=FALSE, include=FALSE, echo=FALSE}
 str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = n_categories_k_positive))
 cat(paste0("`", str_aux_1, "`", collapse = ", "), ".", sep = "")
 ```
 
-Para explicar el significado de un eje, hay que ver la contribución (`ctr`) de cada modalidad dentro de esa parte del eje. A continuación se explican las modalidades más significativa de este lado del eje en orden de preguntas (no por su contribución):
-
- + `P6_GRUPO:Mucho` = 
-```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P6'])
-```
-```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P6_GRUPO)[1])
-```
- + `P7_GRUPO:Con mucho interés` = 
-```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P7'])
-```
-```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P7_GRUPO)[1])
-```
- + `P9A_GRUPO:Elkarrekin Berdeak` = 
-```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P9A'])
-```
-```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P9A_GRUPO)[8])
-```
- + `P10B_GRUPO:Editoriales izquierda`, `P10DIGITAL:Menciona`
-```{r echo=FALSE, results='asis'}
-paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P10B', 'P10DIGITAL')], collapse = " / ")
-```
-```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P10B_GRUPO)[3])
-```
- + `P11_3:Menciona` = Redes sociales en Internet en las que se tiene cuenta: 
-```{r echo=FALSE, results='asis'}
-paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P11_3')], collapse = " / ")
-```
- + `P12_1:Menciona`, `P12_5:Menciona` = Tipos de páginas de Internet desde las que se ha seguido la información de las elecciones autonómicas del País Vasco de 2020: 
-```{r echo=FALSE, results='asis'}
-paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P12_1', 'P12_5')], collapse = " / ")
-```
- + `P15_GRUPO:Sí` = 
-```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P15'])
-```
- + `P15A_1:No menciona`, `P15A_11:Menciona`, `P15A_11:No menciona`, `P15A_12:Menciona`, `P15A_12:No menciona`, `P15A_18:No menciona`, `P15A_2:No menciona`, `P15A_21:Menciona`, `P15A_21:No menciona`, `P15A_95:No menciona`, `P15A_98:No menciona` = Ha enviado mensajes de:
-```{r echo=FALSE, results='asis'}
-# levels(cis_2020_EB_df$P20)
-cat(paste(levels(cis_2020_EB_df$P20)[c(P20_idx_11_pnv, P20_idx_12_bildu, P20_idx_21_podem)], collapse = ", "))
-```
- + `P16:Sí` = 
-```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P16'])
-```
- + `P16A_1:No menciona`, `P16A_11:Menciona`, `P16A_11:No menciona`, `P16A_12:Menciona`, `P16A_12:No menciona`, `P16A_18:No menciona`, `P16A_2:No menciona`, `P16A_21:Menciona`, `P16A_21:No menciona`, `P16A_95:No menciona`, `P16A_98:No menciona` = Ha recibido mensajes de:
-```{r echo=FALSE, results='asis'}
-# levels(cis_2020_EB_df$P20)
-cat(paste(levels(cis_2020_EB_df$P20)[c(P20_idx_11_pnv, P20_idx_12_bildu, P20_idx_21_podem)], collapse = ", "))
-```
- + `P17_1_GRUPO:Habitualmente`, `P17_2_GRUPO:Habitualmente` = 
-Las elecciones fueron tema de conversación 
-```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P17_1', 'P17_2')], collapse = ", "))
-```
-```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P17_2_GRUPO)[1])
-```
-
- + `P19ACOM_GRUPO:EH Bildu/Elkarrekin Podemos`
-```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P19ACOM')], collapse = ", "))
-```
-```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P19ACOM_GRUPO)[12])
-```
-
-En resumen: son personas que envían y reciben mensajes relacionados con la política y están interesados en la política "nacionalista" y/o de izquierdas.
-
-
-En el **lado negativo del eje** están las "variables:modalidades":
-
-```{r}
-# Show negative categories
-aux_idx <- which(aux_tbl$k < 0)[1:n_categories_k_negative]
-require(pander)
-
-pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_negative, " modalidades más significativas del eje negativo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)])), " % de la dimensión."))
-```
-
-```{r eval=FALSE, include=FALSE, echo=FALSE}
-str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = n_categories_k_negative))
-cat(paste0("`", str_aux_1, "`", collapse = ", "), ".", sep = "")
-```
 
 Para explicar el significado de un eje, hay que ver la contribución (`ctr`) de cada modalidad dentro de esa parte del eje. A continuación se explican las modalidades más significativa de este lado del eje en orden de preguntas (no por su contribución):
 
  + `ESCIDEOLPAR_1_GRUPO:NS_NC`, `ESCIDEOLPAR_2_GRUPO:NS_NC`, `ESCIDEOLPAR_3_GRUPO:NS_NC`, `ESCIDEOLPAR_4_GRUPO:NS_NC`, `ESCIDEOLPAR_5_GRUPO:NS_NC`, `ESCIDEOLPAR_6_GRUPO:NS_NC`, `ESCIDEOLPAR_7_GRUPO:NS_NC` =  No sabe o no contesta sobre la escala ideológica de ningún partido.
- +  `RVAUTO20:No votó/abstención`, `P20_GRUPO:Abstención+` = 
-```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('RVAUTO20')], collapse = ", "))
-```
-: 
-```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$RVAUTO20)[11])
-```
  + `P5_GRUPO:No alineado/a` = 
 ```{r echo=FALSE, results='asis'}
 cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P5'])
@@ -552,18 +472,109 @@ cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %i
 cat(levels(cis_2020_EB_df$P26_2_GRUPO)[10])
 ```
 
-En resumen: Este eje lado del eje representa a las personas que no les interesa la campaña electoral, ni la política, que se abstuvieron o no votaron y nunca votarían a EH Bildu.
+En resumen: Este eje lado del eje representa a las personas que no les interesa la campaña electoral, ni la política, que nunca votarían a EH Bildu.
+
+En el **lado negativo del eje** están las "variables:modalidades":
+
+```{r}
+# Show negative categories
+aux_idx <- which(aux_tbl$k < 0)[1:n_categories_k_negative]
+require(pander)
+
+pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_negative, " modalidades más significativas del eje negativo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
+```
+
+```{r eval=FALSE, include=FALSE, echo=FALSE}
+str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = n_categories_k_negative))
+cat(paste0("`", str_aux_1, "`", collapse = ", "), ".", sep = "")
+```
+
+Para explicar el significado de un eje, hay que ver la contribución (`ctr`) de cada modalidad dentro de esa parte del eje. A continuación se explican las modalidades más significativa de este lado del eje en orden de preguntas (no por su contribución):
+
+ + `P6_GRUPO:Mucho` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P6'])
+```
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P6_GRUPO)[1])
+```
+ + `P7_GRUPO:Con mucho interés` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P7'])
+```
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P7_GRUPO)[1])
+```
+ + `P9A_GRUPO:Elkarrekin Berdeak` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P9A'])
+```
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P9A_GRUPO)[8])
+```
+ + `P10B_GRUPO:Editoriales izquierda`, `P10DIGITAL:Menciona`
+```{r echo=FALSE, results='asis'}
+paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P10B', 'P10DIGITAL')], collapse = " / ")
+```
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P10B_GRUPO)[3])
+```
+ + `P11_3:Menciona` = Redes sociales en Internet en las que se tiene cuenta: 
+```{r echo=FALSE, results='asis'}
+paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P11_3')], collapse = " / ")
+```
+ + `P12_1:Menciona`, `P12_5:Menciona` = Tipos de páginas de Internet desde las que se ha seguido la información de las elecciones autonómicas del País Vasco de 2020: 
+```{r echo=FALSE, results='asis'}
+paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P12_1', 'P12_5')], collapse = " / ")
+```
+ + `P15_GRUPO:Sí` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P15'])
+```
+ + `P15A_1:No menciona`, `P15A_11:Menciona`, `P15A_11:No menciona`, `P15A_12:Menciona`, `P15A_12:No menciona`, `P15A_18:No menciona`, `P15A_2:No menciona`, `P15A_21:Menciona`, `P15A_21:No menciona`, `P15A_95:No menciona`, `P15A_98:No menciona` = Ha enviado mensajes de:
+```{r echo=FALSE, results='asis'}
+# levels(cis_2020_EB_df$P20)
+cat(paste(levels(cis_2020_EB_df$P20)[c(P20_idx_11_pnv, P20_idx_12_bildu, P20_idx_21_podem)], collapse = ", "))
+```
+ + `P16:Sí` = 
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P16'])
+```
+ + `P16A_1:No menciona`, `P16A_11:Menciona`, `P16A_11:No menciona`, `P16A_12:Menciona`, `P16A_12:No menciona`, `P16A_18:No menciona`, `P16A_2:No menciona`, `P16A_21:Menciona`, `P16A_21:No menciona`, `P16A_95:No menciona`, `P16A_98:No menciona` = Ha recibido mensajes de:
+```{r echo=FALSE, results='asis'}
+# levels(cis_2020_EB_df$P20)
+cat(paste(levels(cis_2020_EB_df$P20)[c(P20_idx_11_pnv, P20_idx_12_bildu, P20_idx_21_podem)], collapse = ", "))
+```
+ + `P17_1_GRUPO:Habitualmente`, `P17_2_GRUPO:Habitualmente` = 
+Las elecciones fueron tema de conversación 
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P17_1', 'P17_2')], collapse = ", "))
+```
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P17_2_GRUPO)[1])
+```
+
+ + `P19ACOM_GRUPO:EH Bildu/Elkarrekin Podemos`
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P19ACOM')], collapse = ", "))
+```
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P19ACOM_GRUPO)[12])
+```
+
+En resumen: son personas que envían y reciben mensajes relacionados con la política y están interesados en la política "nacionalista" y/o de izquierdas.
+
 
 **Necesito una interpretación *certera* del significado de este eje por parte de JRB:**
 
-En resumen: Este eje representa a las personas que por un extremo les interesa la política y por el otro no les interesa la campaña electoral, ni la política, que se abstuvieron o no votaron y nunca votarían a EH Bildu.
+En resumen: Este eje representa a las personas que por un extremo no les interesa la campaña electoral, ni la política, que nunca votarían a EH Bildu y por el otro les interesa la política.
 
 
 ## Dimensión 2
 
 ```{r}
 i <- 2
-# We want to show positive and negative categories of this dimension. And it is possible that only one side explains the desaired percentage, so we have to take extra categories from the other side to show.
+# We want to show positive and negative categories of this dimension. And it is possible that only one side explains the wanted percentage, so we have to take extra categories from the other side to show.
 # table with big percentage of eigenvalue
 aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
 
@@ -581,7 +592,7 @@ En el **lado positivo del eje** las modalidades mejor representadas son:
 aux_idx <- which(aux_tbl$k > 0)[1:n_categories_k_positive]
 
 require(pander)
-pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)])), " % de la dimensión."))
+pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
 ```
 ```{r eval=FALSE, include=FALSE, echo=FALSE}
 str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = n_categories_k_positive))
@@ -663,7 +674,7 @@ En el **lado negativo del eje** están las "variables:modalidades":
 # Show negative categories
 aux_idx <- which(aux_tbl$k < 0)[1:n_categories_k_negative]
 require(pander)
-pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_negative, " modalidades más significativas del eje negativo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)])), " % de la dimensión."))
+pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_negative, " modalidades más significativas del eje negativo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
 ```
 
 ```{r eval=FALSE, include=FALSE, echo=FALSE}
@@ -763,14 +774,6 @@ cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P16'
 ```{r echo=FALSE, results='asis'}
 cat(levels(cis_2020_EB_df$P15)[2])
 ```
- + `RVAUTO20:No votó/abstención` = 
-```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('RVAUTO20')], collapse = " / "))
-```
-: 
-```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$RVAUTO20)[11])
-```
  + `P21_GRUPO:Normalmente vota, pero esta vez no quiso hacerlo` = 
 ```{r echo=FALSE, results='asis'}
 cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P21'])
@@ -788,7 +791,7 @@ cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P28'
 cat(levels(cis_2020_EB_df$P28_GRUPO)[4])
 ```
  
-No recibe ni envía mensajes electrónicos. Se informó a través de prensa impresa, radio y TV. No sigue la campaña en redes sociales. Se siente más vasco que español. Se abstuvo de votar. Se siente socialdemócrata.
+No recibe ni envía mensajes electrónicos. Se informó a través de prensa impresa, radio y TV. No sigue la campaña en redes sociales. Se siente más vasco que español. Se siente socialdemócrata.
 
 **Necesito una interpretación *certera* del significado de este eje por parte de JRB. A falta de esa interpretación diremos que:** 
 
@@ -798,7 +801,7 @@ Este eje representa a las personas que envían mensajes electrónicos y dicen qu
 
 ```{r}
 i <- 3
-# We want to show positive and negative categories of this dimension. And it is possible that only one side explains the desaired percentage, so we have to take extra categories from the other side to show.
+# We want to show positive and negative categories of this dimension. And it is possible that only one side explains the wanted percentage, so we have to take extra categories from the other side to show.
 # table with big percentage of eigenvalue
 aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
 
@@ -816,7 +819,7 @@ En el **lado positivo del eje** las modalidades mejor representadas son:
 aux_idx <- which(aux_tbl$k > 0)[1:n_categories_k_positive]
 
 require(pander)
-pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)])), " % de la dimensión."))
+pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
 ```
 ```{r eval=FALSE, include=FALSE, echo=FALSE}
 str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = n_categories_k_positive))
@@ -844,15 +847,6 @@ cat(levels(cis_2020_EB_df$P14_GRUPO)[1])
 
     + `P14A_1:Menciona`, `P14A_11:Menciona`, `P14A_12:Menciona`, `P14A_18:Menciona`, `P14A_2:Menciona`, `P14A_21:Menciona`
     + `P14A_1:No menciona`, `P14A_11:No menciona`, `P14A_12:No menciona`, `P14A_18:No menciona`, `P14A_2:No menciona`, `P14A_21:No menciona`, `P14A_95:No menciona`, `P14A_98:No menciona` = Pero no queda claro por quienes fue contactado.
-  + `P20_GRUPO:Abstención+`, `P20_GRUPO:Conservador`, `RVAUTO20:No votó/abstención`, `RVAUTO20:VOX`
-```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P20'])
-```
-: 
-```{r echo=FALSE, results='asis'}
-cat(paste0(levels(cis_2020_EB_df$P20_GRUPO)[c(6, 1)], collapse = ", "), levels(cis_2020_EB_df$RVAUTO20)[6], sep = ", ")
-```
-
   + `P21_GRUPO:No quiso ir a votar`, `P21_GRUPO:Normalmente vota, pero esta vez no quiso hacerlo` = 
 ```{r echo=FALSE, results='asis'}
 cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P21'])
@@ -939,7 +933,7 @@ cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %i
 cat(levels(cis_2020_EB_df$P29_GRUPO)[1])
 ``` 
 
-El lado positivo de esta dimensión puede representar a las personas se sienten conservadores, que fueron contactadas por algún partido, pero está no claro cual o cuales. Dicen que se abstuvieron de votar y lo tenían decidido antes de la campaña y no descartan votar a "Vox" aunque saben que no votarían a "EH Bildu" ni  a "Elkarrekin Podemos". Se sienten no nacionalistas.
+El lado positivo de esta dimensión puede representar a las personas se sienten conservadores, que fueron contactadas por algún partido, pero que no está claro por cual o cuales. Dicen que no descartan votar a "Vox" aunque saben que no votarían a "EH Bildu" ni  a "Elkarrekin Podemos". Se sienten no nacionalistas.
 
 En el **lado negativo del eje** están las "variables:modalidades":
 
@@ -947,7 +941,7 @@ En el **lado negativo del eje** están las "variables:modalidades":
 # Show negative categories
 aux_idx <- which(aux_tbl$k < 0)[1:n_categories_k_negative]
 require(pander)
-pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_negative, " modalidades más significativas del eje negativo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)])), " % de la dimensión."))
+pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_negative, " modalidades más significativas del eje negativo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
 ```
 
 ```{r eval=FALSE, include=FALSE, echo=FALSE}
@@ -972,6 +966,14 @@ cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'CLAS
 : 
 ```{r echo=FALSE, results='asis'}
 cat(levels(cis_2020_EB_df$CLASESOCIAL_GRUPO)[5])
+```
+ + `P8_4_GRUPO:Poco` = Grado de utilidad de la campaña electoral de las elecciones autonómicas del País Vasco de 2020 en diferentes aspectos de la decisión de voto
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P8_4')], collapse = ", "))
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P8_4_GRUPO)[3])
 ```
  + `P10C_GRUPO:TV vascas públicas` = 
 ```{r echo=FALSE, results='asis'}
@@ -1023,14 +1025,6 @@ cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P19A
 ```{r echo=FALSE, results='asis'}
 cat(levels(cis_2020_EB_df$P19A02_GRUPO)[6])
 ```
- + `P20_GRUPO:Resto` = 
-```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P20'])
-```
-: 
-```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P20_GRUPO)[5])
-```
  + `P20A`, Razones para votar al partido político votado en las elecciones autonómicas del País Vasco de 2020:
    + `P20A_1_GRUPO:Porque es el que mejor representa las ideas de la gente como Ud.` = 
 ```{r echo=FALSE, results='asis'}
@@ -1064,58 +1058,170 @@ cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P23'
 ```{r echo=FALSE, results='asis'}
 cat(paste(levels(cis_2020_EB_df$P23_GRUPO)[1], collapse = " / "))
 ```
+ + `P24_1_GRUPO:8`, `P24_1_GRUPO:NS_NC`, `P24_2_GRUPO:NS_NC`, `P24_3_GRUPO:NS_NC`, `P24_4_GRUPO:NS_NC`, `P24_5_GRUPO:NS_NC`, `P24_6_GRUPO:NS_NC`, `P24_7_GRUPO:NS_NC` = Escala de probabilidad (0-10) de votar a diferentes partidos políticos en las elecciones autonómicas del País Vasco: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P24_1_GRUPO)[11])
+```
+ + `P26_1_GRUPO:No conoce`, `P26_2_GRUPO:7` = Conocimiento y escala de valoración (1-10) de líderes políticos autonómicos del País Vasco
+    + 
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P26_1')], collapse = ", "))
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P26_1_GRUPO)[10])
+```
+    + 
+```{r echo=FALSE, results='asis'}
+cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P26_2')], collapse = ", "))
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_EB_df$P26_1_GRUPO)[7])
+```
 
-ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI  
-
-
- + `P24_1_GRUPO:8`, `P24_1_GRUPO:NS_NC`, `P24_2_GRUPO:NS_NC`, `P24_3_GRUPO:NS_NC`, `P24_4_GRUPO:NS_NC`, `P24_5_GRUPO:NS_NC`, `P24_6_GRUPO:NS_NC`, `P24_7_GRUPO:NS_NC`
- + `P26_1_GRUPO:No conoce`, `P26_2_GRUPO:7`, `P8_4_GRUPO:Poco`
- + `RVAUTO20:EAJ-PNV`, `RVAUTO20:EH Bildu`
+El lado negativo de esta dimensión contiene a las personas que: dicen no conocer la escala ideológica de ningún partido dicen; que deciden el voto en la última semana de campaña; se reconoce como de clase "Pobre"; y en 2020 dudó si votar o no a "Elkarrekin-Podemos".
  
- 
- 
 
+En resumen: Este eje representa a las personas que se manifiestan  conservadoras y centralistas y en el lado negativo del eje a los que no saben o no contestan a quien votar, se sienten pobres y votaron a un partido nacionalista.
 
-`ESCIDEOLPAR_5_GRUPO:NS_NC`, `ESCIDEOLPAR_7_GRUPO:NS_NC`, `ESCIDEOLPAR_4_GRUPO:NS_NC`, `ESCIDEOLPAR_6_GRUPO:NS_NC`, `ESCIDEOLPAR_1_GRUPO:NS_NC`: no saben o no contestan sobre la escala ideológica de los partidos: "PP", "Vox", "Elkarrekin-Podemos", "Ciudadanos" ni "EAJ-PNV". `P14_GRUPO:No`: no fueron contactados por ningún partido político para pedirles el voto, `P24_3_GRUPO:NS_NC`, `P24_5_GRUPO:NS_NC`, `P24_2_GRUPO:NS_NC`, `P24_4_GRUPO:NS_NC`, `P24_7_GRUPO:NS_NC`, `P24_6_GRUPO:NS_NC`, : No sabe o no contesta sobre la probabilidad de votar a "PSE-EE-PSOE", "PP", "EH-Bildu", "Elkarrekin Podemos" ni "vox".
-
-**Necesito una interpretación *certera* del significado de este eje por parte de JRB. A falta de esa interpretación diremos que:** Este eje representa a las personas que se manifiestan  conservadoras y centralistas y en el lado negativo del eje a los que no saben o no contestan a quien votar.
+**Necesito una interpretación *certera* del significado de este eje por parte de JRB.** 
 
 ## Dimensión 4
 
-Se muestran la tabla con las variables más representativas de esta dimensión:
-
-```{r}
-percet_eigenvalue <- 0.5
-```
-
+Se muestran las tablas con las variables más representativas de esta dimensión:
 
 ```{r}
 i <- 4
+# We want to show positive and negative categories of this dimension. And it is possible that only one side explains the wanted percentage, so we have to take extra categories from the other side to show.
+# table with big percentage of eigenvalue
 aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
-require(pander)
-pander(aux_tbl, caption = paste0("Dimensión ", i, ". Contiene ", nrow(aux_tbl), " modalidades que cubren el ", 100 * percet_eigenvalue, " % de esta dimensión."))
+
+
+# Select number of positive categories of table
+n_categories_k_positive <- ifelse(length(which(aux_tbl$k > 0)) < num_categories_to_show, length(which(aux_tbl$k > 0)), num_categories_to_show)
+# Select number of positive categories of table
+n_categories_k_negative <- ifelse(length(which(aux_tbl$k < 0)) < num_categories_to_show, length(which(aux_tbl$k < 0)), num_categories_to_show)
 ```
+
+En el **lado positivo del eje** las modalidades mejor representadas son:
+
+```{r}
+# Show positive categories
+aux_idx <- which(aux_tbl$k > 0)[1:n_categories_k_positive]
+
+require(pander)
+pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
+```
+```{r eval=FALSE, include=FALSE, echo=FALSE}
+str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = n_categories_k_positive))
+cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
+```
+
+En el **lado negativo del eje** están las "variables:modalidades":
+
+```{r}
+# Show negative categories
+aux_idx <- which(aux_tbl$k < 0)[1:n_categories_k_negative]
+require(pander)
+pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_negative, " modalidades más significativas del eje negativo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
+```
+
+```{r eval=FALSE, include=FALSE, echo=FALSE}
+str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = n_categories_k_negative))
+cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
+```
+
 
 ## Dimensión 5
 
-Se muestran la tabla con las variables más representativas de esta dimensión:
+Se muestran las tablas con las variables más representativas de esta dimensión:
 
 ```{r}
 i <- 5
+# We want to show positive and negative categories of this dimension. And it is possible that only one side explains the wanted percentage, so we have to take extra categories from the other side to show.
+# table with big percentage of eigenvalue
 aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
-require(pander)
-pander(aux_tbl, caption = paste0("Dimensión ", i, ". Contiene ", nrow(aux_tbl), " modalidades que cubren el ", 100 * percet_eigenvalue, " % de esta dimensión."))
+
+
+# Select number of positive categories of table
+n_categories_k_positive <- ifelse(length(which(aux_tbl$k > 0)) < num_categories_to_show, length(which(aux_tbl$k > 0)), num_categories_to_show)
+# Select number of positive categories of table
+n_categories_k_negative <- ifelse(length(which(aux_tbl$k < 0)) < num_categories_to_show, length(which(aux_tbl$k < 0)), num_categories_to_show)
 ```
+
+En el **lado positivo del eje** las modalidades mejor representadas son:
+
+```{r}
+# Show positive categories
+aux_idx <- which(aux_tbl$k > 0)[1:n_categories_k_positive]
+
+require(pander)
+pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
+```
+```{r eval=FALSE, include=FALSE, echo=FALSE}
+str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = n_categories_k_positive))
+cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
+```
+
+En el **lado negativo del eje** están las "variables:modalidades":
+
+```{r}
+# Show negative categories
+aux_idx <- which(aux_tbl$k < 0)[1:n_categories_k_negative]
+require(pander)
+pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_negative, " modalidades más significativas del eje negativo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
+```
+
+```{r eval=FALSE, include=FALSE, echo=FALSE}
+str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = n_categories_k_negative))
+cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
+```
+
 
 ## Dimensión 6
 
-Se muestran la tabla con las variables más representativas de esta dimensión:
+Se muestran las tablas con las variables más representativas de esta dimensión:
 
 ```{r}
 i <- 6
+# We want to show positive and negative categories of this dimension. And it is possible that only one side explains the wanted percentage, so we have to take extra categories from the other side to show.
+# table with big percentage of eigenvalue
 aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
+
+
+# Select number of positive categories of table
+n_categories_k_positive <- ifelse(length(which(aux_tbl$k > 0)) < num_categories_to_show, length(which(aux_tbl$k > 0)), num_categories_to_show)
+# Select number of positive categories of table
+n_categories_k_negative <- ifelse(length(which(aux_tbl$k < 0)) < num_categories_to_show, length(which(aux_tbl$k < 0)), num_categories_to_show)
+```
+
+En el **lado positivo del eje** las modalidades mejor representadas son:
+
+```{r}
+# Show positive categories
+aux_idx <- which(aux_tbl$k > 0)[1:n_categories_k_positive]
+
 require(pander)
-pander(aux_tbl, caption = paste0("Dimensión ", i, ". Contiene ", nrow(aux_tbl), " modalidades que cubren el ", 100 * percet_eigenvalue, " % de esta dimensión."))
+pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
+```
+```{r eval=FALSE, include=FALSE, echo=FALSE}
+str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = n_categories_k_positive))
+cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
+```
+
+En el **lado negativo del eje** están las "variables:modalidades":
+
+```{r}
+# Show negative categories
+aux_idx <- which(aux_tbl$k < 0)[1:n_categories_k_negative]
+require(pander)
+pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_negative, " modalidades más significativas del eje negativo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
+```
+
+```{r eval=FALSE, include=FALSE, echo=FALSE}
+str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = n_categories_k_negative))
+cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
 ```
 
 
@@ -1155,38 +1261,6 @@ gg_plot_MCA_cols <- function(dimX = 1, dimY = 2, coord_type = "standard"){
     xlab(paste("Dimension ", dimX, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimX], digits = 1) , "% )", sep = "")) +
     ylab(paste("Dimension ", dimY, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimY], digits = 1) , "% )", sep = ""))
 }
-
-# ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   
-# TODO: FALTAN colorear los individuos que en alguna ocasion votaron a Otros Partidos
-
-gg_plot_MCA_rows <- function(dimX = 1, dimY = 2, coord_type = "standard"){
-
-  require(ca)
-  # Extracting principal from mjca objects
-  # type = c("standard", "principal", "symmetric", "rowprincipal", "colprincipal", "symbiplot", "rowgab", "colgab", "rowgreen", "colgreen")
-  aux_coord <- ca::cacoord(cis_2020_ca_opi01, type = coord_type, dim = c(dimX, dimY), cols = FALSE, rows = TRUE)
-  # dataframe with dimensions coordinates
-  my_title <- "Individuos en el plano factorial"
-  row_coord_df <- cbind.data.frame(aux_coord[,1],
-                                 aux_coord[,2],
-                                 1:nrow(aux_coord))
-  
-  colnames(row_coord_df) <- c("dimX", "dimY", "name")
-
-  require(ggplot2)
-  require(ggrepel)
-  # Se crea el objeto con el grafico
-  ggplot(row_coord_df, aes(x=row_coord_df$dimX, y=row_coord_df$dimY)) +
-    geom_point() + geom_rug() +
-    # xlim(-2.6, 3.5) + ylim(-2.1,3.8)+
-    geom_text_repel(aes(label=row_coord_df$name),hjust=0, vjust=0,size=3.3) +
-    scale_colour_brewer(palette = "Set1") +
-    geom_vline(xintercept = 0) + geom_hline(yintercept = 0) + 
-    ggtitle(my_title) +
-    xlab(paste("Dimension ", dimX, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimX], digits = 1) , "% )", sep = "")) +
-    ylab(paste("Dimension ", dimY, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimY], digits = 1) , "% )", sep = ""))
-}
-
 ```
 
 
@@ -1198,7 +1272,46 @@ gg_plot_MCA_cols(dimX = 2, dimY = 3)
 ```
 
 
-## Individuos
+# Individuos
+```{r}
+# ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   
+# TODO: FALTAN colorear los individuos que en alguna ocasion votaron a Otros Partidos
+
+gg_plot_MCA_rows <- function(dimX = 1, dimY = 2, coord_type = "standard"){
+  require(ca)
+  # Extracting principal from mjca objects
+  # type = c("standard", "principal", "symmetric", "rowprincipal", "colprincipal", "symbiplot", "rowgab", "colgab", "rowgreen", "colgreen")
+  aux_coord <- ca::cacoord(cis_2020_ca_opi01, type = coord_type, dim = c(dimX, dimY), cols = FALSE, rows = TRUE)
+  # dataframe with dimensions coordinates
+  my_title <- "Individuos en el plano factorial"
+  row_coord_df <- cbind.data.frame(aux_coord[,1],
+                                 aux_coord[,2],
+                                 1:nrow(aux_coord),
+                                 cis_2020_EB_df$P20_GRUPO)
+  
+  colnames(row_coord_df) <- c("dimX", "dimY", "name", "P20_GRUPO")
+
+  require(ggplot2)
+  require(ggrepel)
+  # Se crea el objeto con el grafico
+  ggplot(row_coord_df, aes(x=row_coord_df$dimX, y=row_coord_df$dimY, color=P20_GRUPO)) +
+    geom_point() + geom_rug() +
+    # xlim(-2.6, 3.5) + ylim(-2.1,3.8)+
+    geom_text_repel(aes(label=row_coord_df$name),hjust=0, vjust=0,size=3.3) +
+    scale_colour_brewer(palette = "Set1") +
+    geom_vline(xintercept = 0) + geom_hline(yintercept = 0) + 
+    ggtitle(my_title) +
+    xlab(paste("Dimension ", dimX, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimX], digits = 1) , "% )", sep = "")) +
+    ylab(paste("Dimension ", dimY, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimY], digits = 1) , "% )", sep = "")) +
+    # levels(cis_2020_EB_df$P20_GRUPO)
+    scale_color_manual(breaks = c("Conservador", "Elkarrekin Podemos", "Berdeak", "PACMA", "Resto", "Abstención+"),
+                        values=c("royalblue1", "hotpink", "darkgreen", "darkgoldenrod3", "gray", "yellow"))
+}
+```
+
+
+A continuación se muestran a los individuos en los planos factoriales.
+
 ```{r}
 gg_plot_MCA_rows(dimX = 1, dimY = 2)
 ```
@@ -1215,6 +1328,10 @@ gg_plot_MCA_rows(dimX = 2, dimY = 3)
 gg_plot_MCA_rows(dimX = 2, dimY = 4)
 ```
 
+
+```{r}
+gg_plot_MCA_rows(dimX = 4, dimY = 5)
+```
 
 
 
@@ -1244,23 +1361,6 @@ getGgplotACM <- function(hCluter_figura, k.optimo=3, titulo = "") {
 
 
 
-
-
-
-A continuación se muestran 
-```{r echo=FALSE, results='asis'}
-cat(numDim)
-```
- tablas que contienen la modalidades más representativas de cada factor (= dimensión). Esas modalidades cubren el 
-```{r echo=FALSE, results='asis'}
-cat(100 * percet_eigenvalue, "%")
-```
- de cada dimensión.
-
-
-
-
- % del peso de ese factor. Por tanto lo que mejor representa a los encuestados es `N.S.` y `N.C.` y esto no nos aporta *ninguna* información. Así que para realizar este ACM hay que tener en cuenta más dimensiones, o sea más factores.
 
 
 
