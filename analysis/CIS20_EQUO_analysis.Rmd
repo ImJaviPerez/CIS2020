@@ -300,7 +300,11 @@ cat(length(opinion_vars))
 ```
  variables que abarcan 
 ```{r echo=FALSE, results='asis'}
-cat(length(cis_2020_ca_opi01$levelnames))
+i <- 0
+for (j in opinion_vars) {
+  i <- i + nlevels(cis_2020_EB_df[,j])
+}
+cat(i)
 ```
  modalidades. Precisamente cada una de estas modalidades va a contribuir (`ctr`) a crear cada dimensión.
 
@@ -1343,38 +1347,62 @@ gg_plot_MCA_rows(dimX = 4, dimY = 5)
 
 ```{r include=FALSE}
 # Se seleccionan las variables que se van a utilizar
-df_coches.def.ilu.ac <- df_coches.ac[,1:12]
+cis_2020_EB_cluster_df <- cis_2020_EB_df
 ```
 
 Se muestra la división cluster por el método *Ward* o también conocido como *"pérdida de inercia mínima"*.
 
 
 ```{r}
-df_coches.def.ilu.ac$C1 <- ACM_coches.ac.ilu.ind$rowcoord[,1]
-df_coches.def.ilu.ac$C2 <- ACM_coches.ac.ilu.ind$rowcoord[,2]
-# Distancia euclidea al cuadrado entre los elementos de la matriz
-dist_coches<-dist(model.matrix(~-1 + C1+C2, df_coches.def.ilu.ac))^2
-HClust.2 <- hclust(dist_coches , method= "ward.D")
 
-plot(HClust.2, main= "Cluster Dendrograma para coches", xlab= 
-  "Vehículos estudiados", sub="Method=ward.d; Distancia=euclidea al cuadrado")
+# ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   
+
+cis_2020_EB_cluster_df$C1 <- cis_2020_ca_opi01$rowcoord[,1]
+cis_2020_EB_cluster_df$C2 <- cis_2020_ca_opi01$rowcoord[,2]
+
+cosa <- ca::cacoord(cis_2020_ca_opi01, type = coord_type, dim = NA, cols = FALSE, rows = TRUE)
+# TODO INCLUIR EL RESTO DE DIMENSIONES HASTA numDim
+
+# ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   
+
+# Distancia euclidea al cuadrado entre los elementos de la matriz
+dist_individuos <- dist(model.matrix(~-1 + C1+C2, cis_2020_EB_cluster_df))^2
+HClust.2 <- hclust(dist_individuos , method= "ward.D")
+
+plot(HClust.2, main= "Cluster Dendrograma para individuos", xlab= 
+  "Encuestas CIS EQUO", sub="Method=ward.d; Distancia=euclidea al cuadrado")
 ```
 
-Parece que el número de cluster adecuado es 3 a la vista de las alturas de las ramas del dendograma. Pero al igual que en el análisis de correspondencias simples, aquí  también se puede buscar el número óptimo de clusters (`k`) usando la función `daisy` (Dissimilarity Matrix Calculation) que computa las desigualdades en las distancias entre parejas. En este caso se ha usado la métrica euclídea al cuadrado para ese cálculo. Para obtener el número óptimo de clusters y su composición.
+Parece que el número de cluster adecuado es XXXX a la vista de las alturas de las ramas del dendograma. Pero al igual que en el análisis de correspondencias simples, aquí  también se puede buscar el número óptimo de clusters (`k`) usando la función `daisy` (Dissimilarity Matrix Calculation) que computa las desigualdades en las distancias entre parejas. En este caso se ha usado la métrica euclídea al cuadrado para ese cálculo. Para obtener el número óptimo de clusters y su composición.
+
+ 
+```{r echo=TRUE}
+# Funcion para calcular el k optimo
+# Creamos una funcion para calcular la matriz de distancia dos a dos con los grupos
+# daisy: Compute all the pairwise dissimilarities (distances) between observations in the data set.
+grpdist <- function(X, metrica="euclidean"){
+  # metrica = "euclidean", "gower"
+  # Se carga la libreria "cluster"
+  require(cluster)
+  gr <- as.data.frame(as.factor(X))
+  distgr <- daisy(gr, metrica)
+  distgr
+  }
+```
 
 
 ```{r}
 # Se selecciona el numero optimo de clusters
 # data frame auxialiar
-kt <- data.frame(k=1:nrow(df_coches.def.ilu.ac), r=0)
+kt <- data.frame(k=1:nrow(cis_2020_EB_cluster_df), r=0)
 
 mtdo_usado = "ward"
-HClust_aux <- hclust(dist_coches , method= mtdo_usado)
+HClust_aux <- hclust(dist_individuos , method= mtdo_usado)
 
-for(i in 2:(nrow(df_coches.def.ilu.ac)-1)){
+for(i in 2:(nrow(cis_2020_EB_cluster_df)-1)){
   gr <- cutree(HClust_aux, i)
   distgr <- grpdist(gr, "gower")
-  mt <- cor(dist_coches, distgr, method="pearson")
+  mt <- cor(dist_individuos, distgr, method="pearson")
   kt[i,2] <- mt
   }
 # Calculamos mediante el estadístico de Mantel el número de clusters óptimo:
@@ -1387,22 +1415,22 @@ print(summary(as.factor(cutree(HClust_aux, k = k.best))))
 
 ```{r include=FALSE, eval=FALSE}
 
-## # Lista de metodos a testear
-## lista_mtdos = c("ward", "complete", "single", "average", "mcquitty", "median", "centroid")
+# Lista de metodos a testear
+lista_mtdos = c("ward", "complete", "single", "average", "mcquitty", "median", "centroid")
 # data frame auxialiar
-kt <- data.frame(k=1:nrow(df_coches.def.ilu.ac), r=0)
+kt <- data.frame(k=1:nrow(cis_2020_EB_cluster_df), r=0)
 
 # Bucle para testear todos los metodos con la distancia elegida
 for (mtdo_usado in lista_mtdos)
 {
-  HClust_aux <- hclust(dist_coches , method= mtdo_usado)
+  HClust_aux <- hclust(dist_individuos , method= mtdo_usado)
 
   # plot(HClust_aux, main= "Cluster Dendrograma para coches", xlab= "Vehículos estudiados",sub=paste("Metodo=", mtdo_usado,"; Distancia=euclidea al cuadrado", sep = ""))
 
-  for(i in 2:(nrow(df_coches.def.ilu.ac)-1)){
+  for(i in 2:(nrow(cis_2020_EB_cluster_df)-1)){
     gr <- cutree(HClust_aux, i)
     distgr <- grpdist(gr, "gower")
-    mt <- cor(dist_coches, distgr, method="pearson")
+    mt <- cor(dist_individuos, distgr, method="pearson")
     kt[i,2] <- mt
     }
   # Calculamos mediante el estadístico de Mantel el número de clusters óptimo:
@@ -1417,21 +1445,25 @@ for (mtdo_usado in lista_mtdos)
 
 
 ```{r include=FALSE}
+# ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   
+# ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   
+
 library("RcmdrMisc")
+require("RcmdrMisc")
 
 # Funcion que genera el objeto con la figura
 getGgplotACM <- function(hCluter_figura, k.optimo=3, titulo = "") {
   # Se crea una columna con el numero de cluster asignado a ese coche
-  df_coches.def.ilu.ac$num_cluster <- assignCluster(model.matrix(~-1 +  C1+C2, df_coches.def.ilu.ac), 
-                                                    df_coches.def.ilu.ac, cutree(hCluter_figura, k = k.optimo))
+  cis_2020_EB_cluster_df$num_cluster <- assignCluster(model.matrix(~-1 +  C1+C2, cis_2020_EB_cluster_df), 
+                                                    cis_2020_EB_cluster_df, cutree(hCluter_figura, k = k.optimo))
   
-  ##### coches$num_cluster <- assignCluster(model.matrix(~-1 +  C1+C2, df_coches.def.ilu.ac), df_coches.def.ilu.ac, cutree(hCluter_figura, k = k.optimo))
+  ##### coches$num_cluster <- assignCluster(model.matrix(~-1 +  C1+C2, cis_2020_EB_cluster_df), cis_2020_EB_cluster_df, cutree(hCluter_figura, k = k.optimo))
   
-  figura <- ggplot(df_coches.def.ilu.ac, aes(x=C1, y=C2, color=num_cluster)) +
+  figura <- ggplot(cis_2020_EB_cluster_df, aes(x=C1, y=C2, color=num_cluster)) +
     geom_point() + geom_rug() +
     geom_vline(xintercept = 0) + geom_hline(yintercept = 0) +
-    geom_text_repel(aes(label=rownames(df_coches.def.ilu.ac)),hjust=0, vjust=0, size=3.3) +
-    #geom_text(aes(label=rownames(df_coches.def.ilu.ac)),hjust=0, vjust=0, size=3.3) +
+    geom_text_repel(aes(label=rownames(cis_2020_EB_cluster_df)),hjust=0, vjust=0, size=3.3) +
+    #geom_text(aes(label=rownames(cis_2020_EB_cluster_df)),hjust=0, vjust=0, size=3.3) +
     theme(legend.position="top") + ggtitle(titulo)
   
   return(figura)
@@ -1451,7 +1483,7 @@ library(lattice)
 
 # Método: "ward.D". k óptimo = 3
 k_aux = 3
-HClust_aux <- hclust(dist_coches , method= "ward.D")
+HClust_aux <- hclust(dist_individuos , method= "ward.D")
 g1grob <- ggplotGrob(getGgplotACM(HClust_aux, k.optimo = k_aux, titulo = paste("Método ward.D.", k_aux, "clusters")))
 # Se crea el texto que se mostrara con la figura
 # Distribución de los vehículos en cada cluster:
@@ -1465,7 +1497,7 @@ texto1=textGrob(txt_distrib_clusters, gp=gpar(fontsize=10))
 
 # Método: "ward.D". k óptimo = 4
 k_aux = 4
-HClust_aux <- hclust(dist_coches , method= "ward.D")
+HClust_aux <- hclust(dist_individuos , method= "ward.D")
 g2grob <- ggplotGrob(getGgplotACM(HClust_aux, k.optimo = k_aux, titulo = paste("Método ward.D.", k_aux, "clusters")))
 # Se crea el texto que se mostrara con la figura
 # Distribución de los vehículos en cada cluster:
@@ -1496,23 +1528,23 @@ library(grid)
 library(ggplot2)
 library(lattice)
 
-# La matriz dist_coches contiene las distancias eclideas al cuadrado.
+# La matriz dist_individuos contiene las distancias eclideas al cuadrado.
 #
 # Se toma el metodo mas adecuado
 mtdo_usado_acm = "ward.D"
 
 # Se elige el numero de clusters optimo
-for(i in 2:(nrow(df_coches.def.ilu.ac)-1)){
+for(i in 2:(nrow(cis_2020_EB_cluster_df)-1)){
   gr <- cutree(HClust.2, i)
   distgr <- grpdist(gr, "euclidean")
-  mt <- cor(dist_coches, distgr, method="pearson")
+  mt <- cor(dist_individuos, distgr, method="pearson")
   kt[i,2] <- mt
 }
 
 num_clusters_acm <- which.max(kt$r)
 
 # Método: "ward.D". k óptimo = 3
-HClust.2 <- hclust(dist_coches , method = mtdo_usado_acm)
+HClust.2 <- hclust(dist_individuos , method = mtdo_usado_acm)
 
 # Se crea la figuar
 gg_cluster_ACM <- ggplotGrob(getGgplotACM(HClust.2, k.optimo = num_clusters_acm, titulo = paste("Método", mtdo_usado_acm)))
