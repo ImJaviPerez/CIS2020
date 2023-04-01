@@ -150,7 +150,7 @@ cat(round(eigen_inertia_e, digits = 4), ".", sep = "")
 cis_2020_equo_ca_00_summ <- summary(cis_2020_equo_ca_00)
 numDim <- length(which(cis_2020_equo_ca_00_summ$scree[,2] > (eigen_inertia_e/2)))
 
-if (numDim < 9) numDim <- 9
+if (numDim < 6) numDim <- 6
 ```
 Por lo tanto en nuestro caso el número de dimensiones será:
 ```{r echo=FALSE, results='asis'}
@@ -1355,18 +1355,18 @@ Se muestra la división cluster por el método *Ward* o también conocido como *
 
 ```{r}
 
-# ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   
+### cis_2020_EB_cluster_df$C1 <- cis_2020_ca_opi01$rowcoord[,1]
+### cis_2020_EB_cluster_df$C2 <- cis_2020_ca_opi01$rowcoord[,2]
 
-cis_2020_EB_cluster_df$C1 <- cis_2020_ca_opi01$rowcoord[,1]
-cis_2020_EB_cluster_df$C2 <- cis_2020_ca_opi01$rowcoord[,2]
+# Find rows coordinates in factorial space
+# type = c("standard", "principal", "symmetric", "rowprincipal", "colprincipal", "symbiplot", "rowgab", "colgab", "rowgreen", "colgreen")
+aux_tbl <- ca::cacoord(cis_2020_ca_opi01, type = "standard", dim = c(1:numDim), cols = FALSE, rows = TRUE)
+# Append rows coordinates to data.frame
+cis_2020_EB_cluster_df <- cbind.data.frame(cis_2020_EB_cluster_df, aux_tbl)
 
-cosa <- ca::cacoord(cis_2020_ca_opi01, type = coord_type, dim = NA, cols = FALSE, rows = TRUE)
-# TODO INCLUIR EL RESTO DE DIMENSIONES HASTA numDim
-
-# ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   
-
+formula_all_dims <- as.formula(paste("~-1 +", paste0("Dim",1:numDim, collapse = "+")))
 # Distancia euclidea al cuadrado entre los elementos de la matriz
-dist_individuos <- dist(model.matrix(~-1 + C1+C2, cis_2020_EB_cluster_df))^2
+dist_individuos <- dist(model.matrix(formula_all_dims, cis_2020_EB_cluster_df))^2
 HClust.2 <- hclust(dist_individuos , method= "ward.D")
 
 plot(HClust.2, main= "Cluster Dendrograma para individuos", xlab= 
@@ -1452,9 +1452,25 @@ library("RcmdrMisc")
 require("RcmdrMisc")
 
 # Funcion que genera el objeto con la figura
-getGgplotACM <- function(hCluter_figura, k.optimo=3, titulo = "") {
+getGgplotACM <- function(hCluter_figura, dimX = 1, dimY = 2, k.optimo=3, titulo = "") {
+  
+
+  # ESTAS AQUI      # ESTAS AQUI      # ESTAS AQUI      # ESTAS AQUI      # ESTAS AQUI    
+    
+  # PRUEBA
+  hCluter_figura <- HClust.2
+  dimX = 1
+  dimY = 2
+  k.optimo=3
+  titulo = ""
+  
+  C1 <- which(colnames(cis_2020_EB_cluster_df) == paste0("Dim", dimX))
+  
+  # FIN PRUEBA
+  # ESTAS AQUI      # ESTAS AQUI      # ESTAS AQUI      # ESTAS AQUI      # ESTAS AQUI    
+  
   # Se crea una columna con el numero de cluster asignado a ese coche
-  cis_2020_EB_cluster_df$num_cluster <- assignCluster(model.matrix(~-1 +  C1+C2, cis_2020_EB_cluster_df), 
+  cis_2020_EB_cluster_df$num_cluster <- assignCluster(model.matrix(formula_all_dims, cis_2020_EB_cluster_df), 
                                                     cis_2020_EB_cluster_df, cutree(hCluter_figura, k = k.optimo))
   
   ##### coches$num_cluster <- assignCluster(model.matrix(~-1 +  C1+C2, cis_2020_EB_cluster_df), cis_2020_EB_cluster_df, cutree(hCluter_figura, k = k.optimo))
