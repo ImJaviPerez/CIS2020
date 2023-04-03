@@ -1511,11 +1511,9 @@ for (i in 1:k_aux) {
   j <- c(j, length(which(aux_tbl$num_cluster == i)))
   print(paste(i, length(which(aux_tbl$num_cluster == i))))
 }
-# Outlier rows
-print("Outlier rows:")
-rownames(aux_tbl)[which(aux_tbl$num_cluster %in% which.min(j))]
-
-
+outlier_rows <- as.numeric(rownames(aux_tbl)[which(aux_tbl$num_cluster %in% which.min(j))])
+# Outlier rows: 86 751 1393 1412 2343
+cat("Outlier rows:", outlier_rows)
 
 
 g1grob <- ggplotGrob(getGgplotACM(HClust_aux, k.optimo = k_aux, titulo = paste("Método complete", k_aux, "clusters")))
