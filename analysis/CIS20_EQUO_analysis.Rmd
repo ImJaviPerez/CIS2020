@@ -1333,7 +1333,7 @@ gg_plot_MCA_rows <- function(dimX = 1, dimY = 2, coord_type = "standard"){
     ylab(paste("Dimension ", dimY, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimY], digits = 1) , "% )", sep = "")) +
     # levels(cis_2020_EB_df$P20_GRUPO)
     scale_color_manual(breaks = c("Conservador", "Elkarrekin Podemos", "Berdeak", "PACMA", "Resto", "Abstención+"),
-                        values=c("royalblue1", "hotpink", "darkgreen", "darkgoldenrod3", "gray", "yellow"))
+                        values=c("royalblue1", "blueviolet", "darkgreen", "darkgoldenrod3", "gray", "hotpink"))
 }
 ```
 
