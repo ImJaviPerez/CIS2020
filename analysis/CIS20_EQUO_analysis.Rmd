@@ -1644,17 +1644,20 @@ grid.arrange(
 ```
 
 
-En este caso los vehículos han sido agrupados en 3 clusters: 
+RANN: Fast Nearest Neighbour Search (Wraps ANN Library) Using L2 Metric
 
-* Cluster 3, en azul: los más baratos, con motor más pequeño y menor consumo.
-* Cluster 1. en rojo: los de precio y motor intermedio.
-* Cluster 2, en verde: los más caros, mayor motor y mayor consumo.
+```{r}
+library(RANN)
+require(RANN)
 
+individuals_space_df <- cis_2020_EB_cluster_df[, (ncol(cis_2020_EB_cluster_df) - numDim + 1):ncol(cis_2020_EB_cluster_df)]
 
+EB_rows <- which(cis_2020_EB_df$P20_GRUPO %in% "Berdeak")
+points_EB <- individuals_space_df[EB_rows,]
 
-En el apéndice *"Clusters. Análisis de componentes múltiples. Lista de los vehículos"* se puede ver la lista completa de vehículos que componen cada cluster.
+cosa <- RANN::nn2(data = individuals_space_df, query = points_EB, k = 3)
 
-
+```
 
 
 
