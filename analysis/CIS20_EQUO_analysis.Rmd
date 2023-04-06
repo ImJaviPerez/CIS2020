@@ -1649,14 +1649,27 @@ RANN: Fast Nearest Neighbour Search (Wraps ANN Library) Using L2 Metric
 ```{r}
 library(RANN)
 require(RANN)
-
+# Save individuals coordinates
 individuals_space_df <- cis_2020_EB_cluster_df[, (ncol(cis_2020_EB_cluster_df) - numDim + 1):ncol(cis_2020_EB_cluster_df)]
 
-EB_rows <- which(cis_2020_EB_df$P20_GRUPO %in% "Berdeak")
-points_EB <- individuals_space_df[EB_rows,]
+# Select individuals from "Berdeak" or "Otro partido"
+# levels(cis_2020_EB_df$P20_GRUPO)
+EB_rows_b <- which(cis_2020_EB_df$P20_GRUPO %in% "Berdeak")
+# levels(cis_2020_EB_df$RVAUTO20)
+EB_rows_o <- which(cis_2020_EB_df$RVAUTO20 %in% "Otro partido")
+EB_rows <- unique(c(EB_rows_b, EB_rows_o))
+# create dataframe with those group
+points_EB_df <- individuals_space_df[EB_rows,]
+# Nearest Neighbour Search
+points_EB_neighb <- RANN::nn2(data = individuals_space_df, query = points_EB_df, k = 10)
 
-cosa <- RANN::nn2(data = individuals_space_df, query = points_EB, k = 3)
+# Put those group in a vector
+points_EB_neighb_idx <- c()
+for(i in points_EB_neighb$nn.idx) {
+  points_EB_neighb_idx <- c(points_EB_neighb_idx, i)
+}
 
+points_EB_neighb_idx <- unique(points_EB_neighb_idx)
 ```
 
 
