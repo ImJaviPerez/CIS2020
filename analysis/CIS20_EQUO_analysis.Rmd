@@ -1295,10 +1295,12 @@ gg_plot_MCA_cols <- function(dimX = 1, dimY = 2, coord_type = "standard"){
 
 
 
-```{r}
+```{r plot_MCA_cols}
 gg_plot_MCA_cols(dimX = 1, dimY = 2)
-gg_plot_MCA_cols(dimX = 1, dimY = 3)
 gg_plot_MCA_cols(dimX = 2, dimY = 3)
+gg_plot_MCA_cols(dimX = 3, dimY = 4)
+gg_plot_MCA_cols(dimX = 4, dimY = 5)
+gg_plot_MCA_cols(dimX = 5, dimY = 6)
 ```
 
 
@@ -1326,39 +1328,26 @@ gg_plot_MCA_rows <- function(dimX = 1, dimY = 2, coord_type = "standard"){
     geom_point() + geom_rug() +
     # xlim(-2.6, 3.5) + ylim(-2.1,3.8)+
     geom_text_repel(aes(label=row_coord_df$name),hjust=0, vjust=0,size=3.3) +
-    scale_colour_brewer(palette = "Set1") +
+    # scale_colour_brewer(palette = "Set1") +
     geom_vline(xintercept = 0) + geom_hline(yintercept = 0) + 
     ggtitle(my_title) +
     xlab(paste("Dimension ", dimX, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimX], digits = 1) , "% )", sep = "")) +
     ylab(paste("Dimension ", dimY, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimY], digits = 1) , "% )", sep = "")) +
     # levels(cis_2020_acm_EB_df$P20_GRUPO)
     scale_color_manual(breaks = c("Conservador", "Elkarrekin Podemos", "Berdeak", "PACMA", "Resto", "Abstención+"),
-                        values=c("royalblue1", "blueviolet", "darkgreen", "darkgoldenrod3", "gray", "hotpink"))
+                        values=c("cyan", "magenta", "darkgreen", "navajowhite3", "navajowhite", "yellow"))
 }
 ```
 
 
-A continuación se muestran a los individuos en los planos factoriales.
+A continuación se muestran a los individuos en diferentes planos factoriales.
 
-```{r}
+```{r plot_MCA_rows}
 gg_plot_MCA_rows(dimX = 1, dimY = 2)
-```
-
-```{r}
-gg_plot_MCA_rows(dimX = 1, dimY = 3)
-```
-
-```{r}
 gg_plot_MCA_rows(dimX = 2, dimY = 3)
-```
-
-```{r}
-gg_plot_MCA_rows(dimX = 2, dimY = 4)
-```
-
-
-```{r}
+gg_plot_MCA_rows(dimX = 3, dimY = 4)
 gg_plot_MCA_rows(dimX = 4, dimY = 5)
+gg_plot_MCA_rows(dimX = 5, dimY = 6)
 ```
 
 
@@ -1368,24 +1357,23 @@ gg_plot_MCA_rows(dimX = 4, dimY = 5)
 
 ## Decidir el número de cluster y caracterizar estos cluster.
 
-```{r}
-# Se seleccionan las variables que se van a utilizar
-cis_2020_EB_cluster_df <- cis_2020_acm_EB_df
+```{r eval=FALSE}
+### # Se seleccionan las variables que se van a utilizar
+### cis_2020_acm_EB_df <- cis_2020_acm_EB_df
 ```
 
 Se muestra la división cluster por el método *Ward.D* o también conocido como *"pérdida de inercia mínima"*.
-
 
 ```{r}
 # Find rows coordinates in factorial space
 # type = c("standard", "principal", "symmetric", "rowprincipal", "colprincipal", "symbiplot", "rowgab", "colgab", "rowgreen", "colgreen")
 aux_tbl <- ca::cacoord(cis_2020_ca_opi01, type = "standard", dim = c(1:numDim), cols = FALSE, rows = TRUE)
 # Append rows coordinates to data.frame
-cis_2020_EB_cluster_df <- cbind.data.frame(cis_2020_EB_cluster_df, aux_tbl)
+cis_2020_acm_EB_df <- cbind.data.frame(cis_2020_acm_EB_df, aux_tbl)
 
 formula_all_dims <- as.formula(paste("~-1 +", paste0("Dim",1:numDim, collapse = "+")))
 # Distancia euclidea al cuadrado entre los elementos de la matriz
-dist_individuos <- stats::dist(model.matrix(formula_all_dims, cis_2020_EB_cluster_df))^2
+dist_individuos <- stats::dist(model.matrix(formula_all_dims, cis_2020_acm_EB_df))^2
 HClust.2 <- hclust(dist_individuos , method= "ward.D")
 
 plot(HClust.2, main= "Cluster Dendrograma para individuos", xlab= 
@@ -1413,12 +1401,12 @@ grpdist <- function(X, metrica="gower"){
 ```{r}
 # Se selecciona el numero optimo de clusters
 # data frame auxialiar
-kt <- data.frame(k=1:nrow(cis_2020_EB_cluster_df), r=0)
+kt <- data.frame(k=1:nrow(cis_2020_acm_EB_df), r=0)
 
 mtdo_usado = "ward.D"
 HClust_aux <- hclust(dist_individuos , method= mtdo_usado)
 
-for(i in 2:(nrow(cis_2020_EB_cluster_df)-1)){
+for(i in 2:(nrow(cis_2020_acm_EB_df)-1)){
   gr <- cutree(HClust_aux, i)
   distgr <- grpdist(gr, "gower")
   # distgr <- grpdist(gr, "euclidean")
@@ -1438,7 +1426,7 @@ print(summary(as.factor(cutree(HClust_aux, k = k.best))))
 # Lista de metodos a testear
 lista_mtdos = c("ward.D", "ward.D2", "complete", "single", "average", "mcquitty", "median", "centroid")
 # data frame auxialiar
-kt <- data.frame(k=1:nrow(cis_2020_EB_cluster_df), r=0)
+kt <- data.frame(k=1:nrow(cis_2020_acm_EB_df), r=0)
 
 # Bucle para testear todos los metodos con la distancia elegida
 for (mtdo_usado in lista_mtdos)
@@ -1447,7 +1435,7 @@ for (mtdo_usado in lista_mtdos)
 
   # plot(HClust_aux, main= "Cluster Dendrograma para coches", xlab= "Vehículos estudiados",sub=paste("Metodo=", mtdo_usado,"; Distancia=euclidea al cuadrado", sep = ""))
 
-  for(i in 2:(nrow(cis_2020_EB_cluster_df)-1)){
+  for(i in 2:(nrow(cis_2020_acm_EB_df)-1)){
     gr <- cutree(HClust_aux, i)
     distgr <- grpdist(gr, "gower")
     mt <- cor(dist_individuos, distgr, method="pearson")
@@ -1466,7 +1454,7 @@ for (mtdo_usado in lista_mtdos)
 require("RcmdrMisc")
 
 # Funcion que genera el objeto con la figura
-getGgplotACM <- function(hCluter_figura, dimX = 1, dimY = 2, k.optimo=3, titulo = "") {
+gg_plot_ACM <- function(hCluter_figura, dimX = 1, dimY = 2, k.optimo=3, titulo = "") {
   #hCluter_figura <- HClust.2
 
   # create column name
@@ -1474,14 +1462,14 @@ getGgplotACM <- function(hCluter_figura, dimX = 1, dimY = 2, k.optimo=3, titulo 
   C2 <- paste0("Dim", dimY)
 
   # Se crea una columna con el numero de cluster asignado a ese coche
-  cis_2020_EB_cluster_df$num_cluster <- assignCluster(model.matrix(formula_all_dims, cis_2020_EB_cluster_df), 
-                                                    cis_2020_EB_cluster_df, cutree(hCluter_figura, k = k.optimo))
+  cis_2020_acm_EB_df$num_cluster <- assignCluster(model.matrix(formula_all_dims, cis_2020_acm_EB_df), 
+                                                    cis_2020_acm_EB_df, cutree(hCluter_figura, k = k.optimo))
   
-  figura <- ggplot(data=cis_2020_EB_cluster_df, aes(x=.data[[C1]], y=.data[[C2]], color=num_cluster)) +
+  figura <- ggplot(data=cis_2020_acm_EB_df, aes(x=.data[[C1]], y=.data[[C2]], color=num_cluster)) +
     geom_point() + geom_rug() +
     geom_vline(xintercept = 0) + geom_hline(yintercept = 0) +
-    geom_text_repel(aes(label=rownames(cis_2020_EB_cluster_df)),hjust=0, vjust=0, size=3.3) +
-    #geom_text(aes(label=rownames(cis_2020_EB_cluster_df)),hjust=0, vjust=0, size=3.3) +
+    geom_text_repel(aes(label=rownames(cis_2020_acm_EB_df)),hjust=0, vjust=0, size=3.3) +
+    #geom_text(aes(label=rownames(cis_2020_acm_EB_df)),hjust=0, vjust=0, size=3.3) +
     theme(legend.position="top") + ggtitle(titulo)
   
   return(figura)
@@ -1502,7 +1490,7 @@ require(lattice)
 k_aux <-  k.best
 HClust_aux <- hclust(dist_individuos , method= "complete")
 # Se crea una columna con el numero de cluster asignado a ese coche
-aux_tbl <- cis_2020_EB_cluster_df[,-(1:(ncol(cis_2020_EB_cluster_df)-numDim))]
+aux_tbl <- cis_2020_acm_EB_df[,-(1:(ncol(cis_2020_acm_EB_df)-numDim))]
 aux_tbl$num_cluster <- assignCluster(model.matrix(formula_all_dims, aux_tbl), 
                                                   aux_tbl, cutree(HClust_aux, k = k_aux))
 
@@ -1516,7 +1504,7 @@ outlier_rows <- as.numeric(rownames(aux_tbl)[which(aux_tbl$num_cluster %in% whic
 cat("Outlier rows:", outlier_rows)
 
 
-g1grob <- ggplotGrob(getGgplotACM(HClust_aux, k.optimo = k_aux, titulo = paste("Método complete", k_aux, "clusters")))
+g1grob <- ggplotGrob(gg_plot_ACM(HClust_aux, k.optimo = k_aux, titulo = paste("Método complete", k_aux, "clusters")))
 # Se crea el texto que se mostrara con la figura
 # Distribución de los vehículos en cada cluster:
 txt_distrib_clusters <- "Composición de los clusters: "
@@ -1553,7 +1541,7 @@ require(lattice)
 # Método: "ward.D". k óptimo = 3
 k_aux <-  k.best
 HClust_aux <- hclust(dist_individuos , method= "ward.D")
-g1grob <- ggplotGrob(getGgplotACM(HClust_aux, k.optimo = k_aux, titulo = paste("Método ward.D.", k_aux, "clusters")))
+g1grob <- ggplotGrob(gg_plot_ACM(HClust_aux, k.optimo = k_aux, titulo = paste("Método ward.D.", k_aux, "clusters")))
 # Se crea el texto que se mostrara con la figura
 # Distribución de los vehículos en cada cluster:
 txt_distrib_clusters <- "Composición de los clusters: "
@@ -1567,7 +1555,7 @@ texto1 <- textGrob(txt_distrib_clusters, gp=gpar(fontsize=10))
 # Método: "ward.D". k óptimo = 4
 k_aux = 6
 HClust_aux <- hclust(dist_individuos , method= "ward.D")
-g2grob <- ggplotGrob(getGgplotACM(HClust_aux, k.optimo = k_aux, titulo = paste("Método ward.D.", k_aux, "clusters")))
+g2grob <- ggplotGrob(gg_plot_ACM(HClust_aux, k.optimo = k_aux, titulo = paste("Método ward.D.", k_aux, "clusters")))
 # Se crea el texto que se mostrara con la figura
 # Distribución de los vehículos en cada cluster:
 txt_distrib_clusters <- "Composición de los clusters: "
@@ -1606,7 +1594,7 @@ library(cluster)
 require(cluster)
 
 # Se elige el numero de clusters optimo
-for(i in 2:(nrow(cis_2020_EB_cluster_df)-1)){
+for(i in 2:(nrow(cis_2020_acm_EB_df)-1)){
   gr <- cutree(HClust.2, i)
   distgr <- grpdist(gr, "gower")
   mt <- cor(dist_individuos, distgr, method="pearson")
@@ -1619,7 +1607,7 @@ num_clusters_acm <- which.max(kt$r)
 HClust.2 <- hclust(dist_individuos , method = mtdo_usado_acm)
 
 # Se crea la figuar
-gg_cluster_ACM <- ggplotGrob(getGgplotACM(HClust.2, k.optimo = num_clusters_acm, titulo = paste("Método", mtdo_usado_acm)))
+gg_cluster_ACM <- ggplotGrob(gg_plot_ACM(HClust.2, k.optimo = num_clusters_acm, titulo = paste("Método", mtdo_usado_acm)))
 
 # Se crea el texto que se mostrara con la figura
 # Distribución de los vehículos en cada cluster:
@@ -1653,7 +1641,7 @@ RANN: Fast Nearest Neighbour Search (Wraps ANN Library) Using L2 Metric
 library(RANN)
 require(RANN)
 # Save individuals coordinates
-individuals_space_df <- cis_2020_EB_cluster_df[, c(paste0("Dim", 1:numDim))]
+individuals_space_df <- cis_2020_acm_EB_df[, c(paste0("Dim", 1:numDim))]
 
 # Select individuals from "Berdeak" or "Otro partido"
 # levels(cis_2020_acm_EB_df$P20_GRUPO)
@@ -1675,26 +1663,24 @@ EB_points_neighb_idx <- unique(EB_points_neighb_idx)
 # Select only neighbours
 EB_points_neighb_idx <- EB_points_neighb_idx[!(EB_points_neighb_idx %in% EB_rows)]
 # Create column with neighbours
+# levels(cis_2020_acm_EB_df$RVAUTO20)
+cis_2020_acm_EB_df$P20_NEIGH <- cis_2020_acm_EB_df$RVAUTO20
 
+# Create new neighbours level and recode from "Otro partido" to "EQUO Berdeak"
+aux_idx <- which(levels(cis_2020_acm_EB_df$P20_NEIGH) == 'Otro partido')
+recodes_str <- sprintf("c(%s) = 'EQUO Berdeak'",
+                       paste0("'", levels(cis_2020_acm_EB_df$P20_NEIGH)[aux_idx], "'", collapse = ", "))
+neighbours_lbl <- 'Cercanos EB'
+# Recode
+cis_2020_acm_EB_df$P20_NEIGH_GRUPO <- car::recode(var = cis_2020_acm_EB_df$P20_NEIGH, 
+                                    recodes = recodes_str,
+                                    levels = c(levels(cis_2020_acm_EB_df$P20_NEIGH)[1:(aux_idx-1)], 'EQUO Berdeak', neighbours_lbl, levels(cis_2020_acm_EB_df$P20_NEIGH)[-(1:aux_idx)]))
+# Rename neighbours
+cis_2020_acm_EB_df$P20_NEIGH_GRUPO[EB_points_neighb_idx] <- neighbours_lbl #levels(cis_2020_acm_EB_df$P20_NEIGH_GRUPO)[aux_idx+1]
 
-# ESTAS AQUI # ESTAS AQUI # ESTAS AQUI # ESTAS AQUI # ESTAS AQUI 
+pander(cis_2020_acm_EB_df %>% dplyr::count(P20_NEIGH_GRUPO, .drop=FALSE), caption = "Votos en 2020 y vecinos cercanos a EQUO Berdeak")
 
-# DECIDIR QUE COLUMNA COGER SI P20 o RVAUTO20  ==> COLOREAR (EQUO, VERDES) u (OTRO PARTIDO)
-# levels(cis_2020_EB_df$P20)
-# levels(cis_2020_EB_cluster_df$RVAUTO20)
-cis_2020_EB_cluster_df$P20_NEIGH <- cis_2020_EB_df$P20
-
-
-# ESTAS AQUI # ESTAS AQUI # ESTAS AQUI # ESTAS AQUI # ESTAS AQUI 
-
-
-# Create new neighbours level
-i <- which(levels(cis_2020_EB_cluster_df$P20_NEIGH) == 'EQUO')
-levels(cis_2020_EB_cluster_df$P20_NEIGH) <- c(levels(cis_2020_EB_cluster_df$P20_NEIGH)[1:i], 'Cercanos EB', levels(cis_2020_EB_cluster_df$P20_NEIGH)[-(1:i)])
-# Rename 
-cis_2020_EB_cluster_df$P20_NEIGH[EB_points_neighb_idx] <- 'Cercanos EB'
-
-pander(cis_2020_EB_cluster_df %>% dplyr::count(P20_NEIGH, .drop=FALSE))
+pander(cis_2020_acm_EB_df %>% dplyr::count(RVAUTO20, .drop=FALSE), caption = "Votos en 2020")
 ```
 
 ```{r}
@@ -1702,17 +1688,17 @@ pander(cis_2020_EB_cluster_df %>% dplyr::count(P20_NEIGH, .drop=FALSE))
 gg_plot_neighbours <- function(dimX = 1, dimY = 2){
 
   my_title <- "Individuos Cercanos a Equo-Berdeak en 2020"
-  row_coord_df <- cbind.data.frame(cis_2020_EB_cluster_df[,paste0("Dim",dimX)],
-                                 cis_2020_EB_cluster_df[,paste0("Dim",dimY)],
-                                 rownames(cis_2020_EB_cluster_df),
-                                 cis_2020_EB_cluster_df$P20_NEIGH)
+  row_coord_df <- cbind.data.frame(cis_2020_acm_EB_df[,paste0("Dim",dimX)],
+                                 cis_2020_acm_EB_df[,paste0("Dim",dimY)],
+                                 rownames(cis_2020_acm_EB_df),
+                                 cis_2020_acm_EB_df$P20_NEIGH_GRUPO)
   
-  colnames(row_coord_df) <- c("dimX", "dimY", "name", "P20_NEIGH")
+  colnames(row_coord_df) <- c("dimX", "dimY", "name", "P20_NEIGH_GRUPO")
 
   require(ggplot2)
   require(ggrepel)
   # Se crea el objeto con el grafico
-  gg_obj <- ggplot(row_coord_df, aes(x=dimX, y=dimY, color=P20_NEIGH)) +
+  gg_obj <- ggplot(row_coord_df, aes(x=dimX, y=dimY, color=P20_NEIGH_GRUPO)) +
     geom_point() + geom_rug() +
     # xlim(-2.6, 3.5) + ylim(-2.1,3.8)+
     geom_text_repel(aes(label=name),hjust=0, vjust=0,size=3.3) +
@@ -1721,42 +1707,31 @@ gg_plot_neighbours <- function(dimX = 1, dimY = 2){
     ggtitle(my_title) +
     xlab(paste("Dimension ", dimX, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimX], digits = 1) , "% )", sep = "")) +
     ylab(paste("Dimension ", dimY, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimY], digits = 1) , "% )", sep = "")) +
-    # levels(cis_2020_EB_cluster_df$P20_NEIGH)
-    scale_color_manual(breaks = c("PP+C's", "PSE-EE-PSOE", "Ciudadanos", "IU", 
+    # levels(cis_2020_acm_EB_df$P20_NEIGH_GRUPO)
+    scale_color_manual(breaks = c("PP+C's", "PSE-EE-PSOE", 
                                   "EAJ-PNV", "EH Bildu", 
                                   "PACMA", "VOX", 
-                                  "Los Verdes", "Elkarrekin Podemos", "EQUO", "Cercanos EB", 
-                                  "Escaños en Blanco", "Voto nulo", "Otro partido", "En blanco", "No votó/abstención", "No recuerda", "N.C."),
-                       values=c("cyan", "red", "cyan", "red",
+                                  "Elkarrekin Podemos", 
+                                  "Voto nulo", "EQUO Berdeak", "Cercanos EB", 
+                                  "En blanco", "No votó/abstención", "No recuerda", "N.C."),
+                       values=c("cyan", "red", 
                                 "navajowhite", "navajowhite",
                                 "navajowhite3", "cyan", 
-                                "darkgreen", "magenta", "darkgreen", "limegreen",
-                                "yellow", "yellow", "yellow", "yellow", "yellow", "yellow", "yellow"))
+                                "magenta", 
+                                "yellow", "darkgreen", "limegreen",
+                                "yellow", "yellow", "yellow", "yellow"))
   
   return(gg_obj)
 }
 ```
 
-```{r}
+Se muestran a todos los vecinos de *EQUO Berdeak* en diferentes planos factoriales.
+
+```{r plot_neigbours}
 gg_plot_neighbours(dimX = 1, dimY = 2)
-```
-
-```{r}
-gg_plot_neighbours(dimX = 1, dimY = 3)
-```
-
-```{r}
-gg_plot_neighbours(dimX = 2, dimY = 4)
-```
-
-
-```{r}
+gg_plot_neighbours(dimX = 2, dimY = 3)
+gg_plot_neighbours(dimX = 3, dimY = 4)
 gg_plot_neighbours(dimX = 4, dimY = 5)
-```
-
-
-
-```{r}
 gg_plot_neighbours(dimX = 5, dimY = 6)
 ```
 
