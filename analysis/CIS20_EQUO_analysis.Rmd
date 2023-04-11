@@ -222,21 +222,21 @@ Se realiza una primera tentativa de ACM sólo con las variables de opinión:
 # Queremos representar algunas variables ilustrativas como columnas suplementarias.
 # Por tanto hay que reordenar el dataframe poniendo las ilustrativas al final.
 # Ademas debemos elegir lambda = "Burt"
-cis_2020_EB_df <- cis_2020_EB_df[,c(opinion_vars, illustrative_vars)]
+cis_2020_acm_EB_df <- cis_2020_EB_df[,c(opinion_vars, illustrative_vars)]
 # Seleccion de columnas suplementarias para mostar en el plano factorial
 suplementary_cols <- c('RECUVOTOA_GRUPO', 
                        'RECUVOTOG_GRUPO', 
                        'RVAUTO20', 'P20_GRUPO', 'RVAUTO16_GRUPO', 'RECUERDO_GRUPO')
 
-suplementary_cols_idx <- which(colnames(cis_2020_EB_df) %in% suplementary_cols)
-opinion_vars_idx <- which(colnames(cis_2020_EB_df) %in% opinion_vars)
+suplementary_cols_idx <- which(colnames(cis_2020_acm_EB_df) %in% suplementary_cols)
+opinion_vars_idx <- which(colnames(cis_2020_acm_EB_df) %in% opinion_vars)
 ```
 
 
 ```{r ACM01}
 require(ca)
-### cis_2020_ca_opi01 <- mjca(cis_2020_EB_df[,opinion_vars], nd = numDim)
-cis_2020_ca_opi01 <- mjca(cis_2020_EB_df, nd = numDim, lambda = "Burt", supcol = suplementary_cols_idx, subsetcol = opinion_vars_idx)
+### cis_2020_ca_opi01 <- mjca(cis_2020_acm_EB_df[,opinion_vars], nd = numDim)
+cis_2020_ca_opi01 <- mjca(cis_2020_acm_EB_df, nd = numDim, lambda = "Burt", supcol = suplementary_cols_idx, subsetcol = opinion_vars_idx)
 
 cis_2020_ca_opi01_summ <- summary(cis_2020_ca_opi01)
 # print(cis_2020_ca_opi01_summ)
@@ -327,7 +327,7 @@ cat(length(opinion_vars))
 ```{r echo=FALSE, results='asis'}
 i <- 0
 for (j in opinion_vars) {
-  i <- i + nlevels(cis_2020_EB_df[,j])
+  i <- i + nlevels(cis_2020_acm_EB_df[,j])
 }
 cat(i)
 ```
@@ -372,134 +372,134 @@ Para explicar el significado de un eje, hay que ver la contribución (`ctr`) de 
  + `ESCIDEOLPAR_1_GRUPO:NS_NC`, `ESCIDEOLPAR_2_GRUPO:NS_NC`, `ESCIDEOLPAR_3_GRUPO:NS_NC`, `ESCIDEOLPAR_4_GRUPO:NS_NC`, `ESCIDEOLPAR_5_GRUPO:NS_NC`, `ESCIDEOLPAR_6_GRUPO:NS_NC`, `ESCIDEOLPAR_7_GRUPO:NS_NC` =  No sabe o no contesta sobre la escala ideológica de ningún partido.
  + `P5_GRUPO:No alineado/a` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P5'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P5'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P5_GRUPO)[7])
+cat(levels(cis_2020_acm_EB_df$P5_GRUPO)[7])
 ```
  + `P5A_GRUPO:N.C.` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P5A'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P5A'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P5A_GRUPO)[8])
+cat(levels(cis_2020_acm_EB_df$P5A_GRUPO)[8])
 ```
  + `P6_GRUPO:Nada` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P6'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P6'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P6_GRUPO)[4])
+cat(levels(cis_2020_acm_EB_df$P6_GRUPO)[4])
 ```
  + `P7_GRUPO:Con ningún interés` = No pusieron ningún interés en seguir la campaña.
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P7')], collapse = ", "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P7')], collapse = ", "))
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P7_GRUPO)[4])
+cat(levels(cis_2020_acm_EB_df$P7_GRUPO)[4])
 ```
  
 
  + `P8_1_GRUPO:Nada`, `P8_2_GRUPO:Nada`, `P8_3_GRUPO:Nada` = Grado de utilidad de la campaña electoral de las elecciones autonómicas del País Vasco de 2020 en diferentes aspectos de la decisión de voto: 
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P8_1', 'P8_2', 'P8_3')], collapse = " / "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P8_1', 'P8_2', 'P8_3')], collapse = " / "))
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P8_1_GRUPO)[4])
+cat(levels(cis_2020_acm_EB_df$P8_1_GRUPO)[4])
 ```
 
  + `P9_GRUPO:N.S.`
  + `P10_1_GRUPO:(NO LEER) No se informó, no le interesa la política`, `P10_2:N.C.`, `P10DIGITAL:No menciona`
  + `P12_1:No menciona`, `P12_7:Menciona` = Tipos de páginas de Internet desde las que se ha seguido la información de las elecciones autonómicas del País Vasco de 2020:
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P12_7'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P12_7'])
 ```
  + `P15_GRUPO:No` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P15'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P15'])
 ```
  + `P16:No` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P16'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P16'])
 ```
  + `P17_1_GRUPO:Casi nunca o nunca`, `P17_2_GRUPO:Casi nunca o nunca` = Frecuencia con la que se ha hablado en diferentes entornos sociales de las elecciones autonómicas del País Vasco de 2020: 
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P17_1', 'P17_2')], collapse = ", "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P17_1', 'P17_2')], collapse = ", "))
 ```
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P17_2_GRUPO)[4])
+cat(levels(cis_2020_acm_EB_df$P17_2_GRUPO)[4])
 ```
  + `P18_GRUPO:No` = 
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P18')], collapse = ", "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P18')], collapse = ", "))
 ```
  + `P21_GRUPO:No quiso ir a votar` = 
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P21')], collapse = ", "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P21')], collapse = ", "))
 ```
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P21_GRUPO)[2])
+cat(levels(cis_2020_acm_EB_df$P21_GRUPO)[2])
 ```
  + `P21A_GRUPO:Lo tenía decidido hace bastante tiempo (antes del inicio de la campaña electoral) `
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P21A')], collapse = ", "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P21A')], collapse = ", "))
 ```
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P21A_GRUPO)[2])
+cat(levels(cis_2020_acm_EB_df$P21A_GRUPO)[2])
 ```
  + `P23_GRUPO:Se habría abstenido o habría votado en blanco `
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P23')], collapse = ", "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P23')], collapse = ", "))
 ```
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P23_GRUPO)[2])
+cat(levels(cis_2020_acm_EB_df$P23_GRUPO)[2])
 ```
  + `P24_2_GRUPO:0 Con toda seguridad, no lo votaría nunca`, `P24_3_GRUPO:NS_NC`, `P24_4_GRUPO:0 Con toda seguridad, no lo votaría nunca`, `P24_5_GRUPO:NS_NC` = Escala de probabilidad (0-10) de votar a diferentes partidos políticos en las elecciones autonómicas del País Vasco:
     +
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P24_2')], collapse = ", "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P24_2')], collapse = ", "))
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P24_2_GRUPO)[1])
+cat(levels(cis_2020_acm_EB_df$P24_2_GRUPO)[1])
 ```
     +
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P24_3')], collapse = ", "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P24_3')], collapse = ", "))
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P24_3_GRUPO)[11])
+cat(levels(cis_2020_acm_EB_df$P24_3_GRUPO)[11])
 ```
     +
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P24_4')], collapse = ", "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P24_4')], collapse = ", "))
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P24_4_GRUPO)[1])
+cat(levels(cis_2020_acm_EB_df$P24_4_GRUPO)[1])
 ```
     +
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P24_5')], collapse = ", "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P24_5')], collapse = ", "))
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P24_5_GRUPO)[6])
+cat(levels(cis_2020_acm_EB_df$P24_5_GRUPO)[6])
 ```
  + `P26_2_GRUPO:No conoce` = Conocimiento y escala de valoración (1-10) de líderes políticos autonómicos del País Vasco
     +
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P26_2')], collapse = ", "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P26_2')], collapse = ", "))
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P26_2_GRUPO)[10])
+cat(levels(cis_2020_acm_EB_df$P26_2_GRUPO)[10])
 ```
 
 En resumen: Este eje lado del eje representa a las personas que no les interesa la campaña electoral, ni la política, que nunca votarían a EH Bildu.
@@ -523,73 +523,73 @@ Para explicar el significado de un eje, hay que ver la contribución (`ctr`) de 
 
  + `P6_GRUPO:Mucho` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P6'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P6'])
 ```
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P6_GRUPO)[1])
+cat(levels(cis_2020_acm_EB_df$P6_GRUPO)[1])
 ```
  + `P7_GRUPO:Con mucho interés` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P7'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P7'])
 ```
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P7_GRUPO)[1])
+cat(levels(cis_2020_acm_EB_df$P7_GRUPO)[1])
 ```
  + `P9A_GRUPO:Elkarrekin Berdeak` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P9A'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P9A'])
 ```
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P9A_GRUPO)[8])
+cat(levels(cis_2020_acm_EB_df$P9A_GRUPO)[8])
 ```
  + `P10B_GRUPO:Editoriales izquierda`, `P10DIGITAL:Menciona`
 ```{r echo=FALSE, results='asis'}
-paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P10B', 'P10DIGITAL')], collapse = " / ")
+paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P10B', 'P10DIGITAL')], collapse = " / ")
 ```
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P10B_GRUPO)[3])
+cat(levels(cis_2020_acm_EB_df$P10B_GRUPO)[3])
 ```
  + `P11_3:Menciona` = Redes sociales en Internet en las que se tiene cuenta: 
 ```{r echo=FALSE, results='asis'}
-paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P11_3')], collapse = " / ")
+paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P11_3')], collapse = " / ")
 ```
  + `P12_1:Menciona`, `P12_5:Menciona` = Tipos de páginas de Internet desde las que se ha seguido la información de las elecciones autonómicas del País Vasco de 2020: 
 ```{r echo=FALSE, results='asis'}
-paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P12_1', 'P12_5')], collapse = " / ")
+paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P12_1', 'P12_5')], collapse = " / ")
 ```
  + `P15_GRUPO:Sí` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P15'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P15'])
 ```
  + `P15A_1:No menciona`, `P15A_11:Menciona`, `P15A_11:No menciona`, `P15A_12:Menciona`, `P15A_12:No menciona`, `P15A_18:No menciona`, `P15A_2:No menciona`, `P15A_21:Menciona`, `P15A_21:No menciona`, `P15A_95:No menciona`, `P15A_98:No menciona` = Ha enviado mensajes de:
 ```{r echo=FALSE, results='asis'}
-# levels(cis_2020_EB_df$P20)
-cat(paste(levels(cis_2020_EB_df$P20)[c(P20_idx_11_pnv, P20_idx_12_bildu, P20_idx_21_podem)], collapse = ", "))
+# levels(cis_2020_acm_EB_df$P20)
+cat(paste(levels(cis_2020_acm_EB_df$P20)[c(P20_idx_11_pnv, P20_idx_12_bildu, P20_idx_21_podem)], collapse = ", "))
 ```
  + `P16:Sí` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P16'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P16'])
 ```
  + `P16A_1:No menciona`, `P16A_11:Menciona`, `P16A_11:No menciona`, `P16A_12:Menciona`, `P16A_12:No menciona`, `P16A_18:No menciona`, `P16A_2:No menciona`, `P16A_21:Menciona`, `P16A_21:No menciona`, `P16A_95:No menciona`, `P16A_98:No menciona` = Ha recibido mensajes de:
 ```{r echo=FALSE, results='asis'}
-# levels(cis_2020_EB_df$P20)
-cat(paste(levels(cis_2020_EB_df$P20)[c(P20_idx_11_pnv, P20_idx_12_bildu, P20_idx_21_podem)], collapse = ", "))
+# levels(cis_2020_acm_EB_df$P20)
+cat(paste(levels(cis_2020_acm_EB_df$P20)[c(P20_idx_11_pnv, P20_idx_12_bildu, P20_idx_21_podem)], collapse = ", "))
 ```
  + `P17_1_GRUPO:Habitualmente`, `P17_2_GRUPO:Habitualmente` = 
 Las elecciones fueron tema de conversación 
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P17_1', 'P17_2')], collapse = ", "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P17_1', 'P17_2')], collapse = ", "))
 ```
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P17_2_GRUPO)[1])
+cat(levels(cis_2020_acm_EB_df$P17_2_GRUPO)[1])
 ```
 
  + `P19ACOM_GRUPO:EH Bildu/Elkarrekin Podemos`
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P19ACOM')], collapse = ", "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P19ACOM')], collapse = ", "))
 ```
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P19ACOM_GRUPO)[12])
+cat(levels(cis_2020_acm_EB_df$P19ACOM_GRUPO)[12])
 ```
 
 En resumen: son personas que envían y reciben mensajes relacionados con la política y están interesados en la política "nacionalista" y/o de izquierdas.
@@ -634,65 +634,65 @@ Para explicar el significado de un eje, hay que ver la contribución (`ctr`) de 
   + `ESCIDEOLPAR_1_GRUPO:NS_NC`, `ESCIDEOLPAR_2_GRUPO:NS_NC`, `ESCIDEOLPAR_3_GRUPO:NS_NC`, `ESCIDEOLPAR_4_GRUPO:NS_NC`, `ESCIDEOLPAR_5_GRUPO:NS_NC`, `ESCIDEOLPAR_6_GRUPO:NS_NC`, `ESCIDEOLPAR_7_GRUPO:NS_NC` = Escala de ubicación ideológica (1-10) de partidos políticos de la comunidad autónoma: No saben o no contestan.
   + `CLASESOCIAL_GRUPO:Clase pobre-` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'CLASESOCIAL'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'CLASESOCIAL'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$CLASESOCIAL_GRUPO)[5])
+cat(levels(cis_2020_acm_EB_df$CLASESOCIAL_GRUPO)[5])
 ```
   + `ESCIDEOL_GRUPO:N.S.`
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'ESCIDEOL'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'ESCIDEOL'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$ESCIDEOL_GRUPO)[8])
+cat(levels(cis_2020_acm_EB_df$ESCIDEOL_GRUPO)[8])
 ```
   + `P4_GRUPO:NS_NC` = 
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P4')], collapse = " / "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P4')], collapse = " / "))
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P4_GRUPO)[5])
+cat(levels(cis_2020_acm_EB_df$P4_GRUPO)[5])
 ```
   + `P15_GRUPO:Sí`
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P15'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P15'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P15)[1])
+cat(levels(cis_2020_acm_EB_df$P15)[1])
 ```
   + `P15A_1:No menciona`, `P15A_11:Menciona`, `P15A_11:No menciona`, `P15A_12:Menciona`, `P15A_12:No menciona`, `P15A_18:Menciona`, `P15A_18:No menciona`, `P15A_2:Menciona`, `P15A_2:No menciona`, `P15A_21:Menciona`, `P15A_95:No menciona`, `P15A_98:No menciona` =
     + Los mensajes enviados no está claro de qué partido son.
 
   + `P16:Sí`
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P16'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P16'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P15)[1])
+cat(levels(cis_2020_acm_EB_df$P15)[1])
 ```
     + `P16A_21:Menciona`, `P16A_95:No menciona`, `P16A_98:No menciona` = 
 ```{r echo=FALSE, results='asis'}
-# levels(cis_2020_EB_df$P20)
-cat(paste(levels(cis_2020_EB_df$P20)[c(P20_idx_21_podem)], collapse = ", "))
+# levels(cis_2020_acm_EB_df$P20)
+cat(paste(levels(cis_2020_acm_EB_df$P20)[c(P20_idx_21_podem)], collapse = ", "))
 ```
 
   + `P24_1_GRUPO:NS_NC`, `P24_2_GRUPO:NS_NC`, `P24_3_GRUPO:NS_NC`, `P24_4_GRUPO:NS_NC`, `P24_5_GRUPO:NS_NC`, `P24_6_GRUPO:NS_NC`, `P24_7_GRUPO:NS_NC` = Escala de probabilidad (0-10) de votar a diferentes partidos políticos en las elecciones autonómicas del País Vasco: 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P24_1_GRUPO)[11])
+cat(levels(cis_2020_acm_EB_df$P24_1_GRUPO)[11])
 ```
   + `P26_1_GRUPO:No conoce` = Conocimiento y escala de valoración (1-10) de líderes políticos autonómicos del País Vasco
     +
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P26_1')], collapse = ", "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P26_1')], collapse = ", "))
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P26_1_GRUPO)[10])
+cat(levels(cis_2020_acm_EB_df$P26_1_GRUPO)[10])
 ```
 
 
@@ -714,111 +714,111 @@ cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
 ```
  + `ESCIDEOL_GRUPO:3` = 
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('ESCIDEOL')], collapse = " / "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('ESCIDEOL')], collapse = " / "))
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$ESCIDEOL_GRUPO)[3])
+cat(levels(cis_2020_acm_EB_df$ESCIDEOL_GRUPO)[3])
 ```
  + `P5_GRUPO:Socialdemocracia` = 
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P5')], collapse = " / "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P5')], collapse = " / "))
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P5_GRUPO)[2])
+cat(levels(cis_2020_acm_EB_df$P5_GRUPO)[2])
 ```
  + `P6_GRUPO:Poco` = 
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P6')], collapse = " / "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P6')], collapse = " / "))
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P6_GRUPO)[3])
+cat(levels(cis_2020_acm_EB_df$P6_GRUPO)[3])
 ``` 
  + `P8_1_GRUPO:Poco`, `P8_2_GRUPO:Poco`, `P8_4_GRUPO:Poco` = Grado de utilidad de la campaña electoral de las elecciones autonómicas del País Vasco de 2020 en diferentes aspectos de la decisión de voto
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P8_1', 'P8_2', 'P8_4')], collapse = " / "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P8_1', 'P8_2', 'P8_4')], collapse = " / "))
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P8_1_GRUPO)[3])
+cat(levels(cis_2020_acm_EB_df$P8_1_GRUPO)[3])
 ``` 
  + `P10RADIO:Menciona`, `P10IMPRESA:Menciona`, `P10TV:Menciona` = Fuentes utilizadas para informarse sobre las elecciones autonómicas del País Vasco de 2020
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P10RADIO', 'P10IMPRESA', 'P10TV')], collapse = " / "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P10RADIO', 'P10IMPRESA', 'P10TV')], collapse = " / "))
 ```
  + `P10D_GRUPO:Estatales centro-izquierda` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P10D'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P10D'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P10D_GRUPO)[3])
+cat(levels(cis_2020_acm_EB_df$P10D_GRUPO)[3])
 ```
  + `P10A_GRUPO:Editoriales centro-derecha` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P10A'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P10A'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P10A_GRUPO)[1])
+cat(levels(cis_2020_acm_EB_df$P10A_GRUPO)[1])
 ```
  + `P10C_GRUPO:TV vascas públicas` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P10C'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P10C'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P10C_GRUPO)[5])
+cat(levels(cis_2020_acm_EB_df$P10C_GRUPO)[5])
 ```
  + `P10_2:Radio` = Fuentes utilizadas para informarse sobre las elecciones autonómicas del País Vasco de 2020, 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P10_2'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P10_2'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P10_2)[4])
+cat(levels(cis_2020_acm_EB_df$P10_2)[4])
 ```
  + `P11_2:No menciona`, `P11_7:Menciona` = Redes sociales en Internet en las que se tiene cuenta: 
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P11_1', 'P11_7')], collapse = " / "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P11_1', 'P11_7')], collapse = " / "))
 ```
  + `P12_5:No menciona` = Tipos de páginas de Internet desde las que se ha seguido la información de las elecciones autonómicas del País Vasco de 2020: No ha seguido 
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P12_5')], collapse = " / "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P12_5')], collapse = " / "))
 ```
  + `P15_GRUPO:No` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P15'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P15'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P15)[2])
+cat(levels(cis_2020_acm_EB_df$P15)[2])
 ```
  + `P16:No` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P16'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P16'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P15)[2])
+cat(levels(cis_2020_acm_EB_df$P15)[2])
 ```
  + `P21_GRUPO:Normalmente vota, pero esta vez no quiso hacerlo` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P21'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P21'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P21)[3])
+cat(levels(cis_2020_acm_EB_df$P21)[3])
 ```
  + `P28_GRUPO:Me siento más vasco/a que español/a ` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P28'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P28'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P28_GRUPO)[4])
+cat(levels(cis_2020_acm_EB_df$P28_GRUPO)[4])
 ```
  
 No recibe ni envía mensajes electrónicos. Se informó a través de prensa impresa, radio y TV. No sigue la campaña en redes sociales. Se siente más vasco que español. Se siente socialdemócrata.
@@ -860,107 +860,107 @@ Para explicar el significado de un eje, hay que ver la contribución (`ctr`) de 
 
   + `P9A_GRUPO:Conservador` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P9A'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P9A'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P9A_GRUPO)[1])
+cat(levels(cis_2020_acm_EB_df$P9A_GRUPO)[1])
 ```
   + `P14_GRUPO:Sí` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P14'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P14'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P14_GRUPO)[1])
+cat(levels(cis_2020_acm_EB_df$P14_GRUPO)[1])
 ```
 
     + `P14A_1:Menciona`, `P14A_11:Menciona`, `P14A_12:Menciona`, `P14A_18:Menciona`, `P14A_2:Menciona`, `P14A_21:Menciona`
     + `P14A_1:No menciona`, `P14A_11:No menciona`, `P14A_12:No menciona`, `P14A_18:No menciona`, `P14A_2:No menciona`, `P14A_21:No menciona`, `P14A_95:No menciona`, `P14A_98:No menciona` = Pero no queda claro por quienes fue contactado.
   + `P21_GRUPO:No quiso ir a votar`, `P21_GRUPO:Normalmente vota, pero esta vez no quiso hacerlo` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P21'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P21'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(paste(levels(cis_2020_EB_df$P21_GRUPO)[c(2,3)], collapse = " / "))
+cat(paste(levels(cis_2020_acm_EB_df$P21_GRUPO)[c(2,3)], collapse = " / "))
 ```
 
   + `P21A_GRUPO:Lo tenía decidido hace bastante tiempo (antes del inicio de la campaña electoral) ` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P21A'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P21A'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P21A_GRUPO)[2])
+cat(levels(cis_2020_acm_EB_df$P21A_GRUPO)[2])
 ```
   + `P21B` = Razones para no ir a votar en las elecciones autonómicas del País Vasco de 2020:
     + `P21B_1_GRUPO:No había ninguna alternativa que le satisficiera`, `P21B_1_GRUPO:No le inspiraba confianza ningún partido ni ningún/a político/a` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P21B_1'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P21B_1'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(paste(levels(cis_2020_EB_df$P21B_1_GRUPO)[c(1,5)], collapse = " / "))
+cat(paste(levels(cis_2020_acm_EB_df$P21B_1_GRUPO)[c(1,5)], collapse = " / "))
 ```
     + `P21B_2:Da lo mismo votar que no votar, no sirve para nada` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P21B_2'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P21B_2'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(paste(levels(cis_2020_EB_df$P21B_2)[3], collapse = " / "))
+cat(paste(levels(cis_2020_acm_EB_df$P21B_2)[3], collapse = " / "))
 ```
 
   + `P23_GRUPO:Se habría abstenido o habría votado en blanco ` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P23'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P23'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P23)[2])
+cat(levels(cis_2020_acm_EB_df$P23)[2])
 ```
   + `P24_2_GRUPO:0 Con toda seguridad, no lo votaría nunca`, `P24_4_GRUPO:0 Con toda seguridad, no lo votaría nunca`, `P24_7_GRUPO:2_10` = Escala de probabilidad (0-10) de votar a diferentes partidos políticos en las elecciones autonómicas del País Vasco :
     +
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P24_2'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P24_2'])
 ```  
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P24_2_GRUPO)[1])
+cat(levels(cis_2020_acm_EB_df$P24_2_GRUPO)[1])
 ```
     +
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P24_4'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P24_4'])
 ```  
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P24_2_GRUPO)[1])
+cat(levels(cis_2020_acm_EB_df$P24_2_GRUPO)[1])
 ```
     +
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P24_7'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P24_7'])
 ```  
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P24_7_GRUPO)[3])
+cat(levels(cis_2020_acm_EB_df$P24_7_GRUPO)[3])
 ```
   + `P26_1_GRUPO:1 Muy mal`, `P26_2_GRUPO:1 Muy mal`, `P26_3_GRUPO:1 Muy mal`, `P26_4_GRUPO:1 Muy mal` = Conocimiento y escala de valoración (1-10) de líderes políticos autonómicos del País Vasco
     +
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P26_1', 'P26_2', 'P26_3', 'P26_4')], collapse = ", "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P26_1', 'P26_2', 'P26_3', 'P26_4')], collapse = ", "))
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P26_1_GRUPO)[1])
+cat(levels(cis_2020_acm_EB_df$P26_1_GRUPO)[1])
 ```
   + `P29_GRUPO:1 Mínimo grado de nacionalismo vasco` = 
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P29')], collapse = ", "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P29')], collapse = ", "))
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P29_GRUPO)[1])
+cat(levels(cis_2020_acm_EB_df$P29_GRUPO)[1])
 ``` 
 
 El lado positivo de esta dimensión puede representar a las personas se sienten conservadores, que fueron contactadas por algún partido, pero que no está claro por cual o cuales. Dicen que no descartan votar a "Vox" aunque saben que no votarían a "EH Bildu" ni  a "Elkarrekin Podemos". Se sienten no nacionalistas.
@@ -981,133 +981,133 @@ cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
 
  + `ESCIDEOL_GRUPO:N.S.` = 
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('ESCIDEOL')], collapse = " / "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('ESCIDEOL')], collapse = " / "))
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$ESCIDEOL_GRUPO)[9])
+cat(levels(cis_2020_acm_EB_df$ESCIDEOL_GRUPO)[9])
 ```
 
  + `ESCIDEOLPAR_1_GRUPO:NS_NC`, `ESCIDEOLPAR_2_GRUPO:NS_NC`, `ESCIDEOLPAR_3_GRUPO:NS_NC`, `ESCIDEOLPAR_4_GRUPO:NS_NC`, `ESCIDEOLPAR_5_GRUPO:NS_NC`, `ESCIDEOLPAR_6_GRUPO:NS_NC`, `ESCIDEOLPAR_7_GRUPO:NS_NC`  =  No sabe o no contesta sobre la escala ideológica de ningún partido.
  + `CLASESOCIAL_GRUPO:Clase pobre-` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'CLASESOCIAL'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'CLASESOCIAL'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$CLASESOCIAL_GRUPO)[5])
+cat(levels(cis_2020_acm_EB_df$CLASESOCIAL_GRUPO)[5])
 ```
  + `P8_4_GRUPO:Poco` = Grado de utilidad de la campaña electoral de las elecciones autonómicas del País Vasco de 2020 en diferentes aspectos de la decisión de voto
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P8_4')], collapse = ", "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P8_4')], collapse = ", "))
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P8_4_GRUPO)[3])
+cat(levels(cis_2020_acm_EB_df$P8_4_GRUPO)[3])
 ```
  + `P10C_GRUPO:TV vascas públicas` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P10C'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P10C'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P10C_GRUPO)[5])
+cat(levels(cis_2020_acm_EB_df$P10C_GRUPO)[5])
 ```
 
  + `P10_2:Televisión` = Fuentes utilizadas para informarse sobre las elecciones autonómicas del País Vasco de 2020, 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P10_2'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P10_2'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P10_2)[4])
+cat(levels(cis_2020_acm_EB_df$P10_2)[4])
 ```
  + `P11_7:Menciona` = Redes sociales en Internet en las que se tiene cuenta: 
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P11_7')], collapse = " / "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P11_7')], collapse = " / "))
 ```
  + `P12_9:Menciona` = Tipos de páginas de Internet desde las que se ha seguido la información de las elecciones autonómicas del País Vasco de 2020: 
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P12_9')], collapse = " / "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P12_9')], collapse = " / "))
 ```
  + `P14_GRUPO:No` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P14'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P14'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P14_GRUPO)[2])
+cat(levels(cis_2020_acm_EB_df$P14_GRUPO)[2])
 ```
 
  + `P16:No` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P16'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P16'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P15)[2])
+cat(levels(cis_2020_acm_EB_df$P15)[2])
 ```
  + `P19A02_GRUPO:Elkarrekin Podemos` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P19A02'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P19A02'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P19A02_GRUPO)[6])
+cat(levels(cis_2020_acm_EB_df$P19A02_GRUPO)[6])
 ```
  + `P20A`, Razones para votar al partido político votado en las elecciones autonómicas del País Vasco de 2020:
    + `P20A_1_GRUPO:Porque es el que mejor representa las ideas de la gente como Ud.` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P20A_1'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P20A_1'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P20A_1_GRUPO)[4])
+cat(levels(cis_2020_acm_EB_df$P20A_1_GRUPO)[4])
 ```
    + `P20A_2:N.C.`, `P20A_2:Por el/la candidato/a que presentaba a lehendakari` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P20A_2'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P20A_2'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(paste(levels(cis_2020_EB_df$P20A_2)[c(9, 1)], collapse = " / "))
+cat(paste(levels(cis_2020_acm_EB_df$P20A_2)[c(9, 1)], collapse = " / "))
 ```
  + `P22_GRUPO:Lo decidió durante la última semana de la campaña electoral, unos días antes de las elecciones ` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P22'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P22'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(paste(levels(cis_2020_EB_df$P22_GRUPO)[3], collapse = " / "))
+cat(paste(levels(cis_2020_acm_EB_df$P22_GRUPO)[3], collapse = " / "))
 ```
  + `P23_GRUPO:Habría votado por el mismo partido o coalición por el que lo hizo ` = 
 ```{r echo=FALSE, results='asis'}
-cat(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) == 'P23'])
+cat(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) == 'P23'])
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(paste(levels(cis_2020_EB_df$P23_GRUPO)[1], collapse = " / "))
+cat(paste(levels(cis_2020_acm_EB_df$P23_GRUPO)[1], collapse = " / "))
 ```
  + `P24_1_GRUPO:8`, `P24_1_GRUPO:NS_NC`, `P24_2_GRUPO:NS_NC`, `P24_3_GRUPO:NS_NC`, `P24_4_GRUPO:NS_NC`, `P24_5_GRUPO:NS_NC`, `P24_6_GRUPO:NS_NC`, `P24_7_GRUPO:NS_NC` = Escala de probabilidad (0-10) de votar a diferentes partidos políticos en las elecciones autonómicas del País Vasco: 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P24_1_GRUPO)[11])
+cat(levels(cis_2020_acm_EB_df$P24_1_GRUPO)[11])
 ```
  + `P26_1_GRUPO:No conoce`, `P26_2_GRUPO:7` = Conocimiento y escala de valoración (1-10) de líderes políticos autonómicos del País Vasco
     + 
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P26_1')], collapse = ", "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P26_1')], collapse = ", "))
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P26_1_GRUPO)[10])
+cat(levels(cis_2020_acm_EB_df$P26_1_GRUPO)[10])
 ```
     + 
 ```{r echo=FALSE, results='asis'}
-cat(paste(attributes(cis_2020_EB_df)$variable.labels[colnames(cis_2020_EB_df) %in% c('P26_2')], collapse = ", "))
+cat(paste(attributes(cis_2020_acm_EB_df)$variable.labels[colnames(cis_2020_acm_EB_df) %in% c('P26_2')], collapse = ", "))
 ```
 : 
 ```{r echo=FALSE, results='asis'}
-cat(levels(cis_2020_EB_df$P26_1_GRUPO)[7])
+cat(levels(cis_2020_acm_EB_df$P26_1_GRUPO)[7])
 ```
 
 El lado negativo de esta dimensión contiene a las personas que: dicen no conocer la escala ideológica de ningún partido dicen; que deciden el voto en la última semana de campaña; se reconoce como de clase "Pobre"; y en 2020 dudó si votar o no a "Elkarrekin-Podemos".
@@ -1314,8 +1314,8 @@ gg_plot_MCA_rows <- function(dimX = 1, dimY = 2, coord_type = "standard"){
   row_coord_df <- cbind.data.frame(aux_coord[,1],
                                  aux_coord[,2],
                                  # 1:nrow(aux_coord),
-                                 rownames(cis_2020_EB_df),
-                                 cis_2020_EB_df$P20_GRUPO)
+                                 rownames(cis_2020_acm_EB_df),
+                                 cis_2020_acm_EB_df$P20_GRUPO)
   
   colnames(row_coord_df) <- c("dimX", "dimY", "name", "P20_GRUPO")
 
@@ -1331,7 +1331,7 @@ gg_plot_MCA_rows <- function(dimX = 1, dimY = 2, coord_type = "standard"){
     ggtitle(my_title) +
     xlab(paste("Dimension ", dimX, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimX], digits = 1) , "% )", sep = "")) +
     ylab(paste("Dimension ", dimY, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimY], digits = 1) , "% )", sep = "")) +
-    # levels(cis_2020_EB_df$P20_GRUPO)
+    # levels(cis_2020_acm_EB_df$P20_GRUPO)
     scale_color_manual(breaks = c("Conservador", "Elkarrekin Podemos", "Berdeak", "PACMA", "Resto", "Abstención+"),
                         values=c("royalblue1", "blueviolet", "darkgreen", "darkgoldenrod3", "gray", "hotpink"))
 }
@@ -1368,9 +1368,9 @@ gg_plot_MCA_rows(dimX = 4, dimY = 5)
 
 ## Decidir el número de cluster y caracterizar estos cluster.
 
-```{r include=FALSE}
+```{r}
 # Se seleccionan las variables que se van a utilizar
-cis_2020_EB_cluster_df <- cis_2020_EB_df
+cis_2020_EB_cluster_df <- cis_2020_acm_EB_df
 ```
 
 Se muestra la división cluster por el método *Ward.D* o también conocido como *"pérdida de inercia mínima"*.
@@ -1656,48 +1656,109 @@ require(RANN)
 individuals_space_df <- cis_2020_EB_cluster_df[, c(paste0("Dim", 1:numDim))]
 
 # Select individuals from "Berdeak" or "Otro partido"
-# levels(cis_2020_EB_df$P20_GRUPO)
-EB_rows_b <- which(cis_2020_EB_df$P20_GRUPO %in% "Berdeak")
-# levels(cis_2020_EB_df$RVAUTO20)
-EB_rows_o <- which(cis_2020_EB_df$RVAUTO20 %in% "Otro partido")
+# levels(cis_2020_acm_EB_df$P20_GRUPO)
+EB_rows_b <- which(cis_2020_acm_EB_df$P20_GRUPO %in% "Berdeak")
+# levels(cis_2020_acm_EB_df$RVAUTO20)
+EB_rows_o <- which(cis_2020_acm_EB_df$RVAUTO20 %in% "Otro partido")
 EB_rows <- unique(c(EB_rows_b, EB_rows_o))
 # create dataframe with that group
-points_EB_df <- individuals_space_df[EB_rows,]
+EB_points_df <- individuals_space_df[EB_rows,]
 # Nearest Neighbour Search
-points_EB_neighb <- RANN::nn2(data = individuals_space_df, query = points_EB_df, k = 10)
+EB_points_neighb <- RANN::nn2(data = individuals_space_df, query = EB_points_df, k = 10)
 
 # Put those groups in a vector
-points_EB_neighb_idx <- c()
-for(i in points_EB_neighb$nn.idx) {
-  points_EB_neighb_idx <- c(points_EB_neighb_idx, i)
+EB_points_neighb_idx <- c()
+for(i in EB_points_neighb$nn.idx) {
+  EB_points_neighb_idx <- c(EB_points_neighb_idx, i)
 }
-points_EB_neighb_idx <- unique(points_EB_neighb_idx)
+EB_points_neighb_idx <- unique(EB_points_neighb_idx)
 # Select only neighbours
-points_EB_neighb_idx <- points_EB_neighb_idx[!(points_EB_neighb_idx %in% EB_rows)]
-# row.names(cis_2020_EB_cluster_df)[points_EB_neighb_idx]
-
-
-# ESTAS AQUI  # ESTAS AQUI  # ESTAS AQUI  # ESTAS AQUI  # ESTAS AQUI  
-
+EB_points_neighb_idx <- EB_points_neighb_idx[!(EB_points_neighb_idx %in% EB_rows)]
 # Create column with neighbours
-cis_2020_EB_cluster_df$P20_NEIGH <- cis_2020_EB_cluster_df$P20_GRUPO
-# Recode neigbours
-# levels(cis_2020_EB_cluster_df$P20_NEIGH)
-cis_2020_EB_cluster_df$P20_NEIGH[points_EB_neighb_idx] <- "Cercanos"
 
-# ESTAS AQUI  # ESTAS AQUI  # ESTAS AQUI  # ESTAS AQUI  # ESTAS AQUI  
 
+# ESTAS AQUI # ESTAS AQUI # ESTAS AQUI # ESTAS AQUI # ESTAS AQUI 
+
+# DECIDIR QUE COLUMNA COGER SI P20 o RVAUTO20  ==> COLOREAR (EQUO, VERDES) u (OTRO PARTIDO)
+# levels(cis_2020_EB_df$P20)
+# levels(cis_2020_EB_cluster_df$RVAUTO20)
+cis_2020_EB_cluster_df$P20_NEIGH <- cis_2020_EB_df$P20
+
+
+# ESTAS AQUI # ESTAS AQUI # ESTAS AQUI # ESTAS AQUI # ESTAS AQUI 
+
+
+# Create new neighbours level
+i <- which(levels(cis_2020_EB_cluster_df$P20_NEIGH) == 'EQUO')
+levels(cis_2020_EB_cluster_df$P20_NEIGH) <- c(levels(cis_2020_EB_cluster_df$P20_NEIGH)[1:i], 'Cercanos EB', levels(cis_2020_EB_cluster_df$P20_NEIGH)[-(1:i)])
+# Rename 
+cis_2020_EB_cluster_df$P20_NEIGH[EB_points_neighb_idx] <- 'Cercanos EB'
+
+pander(cis_2020_EB_cluster_df %>% dplyr::count(P20_NEIGH, .drop=FALSE))
 ```
 
 ```{r}
 # Plot selected points a its neighbours
+gg_plot_neighbours <- function(dimX = 1, dimY = 2){
 
+  my_title <- "Individuos Cercanos a Equo-Berdeak en 2020"
+  row_coord_df <- cbind.data.frame(cis_2020_EB_cluster_df[,paste0("Dim",dimX)],
+                                 cis_2020_EB_cluster_df[,paste0("Dim",dimY)],
+                                 rownames(cis_2020_EB_cluster_df),
+                                 cis_2020_EB_cluster_df$P20_NEIGH)
+  
+  colnames(row_coord_df) <- c("dimX", "dimY", "name", "P20_NEIGH")
+
+  require(ggplot2)
+  require(ggrepel)
+  # Se crea el objeto con el grafico
+  gg_obj <- ggplot(row_coord_df, aes(x=dimX, y=dimY, color=P20_NEIGH)) +
+    geom_point() + geom_rug() +
+    # xlim(-2.6, 3.5) + ylim(-2.1,3.8)+
+    geom_text_repel(aes(label=name),hjust=0, vjust=0,size=3.3) +
+    # scale_colour_brewer(palette = "Set1") +
+    geom_vline(xintercept = 0) + geom_hline(yintercept = 0) + 
+    ggtitle(my_title) +
+    xlab(paste("Dimension ", dimX, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimX], digits = 1) , "% )", sep = "")) +
+    ylab(paste("Dimension ", dimY, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimY], digits = 1) , "% )", sep = "")) +
+    # levels(cis_2020_EB_cluster_df$P20_NEIGH)
+    scale_color_manual(breaks = c("PP+C's", "PSE-EE-PSOE", "Ciudadanos", "IU", 
+                                  "EAJ-PNV", "EH Bildu", 
+                                  "PACMA", "VOX", 
+                                  "Los Verdes", "Elkarrekin Podemos", "EQUO", "Cercanos EB", 
+                                  "Escaños en Blanco", "Voto nulo", "Otro partido", "En blanco", "No votó/abstención", "No recuerda", "N.C."),
+                       values=c("cyan", "red", "cyan", "red",
+                                "navajowhite", "navajowhite",
+                                "navajowhite3", "cyan", 
+                                "darkgreen", "magenta", "darkgreen", "limegreen",
+                                "yellow", "yellow", "yellow", "yellow", "yellow", "yellow", "yellow"))
+  
+  return(gg_obj)
+}
+```
+
+```{r}
+gg_plot_neighbours(dimX = 1, dimY = 2)
+```
+
+```{r}
+gg_plot_neighbours(dimX = 1, dimY = 3)
+```
+
+```{r}
+gg_plot_neighbours(dimX = 2, dimY = 4)
+```
+
+
+```{r}
+gg_plot_neighbours(dimX = 4, dimY = 5)
 ```
 
 
 
-
-
+```{r}
+gg_plot_neighbours(dimX = 5, dimY = 6)
+```
 
 
 
