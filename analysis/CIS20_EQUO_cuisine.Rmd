@@ -193,9 +193,8 @@ cosa_BORRAME <- unique(which(#cis_2020_df$P20 == 'Elkarrekin Podemos'
 # Data subset
 cis_2020_EB_df <- cis_2020_df[rows_ElkBer,]
 
-outlier_rows_idx <- which(row.names(cis_2020_EB_df) %in% c(86, 751, 1393, 1412, 2343))
-
-cis_2020_EB_df <- cis_2020_EB_df[-outlier_rows_idx, ]
+# outlier_rows_idx <- which(row.names(cis_2020_EB_df) %in% c(86, 751, 1393, 1412, 2343))
+# cis_2020_EB_df <- cis_2020_EB_df[-outlier_rows_idx, ]
 ```
 
 Se han seleccionado 
