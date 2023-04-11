@@ -159,7 +159,7 @@ cat(round(eigen_inertia_e, digits = 4), ".", sep = "")
 cis_2020_equo_ca_00_summ <- summary(cis_2020_equo_ca_00)
 numDim <- length(which(cis_2020_equo_ca_00_summ$scree[,2] > (eigen_inertia_e/2)))
 
-if (numDim < 6) numDim <- 9
+# if (numDim < 6) numDim <- 6
 ```
 Por lo tanto en nuestro caso el número de dimensiones será:
 ```{r echo=FALSE, results='asis'}
@@ -1373,7 +1373,7 @@ gg_plot_MCA_rows(dimX = 4, dimY = 5)
 cis_2020_EB_cluster_df <- cis_2020_EB_df
 ```
 
-Se muestra la división cluster por el método *Ward* o también conocido como *"pérdida de inercia mínima"*.
+Se muestra la división cluster por el método *Ward.D* o también conocido como *"pérdida de inercia mínima"*.
 
 
 ```{r}
@@ -1389,7 +1389,7 @@ dist_individuos <- stats::dist(model.matrix(formula_all_dims, cis_2020_EB_cluste
 HClust.2 <- hclust(dist_individuos , method= "ward.D")
 
 plot(HClust.2, main= "Cluster Dendrograma para individuos", xlab= 
-  "Encuestas CIS EQUO", sub="Method=ward.d; Distancia=euclidea al cuadrado")
+  "Encuestas CIS EQUO", sub="Method=ward.D; Distancia=euclidea al cuadrado")
 ```
 
 Parece que el número de cluster adecuado es XXXX a la vista de las alturas de las ramas del dendograma. Pero al igual que en el análisis de correspondencias simples, aquí  también se puede buscar el número óptimo de clusters (`k`) usando la función `daisy` (Dissimilarity Matrix Calculation) que computa las desigualdades en las distancias entre parejas. En este caso se ha usado la métrica euclídea al cuadrado para ese cálculo. Para obtener el número óptimo de clusters y su composición.
@@ -1399,7 +1399,7 @@ Parece que el número de cluster adecuado es XXXX a la vista de las alturas de l
 # Funcion para calcular el k optimo
 # Creamos una funcion para calcular la matriz de distancia dos a dos con los grupos
 # daisy: Compute all the pairwise dissimilarities (distances) between observations in the data set.
-grpdist <- function(X, metrica="euclidean"){
+grpdist <- function(X, metrica="gower"){
   # metrica = "euclidean", "gower"
   # Se carga la libreria "cluster"
   require(cluster)
@@ -1415,7 +1415,7 @@ grpdist <- function(X, metrica="euclidean"){
 # data frame auxialiar
 kt <- data.frame(k=1:nrow(cis_2020_EB_cluster_df), r=0)
 
-mtdo_usado = "ward"
+mtdo_usado = "ward.D"
 HClust_aux <- hclust(dist_individuos , method= mtdo_usado)
 
 for(i in 2:(nrow(cis_2020_EB_cluster_df)-1)){
@@ -1436,7 +1436,7 @@ print(summary(as.factor(cutree(HClust_aux, k = k.best))))
 ```{r include=FALSE, eval=FALSE}
 
 # Lista de metodos a testear
-lista_mtdos = c("ward", "complete", "single", "average", "mcquitty", "median", "centroid")
+lista_mtdos = c("ward.D", "ward.D2", "complete", "single", "average", "mcquitty", "median", "centroid")
 # data frame auxialiar
 kt <- data.frame(k=1:nrow(cis_2020_EB_cluster_df), r=0)
 
@@ -1602,10 +1602,13 @@ require(lattice)
 # Se toma el metodo mas adecuado
 mtdo_usado_acm = "ward.D"
 
+library(cluster)
+require(cluster)
+
 # Se elige el numero de clusters optimo
 for(i in 2:(nrow(cis_2020_EB_cluster_df)-1)){
   gr <- cutree(HClust.2, i)
-  distgr <- grpdist(gr, "euclidean")
+  distgr <- grpdist(gr, "gower")
   mt <- cor(dist_individuos, distgr, method="pearson")
   kt[i,2] <- mt
 }
@@ -1650,11 +1653,7 @@ RANN: Fast Nearest Neighbour Search (Wraps ANN Library) Using L2 Metric
 library(RANN)
 require(RANN)
 # Save individuals coordinates
-### individuals_space_df <- cis_2020_EB_cluster_df[, (ncol(cis_2020_EB_cluster_df) - numDim + 1):ncol(cis_2020_EB_cluster_df)]
-
 individuals_space_df <- cis_2020_EB_cluster_df[, c(paste0("Dim", 1:numDim))]
-
-
 
 # Select individuals from "Berdeak" or "Otro partido"
 # levels(cis_2020_EB_df$P20_GRUPO)
@@ -1673,10 +1672,25 @@ for(i in points_EB_neighb$nn.idx) {
   points_EB_neighb_idx <- c(points_EB_neighb_idx, i)
 }
 points_EB_neighb_idx <- unique(points_EB_neighb_idx)
+# Select only neighbours
+points_EB_neighb_idx <- points_EB_neighb_idx[!(points_EB_neighb_idx %in% EB_rows)]
+# row.names(cis_2020_EB_cluster_df)[points_EB_neighb_idx]
+
+
+# ESTAS AQUI  # ESTAS AQUI  # ESTAS AQUI  # ESTAS AQUI  # ESTAS AQUI  
+
+# Create column with neighbours
+cis_2020_EB_cluster_df$P20_NEIGH <- cis_2020_EB_cluster_df$P20_GRUPO
+# Recode neigbours
+# levels(cis_2020_EB_cluster_df$P20_NEIGH)
+cis_2020_EB_cluster_df$P20_NEIGH[points_EB_neighb_idx] <- "Cercanos"
+
+# ESTAS AQUI  # ESTAS AQUI  # ESTAS AQUI  # ESTAS AQUI  # ESTAS AQUI  
+
 ```
 
 ```{r}
-# Plot selected points a its neighboors
+# Plot selected points a its neighbours
 
 ```
 
