@@ -369,6 +369,37 @@ ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    ESTAS AQUI
 
 Para explicar el significado de un eje, hay que ver la contribución (`ctr`) de cada modalidad dentro de esa parte del eje. A continuación se explican las modalidades más significativa de este lado del eje en orden de preguntas (no por su contribución):
 
+ + `(*)RECUVOTOA:Ciudadanos`
+ + `P10DIGITAL:Menciona`
+ + `P11_2:Menciona`, `P11_3:Menciona`
+ + `P12_1:Menciona`, `P12_5:Menciona`, `P12_7:No menciona`
+ + `P15:Sí`
+ + `P15A_1:No menciona`, `P15A_2:No menciona`, `P15A_11:No menciona`, `P15A_12:Menciona`, `P15A_12:No menciona`, `P15A_18:No menciona`, `P15A_21:No menciona`, `P15A_95:No menciona`, `P15A_98:No menciona`, `P15A_99:No menciona`
+ + `P16:Sí`
+```{r echo=FALSE, results='asis'}
+cat(attributes(cis_2020_acm_df)$variable.labels[colnames(cis_2020_acm_df) == 'P16'])
+cat(attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == 'P16'])
+```
+: 
+```{r echo=FALSE, results='asis'}
+cat(levels(cis_2020_acm_df$P16_GRUPO)[7])
+```
+ + `P16A_1:No menciona`, `P16A_11:Menciona`, `P16A_11:No menciona`, `P16A_12:Menciona`, `P16A_12:No menciona`, `P16A_18:No menciona`, `P16A_2:No menciona`, `P16A_21:No menciona`, `P16A_95:No menciona`, `P16A_98:No menciona`, `P16A_99:No menciona`
+ + `P27:Un Estado en el que se reconociese a las comunidades autónomas la posibilidad de convertirse en Estados independientes `
+ + `P3_2:Sí`
+ + `P3_3:Sí`
+ + `P3_4:Sí`
+ + `RELIGION:Ateo/a`
+ 
+
+ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    
+
+ 
+ 
+ 
+ 
+ 
+
  + `ESCIDEOLPAR_1_GRUPO:NS_NC`, `ESCIDEOLPAR_2_GRUPO:NS_NC`, `ESCIDEOLPAR_3_GRUPO:NS_NC`, `ESCIDEOLPAR_4_GRUPO:NS_NC`, `ESCIDEOLPAR_5_GRUPO:NS_NC`, `ESCIDEOLPAR_6_GRUPO:NS_NC`, `ESCIDEOLPAR_7_GRUPO:NS_NC` =  No sabe o no contesta sobre la escala ideológica de ningún partido.
  + `P5_GRUPO:No alineado/a` = 
 ```{r echo=FALSE, results='asis'}
