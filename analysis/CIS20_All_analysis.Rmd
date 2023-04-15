@@ -423,8 +423,6 @@ Para explicar el significado de un eje, hay que ver la contribución (`ctr`) de 
 + `ESCIDEOL_GRUPO:N.C.`, `ESCIDEOLPAR_1_GRUPO:N.C.`, `ESCIDEOLPAR_1_GRUPO:N.S.`, `ESCIDEOLPAR_2_GRUPO:N.C.`, `ESCIDEOLPAR_2_GRUPO:N.S.`, `ESCIDEOLPAR_3_GRUPO:N.C.`, `ESCIDEOLPAR_3_GRUPO:N.S.`, `ESCIDEOLPAR_4_GRUPO:N.C.`, `ESCIDEOLPAR_4_GRUPO:N.S.`, `ESCIDEOLPAR_5_GRUPO:N.C.`, `ESCIDEOLPAR_5_GRUPO:N.S.`, `ESCIDEOLPAR_6_GRUPO:N.C.`, `ESCIDEOLPAR_6_GRUPO:N.S.`, `ESCIDEOLPAR_7_GRUPO:N.C.`, `ESCIDEOLPAR_7_GRUPO:N.S.`, `P10_2:N.C.`, `P12_7:Menciona`, `P24_1:N.C.`, `P24_2:N.C.`, `P24_3:N.C.`, `P24_4:N.C.`, `P24_5_GRUPO:N.C.`, `P24_6_GRUPO:N.C.`, `P24_7_GRUPO:N.C.`, `P26_1:N.C.`, `P26_2:N.C.`, `P26_3_GRUPO:N.C.`, `P26_4_GRUPO:N.C.`, `P26_5_GRUPO:N.C.`, `P26_6_GRUPO:N.C.`, `P29:N.C.`, `P3_1:No`, `P3_3:No`, `P5A_GRUPO:N.C.`, `P6:Nada`
 
 
-ESTAS AQUI
-
 Este lado del eje representa a las personas que ...
 
 
@@ -434,220 +432,64 @@ En resumen: Este eje representa a las personas que por un extremo ...
 
 
 
-https://bookdown.org/yihui/rmarkdown-cookbook/reuse-chunks.html
-
-```{r next_dims_chapters}
+```{r next_dims_chapters, echo=FALSE, results='asis'}
+# SHOW NEXT CHAPTERS AN TABLES
 # show next dimensions
-for (i in 3:numDim) {
-  <<new_section>>
+for (i in 2:numDim) {
+  # Title ---------------------------------------
+  cat("## Dimension", i, "\n")
+  
+  # A comment ----------------------------------
+  cat("Se muestran las tablas con las variables más representativas de esta dimensión.")
+  cat("\nEn el **lado positivo del eje** las modalidades mejor representadas son:\n")
+  
+  # Prepare tables ------------------------------
+  # We want to show positive and negative categories of this dimension. And it is possible that only one side explains the wanted percentage, so we have to take extra categories from the other side to show.
+  # table with big percentage of eigenvalue
+  aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
+  
+  # Select number of positive categories of table
+  n_categories_k_positive <- ifelse(length(which(aux_tbl$k > 0)) < num_categories_to_show, length(which(aux_tbl$k > 0)), num_categories_to_show)
+  # Select number of positive categories of table
+  n_categories_k_negative <- ifelse(length(which(aux_tbl$k < 0)) < num_categories_to_show, length(which(aux_tbl$k < 0)), num_categories_to_show)
+  
+  # Show positive categories --------------------
+  aux_idx <- which(aux_tbl$k > 0)[1:n_categories_k_positive]
+  
+  require(pander)
+  pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
+
+  ## Sorted categories
+  ## str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = n_categories_k_positive))
+  ## cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
+
+  # A comment -----------------------------------
+  cat("En el **lado negativo del eje** están las \"variables:modalidades\":\n")
+  
+  # Show negative categories --------------------
+  aux_idx <- which(aux_tbl$k < 0)[1:n_categories_k_negative]
+  require(pander)
+  pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_negative, " modalidades más significativas del eje negativo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
+  
+  ## Sorted categories
+  ## str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = n_categories_k_negative))
+  ## cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
+
+  cat("\n\n")
 }
-```
-```{r chunk_dim_3, ref.label=c('new_section', 'text_01')}
-i <- 3
-
-```
-
-
-
-```{r new_section, echo=FALSE, results='asis', eval=TRUE}
-cat("## Dimension", i)
-```
-
-
-```{r text_01, echo=FALSE, results='asis', eval=FALSE}
-cat("Se muestran las tablas con las variables más representativas de esta dimensión:")
-```
-
-
-
-## Dimensión 4
-
-Se muestran las tablas con las variables más representativas de esta dimensión:
-
-```{r}
-i <- 4
-# We want to show positive and negative categories of this dimension. And it is possible that only one side explains the wanted percentage, so we have to take extra categories from the other side to show.
-# table with big percentage of eigenvalue
-aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
-
-
-# Select number of positive categories of table
-n_categories_k_positive <- ifelse(length(which(aux_tbl$k > 0)) < num_categories_to_show, length(which(aux_tbl$k > 0)), num_categories_to_show)
-# Select number of positive categories of table
-n_categories_k_negative <- ifelse(length(which(aux_tbl$k < 0)) < num_categories_to_show, length(which(aux_tbl$k < 0)), num_categories_to_show)
-```
-
-En el **lado positivo del eje** las modalidades mejor representadas son:
-
-```{r}
-# Show positive categories
-aux_idx <- which(aux_tbl$k > 0)[1:n_categories_k_positive]
-
-require(pander)
-pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
-```
-```{r eval=FALSE, include=FALSE, echo=FALSE}
-str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = n_categories_k_positive))
-cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
-```
-
-En el **lado negativo del eje** están las "variables:modalidades":
-
-```{r}
-# Show negative categories
-aux_idx <- which(aux_tbl$k < 0)[1:n_categories_k_negative]
-require(pander)
-pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_negative, " modalidades más significativas del eje negativo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
-```
-
-```{r eval=FALSE, include=FALSE, echo=FALSE}
-str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = n_categories_k_negative))
-cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
-```
-
-
-## Dimensión 5
-
-Se muestran las tablas con las variables más representativas de esta dimensión:
-
-```{r}
-i <- 5
-# We want to show positive and negative categories of this dimension. And it is possible that only one side explains the wanted percentage, so we have to take extra categories from the other side to show.
-# table with big percentage of eigenvalue
-aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
-
-
-# Select number of positive categories of table
-n_categories_k_positive <- ifelse(length(which(aux_tbl$k > 0)) < num_categories_to_show, length(which(aux_tbl$k > 0)), num_categories_to_show)
-# Select number of positive categories of table
-n_categories_k_negative <- ifelse(length(which(aux_tbl$k < 0)) < num_categories_to_show, length(which(aux_tbl$k < 0)), num_categories_to_show)
-```
-
-En el **lado positivo del eje** las modalidades mejor representadas son:
-
-```{r}
-# Show positive categories
-aux_idx <- which(aux_tbl$k > 0)[1:n_categories_k_positive]
-
-require(pander)
-pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
-```
-```{r eval=FALSE, include=FALSE, echo=FALSE}
-str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = n_categories_k_positive))
-cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
-```
-
-En el **lado negativo del eje** están las "variables:modalidades":
-
-```{r}
-# Show negative categories
-aux_idx <- which(aux_tbl$k < 0)[1:n_categories_k_negative]
-require(pander)
-pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_negative, " modalidades más significativas del eje negativo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
-```
-
-```{r eval=FALSE, include=FALSE, echo=FALSE}
-str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = n_categories_k_negative))
-cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
-```
-
-
-## Dimensión 6
-
-Se muestran las tablas con las variables más representativas de esta dimensión:
-
-```{r}
-i <- 6
-# We want to show positive and negative categories of this dimension. And it is possible that only one side explains the wanted percentage, so we have to take extra categories from the other side to show.
-# table with big percentage of eigenvalue
-aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
-
-
-# Select number of positive categories of table
-n_categories_k_positive <- ifelse(length(which(aux_tbl$k > 0)) < num_categories_to_show, length(which(aux_tbl$k > 0)), num_categories_to_show)
-# Select number of positive categories of table
-n_categories_k_negative <- ifelse(length(which(aux_tbl$k < 0)) < num_categories_to_show, length(which(aux_tbl$k < 0)), num_categories_to_show)
-```
-
-En el **lado positivo del eje** las modalidades mejor representadas son:
-
-```{r}
-# Show positive categories
-aux_idx <- which(aux_tbl$k > 0)[1:n_categories_k_positive]
-
-require(pander)
-pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
-```
-```{r eval=FALSE, include=FALSE, echo=FALSE}
-str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = n_categories_k_positive))
-cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
-```
-
-En el **lado negativo del eje** están las "variables:modalidades":
-
-```{r}
-# Show negative categories
-aux_idx <- which(aux_tbl$k < 0)[1:n_categories_k_negative]
-require(pander)
-pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_negative, " modalidades más significativas del eje negativo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
-```
-
-```{r eval=FALSE, include=FALSE, echo=FALSE}
-str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = n_categories_k_negative))
-cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
-```
-
-
-
-
-
-
-```{r}
-# plot(ACM_coches)
-# plot(ACM_coches, mass = c(FALSE, TRUE))
-# plot(ACM_coches, mass = c(FALSE, TRUE), contrib="absolute")
-
-gg_plot_MCA_cols <- function(dimX = 1, dimY = 2, coord_type = "standard"){
-
-  require(ca)
-  # Extracting coordinates from mjca objects
-  # type = c("standard", "principal", "symmetric", "rowprincipal", "colprincipal", "symbiplot", "rowgab", "colgab", "rowgreen", "colgreen")
-  aux_coord <- ca::cacoord(cis_2020_ca_opi01, type = coord_type, dim = c(dimX, dimY), cols = TRUE, rows = FALSE)
-  # dataframe with dimensions coordinates
-  my_title <- "Variables activas en el plano factorial"
-  col_coord_df <- cbind.data.frame(aux_coord[,1],
-                                 aux_coord[,2],
-                               cis_2020_ca_opi01$levelnames)
-
-  colnames(col_coord_df) <- c("dimX", "dimY", "name")
-
-  require(ggplot2)
-  require(ggrepel)
-  # Se crea el objeto con el grafico
-  ggplot(col_coord_df, aes(x=col_coord_df$dimX, y=col_coord_df$dimY)) +
-    geom_point() + geom_rug() +
-    # xlim(-2.6, 3.5) + ylim(-2.1,3.8)+
-    geom_text_repel(aes(label=col_coord_df$name),hjust=0, vjust=0,size=3.3) +
-    scale_colour_brewer(palette = "Set1") +
-    geom_vline(xintercept = 0) + geom_hline(yintercept = 0) + 
-    ggtitle(my_title) +
-    xlab(paste("Dimension ", dimX, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimX], digits = 1) , "% )", sep = "")) +
-    ylab(paste("Dimension ", dimY, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimY], digits = 1) , "% )", sep = ""))
-}
-```
-
-
-
-```{r plot_MCA_cols}
-gg_plot_MCA_cols(dimX = 1, dimY = 2)
-gg_plot_MCA_cols(dimX = 2, dimY = 3)
-gg_plot_MCA_cols(dimX = 3, dimY = 4)
-gg_plot_MCA_cols(dimX = 4, dimY = 5)
-gg_plot_MCA_cols(dimX = 5, dimY = 6)
 ```
 
 
 # Individuos
+
+```{r}
+# Select individuals from EQUO Berdeak
+EB_rows_b <- which(cis_2020_acm_df$P20 %in%  c("Los Verdes", "EQUO"))
+# levels(cis_2020_acm_df$RVAUTO20)
+EB_rows_o <- which(cis_2020_acm_df$RVAUTO20 %in% "Otro partido")
+EB_rows <- unique(c(EB_rows_b, EB_rows_o))
+```
+
 ```{r}
 gg_plot_MCA_rows <- function(dimX = 1, dimY = 2, coord_type = "standard"){
   require(ca)
@@ -660,14 +502,14 @@ gg_plot_MCA_rows <- function(dimX = 1, dimY = 2, coord_type = "standard"){
                                  aux_coord[,2],
                                  # 1:nrow(aux_coord),
                                  rownames(cis_2020_acm_df),
-                                 cis_2020_acm_df$P20)
+                                 cis_2020_acm_df$RVAUTO20)
   
-  colnames(row_coord_df) <- c("dimX", "dimY", "name", "P20")
+  colnames(row_coord_df) <- c("dimX", "dimY", "name", "RVAUTO20")
 
   require(ggplot2)
   require(ggrepel)
   # Se crea el objeto con el grafico
-  ggplot(row_coord_df, aes(x=row_coord_df$dimX, y=row_coord_df$dimY, color=P20)) +
+  ggplot(row_coord_df, aes(x=row_coord_df$dimX, y=row_coord_df$dimY, color=RVAUTO20)) +
     geom_point() + geom_rug() +
     # xlim(-2.6, 3.5) + ylim(-2.1,3.8)+
     geom_text_repel(aes(label=row_coord_df$name),hjust=0, vjust=0,size=3.3) +
@@ -677,10 +519,28 @@ gg_plot_MCA_rows <- function(dimX = 1, dimY = 2, coord_type = "standard"){
     xlab(paste("Dimension ", dimX, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimX], digits = 1) , "% )", sep = "")) +
     ylab(paste("Dimension ", dimY, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimY], digits = 1) , "% )", sep = "")) +
     # levels(cis_2020_acm_df$P20)
-    scale_color_manual(breaks = c("Conservador", "Elkarrekin Podemos", "Berdeak", "PACMA", "Resto", "Abstención+"),
-                        values=c("cyan", "magenta", "darkgreen", "navajowhite3", "navajowhite", "yellow"))
+    # levels(cis_2020_acm_df$RVAUTO20)
+    scale_color_manual(breaks = c('PP+C\'s', 'PSE-EE-PSOE', 
+                                  'EAJ-PNV', 'EH Bildu', 
+                                  'PACMA', 'VOX', 
+                                  'Elkarrekin Podemos', 
+                                  'Voto nulo', 
+                                  'Otro partido', 
+                                  'En blanco', 'No votó/abstención', 'No recuerda', 'N.C.'),
+                        values=c("cyan", "orangered", 
+                                 "navajowhite", "navajowhite", 
+                                 "navajowhite3", "cyan3",
+                                 "darkorchid1", 
+                                 "yellow", 
+                                 "darkgreen", 
+                                 "yellow", "yellow", "yellow", "yellow"))
 }
+# Replace ' character with escape character \\'
+# sprintf("c(%s)", paste0("'", gsub(pattern = "'", replacement = "\\\\'", x = levels(cis_2020_acm_df$RVAUTO20)), "'", collapse = ", "))
 ```
+
+
+ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    ESTAS AQUI
 
 
 A continuación se muestran a los individuos en diferentes planos factoriales.
