@@ -491,6 +491,26 @@ EB_rows <- unique(c(EB_rows_b, EB_rows_o))
 ```
 
 ```{r}
+
+# ESTAS AQUI    # ESTAS AQUI    # ESTAS AQUI    # ESTAS AQUI    
+# 1. METER DESDE LA COCINA RVAUTO20_GRUPO EN cis_2020_df, CON 'EQUO Berdeak' EN VEZ DE 'Otro partido', 
+# 1.1 EXCLUIR RVAUTO20 Y DEJAR RVAUTO20_GRUPO
+# 2. USAR RVAUTO20_GRUPO COMO VARIABLE SUPLEMENTARIA
+# 3. EN gg_plot_MCA_rows USAR RVAUTO20_GRUPO
+
+# Recode RVAUTO20 in a new column
+# Create recodes parameter
+aux_idx <- which(levels(cis_2020_df$RVAUTO20) == "Otro partido")
+recodes_str <- paste0("c('", paste0(levels(cis_2020_df$RVAUTO20)[aux_idx], collapse = "', '"), "') = 'EQUO Berdeak'")
+cis_2020_df$RVAUTO20_GRUPO <- car::recode(var = cis_2020_df$RVAUTO20,
+                                        recodes = recodes_str,
+                                        levels = gsub(pattern = 'Otro partido', 
+                                                      replacement = 'EQUO Berdeak', 
+                                                      x =levels(cis_2020_df$RVAUTO20)))
+#pander(cis_2020_df %>% dplyr::count(RVAUTO20_GRUPO), .drop=FALSE)
+
+
+
 gg_plot_MCA_rows <- function(dimX = 1, dimY = 2, coord_type = "standard"){
   require(ca)
   # Extracting principal from mjca objects
@@ -502,14 +522,14 @@ gg_plot_MCA_rows <- function(dimX = 1, dimY = 2, coord_type = "standard"){
                                  aux_coord[,2],
                                  # 1:nrow(aux_coord),
                                  rownames(cis_2020_acm_df),
-                                 cis_2020_acm_df$RVAUTO20)
+                                 cis_2020_acm_df$RVAUTO20_GRUPO)
   
-  colnames(row_coord_df) <- c("dimX", "dimY", "name", "RVAUTO20")
+  colnames(row_coord_df) <- c("dimX", "dimY", "name", "Votos 2020")
 
   require(ggplot2)
   require(ggrepel)
   # Se crea el objeto con el grafico
-  ggplot(row_coord_df, aes(x=row_coord_df$dimX, y=row_coord_df$dimY, color=RVAUTO20)) +
+  ggplot(row_coord_df, aes(x=row_coord_df$dimX, y=row_coord_df$dimY, color=RVAUTO20_GRUPO)) +
     geom_point() + geom_rug() +
     # xlim(-2.6, 3.5) + ylim(-2.1,3.8)+
     geom_text_repel(aes(label=row_coord_df$name),hjust=0, vjust=0,size=3.3) +
@@ -518,14 +538,13 @@ gg_plot_MCA_rows <- function(dimX = 1, dimY = 2, coord_type = "standard"){
     ggtitle(my_title) +
     xlab(paste("Dimension ", dimX, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimX], digits = 1) , "% )", sep = "")) +
     ylab(paste("Dimension ", dimY, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimY], digits = 1) , "% )", sep = "")) +
-    # levels(cis_2020_acm_df$P20)
-    # levels(cis_2020_acm_df$RVAUTO20)
+    # labs(color = "Votos 2020") +
     scale_color_manual(breaks = c('PP+C\'s', 'PSE-EE-PSOE', 
                                   'EAJ-PNV', 'EH Bildu', 
                                   'PACMA', 'VOX', 
                                   'Elkarrekin Podemos', 
                                   'Voto nulo', 
-                                  'Otro partido', 
+                                  'EQUO Berdeak', 'Otro partido', 
                                   'En blanco', 'No votó/abstención', 'No recuerda', 'N.C.'),
                         values=c("cyan", "orangered", 
                                  "navajowhite", "navajowhite", 
@@ -535,22 +554,19 @@ gg_plot_MCA_rows <- function(dimX = 1, dimY = 2, coord_type = "standard"){
                                  "darkgreen", 
                                  "yellow", "yellow", "yellow", "yellow"))
 }
+# levels(cis_2020_acm_df$P20)
+# levels(cis_2020_acm_df$RVAUTO20)
 # Replace ' character with escape character \\'
 # sprintf("c(%s)", paste0("'", gsub(pattern = "'", replacement = "\\\\'", x = levels(cis_2020_acm_df$RVAUTO20)), "'", collapse = ", "))
 ```
 
-
-ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    ESTAS AQUI
-
-
 A continuación se muestran a los individuos en diferentes planos factoriales.
 
 ```{r plot_MCA_rows}
-gg_plot_MCA_rows(dimX = 1, dimY = 2)
-gg_plot_MCA_rows(dimX = 2, dimY = 3)
-gg_plot_MCA_rows(dimX = 3, dimY = 4)
-gg_plot_MCA_rows(dimX = 4, dimY = 5)
-gg_plot_MCA_rows(dimX = 5, dimY = 6)
+numDims_to_show <- 3 # numDim
+for (i in seq(numDims_to_show-1)) {
+  print(gg_plot_MCA_rows(dimX = i, dimY = i+1))
+}
 ```
 
 
