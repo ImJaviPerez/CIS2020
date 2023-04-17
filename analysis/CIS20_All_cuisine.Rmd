@@ -2960,11 +2960,11 @@ EB_rows_b <- which(cis_2020_df$P20 %in%  c("Los Verdes", "EQUO"))
 EB_rows_o <- which(cis_2020_df$RVAUTO20 %in% "Otro partido")
 
 if (length(EB_rows_o) > length(EB_rows_b)){
-  extra_rows <- which(!(EB_rows_o %in% EB_rows_b))
-  EB_rows_b <- sort(c(EB_rows_b, EB_rows_o[extra_rows]))
+  EB_rows_extra <- which(!(EB_rows_o %in% EB_rows_b))
+  EB_rows_b <- sort(c(EB_rows_b, EB_rows_o[EB_rows_extra]))
 }else{
-  extra_rows <- which(!(EB_rows_b %in% EB_rows_o))
-  EB_rows_o <- sort(c(EB_rows_o, EB_rows_b[extra_rows]))
+  EB_rows_extra <- which(!(EB_rows_b %in% EB_rows_o))
+  EB_rows_o <- sort(c(EB_rows_o, EB_rows_b[EB_rows_extra]))
 }
 # Create EB rows unique and sorted
 EB_rows <- sort(unique(c(EB_rows_b, EB_rows_o)))
@@ -2977,12 +2977,11 @@ pander(aux_tbl)
 
 Difieren en 
 ```{r echo=FALSE, results='asis'}
-cat(length(extra_rows))
+cat(length(EB_rows_extra))
 ```
  elementos, que son: 
 ```{r echo=FALSE, results='asis'}
-# ESTAS AQUI
-cat(paste(EB_rows[extra_rows], collapse = ", "), ".", sep = "")
+cat(paste(EB_rows[EB_rows_extra], collapse = ", "), ".", sep = "")
 ```
 
 Se crea una nueva variable `RVAUTO20_RECODE` donde se reemplaza "*Otro partido*" por "*EQUO Berdeak*":
