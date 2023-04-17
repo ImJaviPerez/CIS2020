@@ -170,7 +170,7 @@ Debemos tener en cuenta que hay una serie de variables que son datos objetivos d
 
 ```{r echo=FALSE, results='asis'}
 # cat(paste0("'", included_cols, "'", collapse = ", "), sep = "")
-# 'PROV', 'MUN', 'CAPITAL', 'TIPO_TEL', 'SEXO', 'A0a', 'P3_1', 'P3_2', 'P3_3', 'P3_4', 'P5', 'P6', 'P8_1', 'P8_2', 'P8_3', 'P8_4', 'P10_2', 'P10_3', 'P10IMPRESA', 'P10DIGITAL', 'P10TV', 'P10RADIO', 'P11_1', 'P11_2', 'P11_3', 'P11_4', 'P11_5', 'P11_7', 'P11_9', 'P12_1', 'P12_2', 'P12_3', 'P12_4', 'P12_5', 'P12_6', 'P12_7', 'P12_9', 'P13_1', 'P13_2', 'P13_3', 'P13_4', 'P13_5', 'P14', 'P14A_11', 'P14A_12', 'P14A_2', 'P14A_21', 'P14A_1', 'P14A_18', 'P14A_95', 'P14A_98', 'P14A_99', 'P15', 'P15A_11', 'P15A_12', 'P15A_2', 'P15A_21', 'P15A_1', 'P15A_18', 'P15A_95', 'P15A_98', 'P15A_99', 'P16', 'P16A_11', 'P16A_12', 'P16A_2', 'P16A_21', 'P16A_1', 'P16A_18', 'P16A_95', 'P16A_98', 'P16A_99', 'P17_1', 'P17_2', 'P17_3', 'P18', 'P19', 'P19A01', 'P19A02', 'P20', 'P20A_2', 'P21', 'P21A', 'P21B_2', 'P22', 'P23', 'P24_1', 'P24_2', 'P24_3', 'P24_4', 'PARTICIPACIONA', 'RECUVOTOA', 'P26_1', 'P26_2', 'P27', 'P29', 'PARTICIPACIONG', 'RECUVOTOG', 'RELIGION', 'FRECUENCIARELI', 'ESTADOCIVIL', 'SITLAB', 'CNO11', 'RELALAB', 'IA_APLAZADA', 'IA_MODIFICADA', 'IA_SUPERVISADA', 'RVAUTO20', 'RVAUTO16', 'RECUERDO', 'ESTUDIOS', 'CLASESUB', 'TAMUNI_GRUPO', 'EDAD_GRUPO', 'P1_GRUPO', 'P1A_GRUPO', 'P1B_GRUPO', 'P2_GRUPO', 'P4_GRUPO', 'P5A_GRUPO', 'P7_GRUPO', 'P9_GRUPO', 'P9A_GRUPO', 'P9B_GRUPO', 'P10_1_GRUPO', 'P10A_GRUPO', 'P10B_GRUPO', 'P10C_GRUPO', 'P10D_GRUPO', 'P18A_GRUPO', 'P18B_GRUPO', 'P20A_1_GRUPO', 'P21B_1_GRUPO', 'P21C_GRUPO', 'P24_5_GRUPO', 'P24_6_GRUPO', 'P24_7_GRUPO', 'P26_3_GRUPO', 'P26_4_GRUPO', 'P26_5_GRUPO', 'P26_6_GRUPO', 'P28_GRUPO', 'ESCIDEOL_GRUPO', 'ESCIDEOLPAR_1_GRUPO', 'ESCIDEOLPAR_2_GRUPO', 'ESCIDEOLPAR_3_GRUPO', 'ESCIDEOLPAR_4_GRUPO', 'ESCIDEOLPAR_5_GRUPO', 'ESCIDEOLPAR_6_GRUPO', 'ESCIDEOLPAR_7_GRUPO', 'ESCUELA_GRUPO', 'NIVELESTENTREV_GRUPO', 'CLASESOCIAL_GRUPO', 'IA_E1_DIA_GRUPO', 'IA_E2_GRUPO', 'IA_E4_GRUPO', 'IA_C2_GRUPO', 'P19ACOM_GRUPO'
+# 'PROV', 'MUN', 'CAPITAL', 'TIPO_TEL', 'SEXO', 'A0a', 'P3_1', 'P3_2', 'P3_3', 'P3_4', 'P5', 'P6', 'P8_1', 'P8_2', 'P8_3', 'P8_4', 'P10_2', 'P10_3', 'P10IMPRESA', 'P10DIGITAL', 'P10TV', 'P10RADIO', 'P11_1', 'P11_2', 'P11_3', 'P11_4', 'P11_5', 'P11_7', 'P11_9', 'P12_1', 'P12_2', 'P12_3', 'P12_4', 'P12_5', 'P12_6', 'P12_7', 'P12_9', 'P13_1', 'P13_2', 'P13_3', 'P13_4', 'P13_5', 'P14', 'P14A_11', 'P14A_12', 'P14A_2', 'P14A_21', 'P14A_1', 'P14A_18', 'P14A_95', 'P14A_98', 'P14A_99', 'P15', 'P15A_11', 'P15A_12', 'P15A_2', 'P15A_21', 'P15A_1', 'P15A_18', 'P15A_95', 'P15A_98', 'P15A_99', 'P16', 'P16A_11', 'P16A_12', 'P16A_2', 'P16A_21', 'P16A_1', 'P16A_18', 'P16A_95', 'P16A_98', 'P16A_99', 'P17_1', 'P17_2', 'P17_3', 'P18', 'P19', 'P19A01', 'P19A02', 'P20', 'P20A_2', 'P21', 'P21A', 'P21B_2', 'P22', 'P23', 'P24_1', 'P24_2', 'P24_3', 'P24_4', 'PARTICIPACIONA', 'RECUVOTOA', 'P26_1', 'P26_2', 'P27', 'P29', 'PARTICIPACIONG', 'RECUVOTOG', 'RELIGION', 'FRECUENCIARELI', 'ESTADOCIVIL', 'SITLAB', 'CNO11', 'RELALAB', 'IA_APLAZADA', 'IA_MODIFICADA', 'IA_SUPERVISADA', 'RVAUTO16', 'RECUERDO', 'ESTUDIOS', 'CLASESUB', 'TAMUNI_GRUPO', 'EDAD_GRUPO', 'P1_GRUPO', 'P1A_GRUPO', 'P1B_GRUPO', 'P2_GRUPO', 'P4_GRUPO', 'P5A_GRUPO', 'P7_GRUPO', 'P9_GRUPO', 'P9A_GRUPO', 'P9B_GRUPO', 'P10_1_GRUPO', 'P10A_GRUPO', 'P10B_GRUPO', 'P10C_GRUPO', 'P10D_GRUPO', 'P18A_GRUPO', 'P18B_GRUPO', 'P20A_1_GRUPO', 'P21B_1_GRUPO', 'P21C_GRUPO', 'P24_5_GRUPO', 'P24_6_GRUPO', 'P24_7_GRUPO', 'P26_3_GRUPO', 'P26_4_GRUPO', 'P26_5_GRUPO', 'P26_6_GRUPO', 'P28_GRUPO', 'ESCIDEOL_GRUPO', 'ESCIDEOLPAR_1_GRUPO', 'ESCIDEOLPAR_2_GRUPO', 'ESCIDEOLPAR_3_GRUPO', 'ESCIDEOLPAR_4_GRUPO', 'ESCIDEOLPAR_5_GRUPO', 'ESCIDEOLPAR_6_GRUPO', 'ESCIDEOLPAR_7_GRUPO', 'ESCUELA_GRUPO', 'NIVELESTENTREV_GRUPO', 'CLASESOCIAL_GRUPO', 'IA_E1_DIA_GRUPO', 'IA_E2_GRUPO', 'IA_E4_GRUPO', 'IA_C2_GRUPO', 'P19ACOM_GRUPO', 'RVAUTO20_RECODE'
 
 # Select some illustrative variables
 illustrative_vars_v01 <- c('PROV', 'MUN', 'CAPITAL', 'TIPO_TEL', 'SEXO', 'A0a', 
@@ -178,12 +178,12 @@ illustrative_vars_v01 <- c('PROV', 'MUN', 'CAPITAL', 'TIPO_TEL', 'SEXO', 'A0a',
                        'PARTICIPACIONG', 'RECUVOTOG', 
                        'ESTADOCIVIL', 'SITLAB', 'CNO11', 'RELALAB', 
                        'IA_APLAZADA', 'IA_MODIFICADA', 'IA_SUPERVISADA', 'P20',
-                       'RVAUTO20', 'RVAUTO16', 'RECUERDO', 'ESTUDIOS', 
+                       'RVAUTO20_RECODE', 'RVAUTO16', 'RECUERDO', 'ESTUDIOS', 
                        'TAMUNI_GRUPO', 'EDAD_GRUPO', 'P1_GRUPO', 'P1A_GRUPO', 'P1B_GRUPO', 'P2_GRUPO', 
                        'NIVELESTENTREV_GRUPO', 
                        'IA_E1_DIA_GRUPO', 'IA_E2_GRUPO', 'IA_E4_GRUPO', 'IA_C2_GRUPO')
 
-# illustrative_vars <- c('RECUVOTOA', 'RECUVOTOG', 'RVAUTO20_GRUPO', 'RVAUTO16', 'RECUERDO')
+# illustrative_vars <- c('RECUVOTOA', 'RECUVOTOG', 'RVAUTO20_RECODE', 'RVAUTO16', 'RECUERDO')
 
 # JRB: Incluir edad, tamano municipio, sexo, situacion laboral, estudios
 illustrative_vars_v02 <- c('PROV', 'MUN', 'CAPITAL', 'TIPO_TEL', 
@@ -191,7 +191,7 @@ illustrative_vars_v02 <- c('PROV', 'MUN', 'CAPITAL', 'TIPO_TEL',
                        'ESTADOCIVIL', 
                        'P1_GRUPO', 'P1A_GRUPO', 'P1B_GRUPO', 'P2_GRUPO', 
                        'IA_APLAZADA', 'IA_MODIFICADA', 'IA_SUPERVISADA', 'P20',
-                       'RVAUTO20', 'RVAUTO16', 'RECUERDO', 
+                       'RVAUTO20_RECODE', 'RVAUTO16', 'RECUERDO', 
                        'IA_E1_DIA_GRUPO', 'IA_E2_GRUPO', 'IA_E4_GRUPO', 'IA_C2_GRUPO')
 
 # JRB: Incluir edad, tamano municipio, sexo, situacion laboral, estudios, nacionalidad, lugar de nacimiento, comunidad autonoma de nacimiento, lengua materna
@@ -199,7 +199,7 @@ illustrative_vars_v03 <- c('PROV', 'MUN', 'CAPITAL', 'TIPO_TEL',
                        'RECUVOTOA', 'RECUVOTOG', 
                        'ESTADOCIVIL',  
                        'IA_APLAZADA', 'IA_MODIFICADA', 'IA_SUPERVISADA', 'P20',
-                       'RVAUTO20', 'RVAUTO16', 'RECUERDO', 
+                       'RVAUTO20_RECODE', 'RVAUTO16', 'RECUERDO', 
                        'IA_E1_DIA_GRUPO', 'IA_E2_GRUPO', 'IA_E4_GRUPO', 'IA_C2_GRUPO')
 
 illustrative_vars <- illustrative_vars_v03
@@ -224,7 +224,7 @@ cis_2020_acm_df <- cis_2020_df[,c(opinion_vars, illustrative_vars)]
 # Seleccion de columnas suplementarias para mostar en el plano factorial
 suplementary_cols <- c('RECUVOTOA', 
                        'RECUVOTOG', 
-                       'RVAUTO20', 'P20', 'RVAUTO16', 'RECUERDO')
+                       'RVAUTO20_RECODE', 'P20', 'RVAUTO16', 'RECUERDO')
 
 suplementary_cols_idx <- which(colnames(cis_2020_acm_df) %in% suplementary_cols)
 opinion_vars_idx <- which(colnames(cis_2020_acm_df) %in% opinion_vars)
@@ -482,25 +482,15 @@ for (i in 2:numDim) {
 
 # Individuos
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 # Select individuals from EQUO Berdeak
 EB_rows_b <- which(cis_2020_acm_df$P20 %in%  c("Los Verdes", "EQUO"))
-# levels(cis_2020_acm_df$RVAUTO20)
-EB_rows_o <- which(cis_2020_acm_df$RVAUTO20 %in% "Otro partido")
+# levels(cis_2020_acm_df$RVAUTO20_RECODE)
+EB_rows_o <- which(cis_2020_acm_df$RVAUTO20_RECODE %in% "Otro partido")
 EB_rows <- unique(c(EB_rows_b, EB_rows_o))
 ```
 
 ```{r}
-
-# ESTAS AQUI    # ESTAS AQUI    # ESTAS AQUI    # ESTAS AQUI    
-# 1. METER DESDE LA COCINA RVAUTO20_GRUPO EN cis_2020_df, CON 'EQUO Berdeak' EN VEZ DE 'Otro partido', 
-# 1.1 EXCLUIR RVAUTO20 Y DEJAR RVAUTO20_GRUPO
-# 2. USAR RVAUTO20_GRUPO COMO VARIABLE SUPLEMENTARIA
-# 3. EN gg_plot_MCA_rows USAR RVAUTO20_GRUPO
-
-
-
-
 gg_plot_MCA_rows <- function(dimX = 1, dimY = 2, coord_type = "standard"){
   require(ca)
   # Extracting principal from mjca objects
@@ -512,14 +502,14 @@ gg_plot_MCA_rows <- function(dimX = 1, dimY = 2, coord_type = "standard"){
                                  aux_coord[,2],
                                  # 1:nrow(aux_coord),
                                  rownames(cis_2020_acm_df),
-                                 cis_2020_acm_df$RVAUTO20_GRUPO)
+                                 cis_2020_acm_df$RVAUTO20_RECODE)
   
   colnames(row_coord_df) <- c("dimX", "dimY", "name", "Votos 2020")
 
   require(ggplot2)
   require(ggrepel)
   # Se crea el objeto con el grafico
-  ggplot(row_coord_df, aes(x=row_coord_df$dimX, y=row_coord_df$dimY, color=RVAUTO20_GRUPO)) +
+  ggplot(row_coord_df, aes(x=row_coord_df$dimX, y=row_coord_df$dimY, color=row_coord_df$`Votos 2020`)) +
     geom_point() + geom_rug() +
     # xlim(-2.6, 3.5) + ylim(-2.1,3.8)+
     geom_text_repel(aes(label=row_coord_df$name),hjust=0, vjust=0,size=3.3) +
@@ -534,7 +524,7 @@ gg_plot_MCA_rows <- function(dimX = 1, dimY = 2, coord_type = "standard"){
                                   'PACMA', 'VOX', 
                                   'Elkarrekin Podemos', 
                                   'Voto nulo', 
-                                  'EQUO Berdeak', 'Otro partido', 
+                                  'EQUO Berdeak', # 'Otro partido', 
                                   'En blanco', 'No votó/abstención', 'No recuerda', 'N.C.'),
                         values=c("cyan", "orangered", 
                                  "navajowhite", "navajowhite", 
@@ -544,10 +534,8 @@ gg_plot_MCA_rows <- function(dimX = 1, dimY = 2, coord_type = "standard"){
                                  "darkgreen", 
                                  "yellow", "yellow", "yellow", "yellow"))
 }
-# levels(cis_2020_acm_df$P20)
-# levels(cis_2020_acm_df$RVAUTO20)
 # Replace ' character with escape character \\'
-# sprintf("c(%s)", paste0("'", gsub(pattern = "'", replacement = "\\\\'", x = levels(cis_2020_acm_df$RVAUTO20)), "'", collapse = ", "))
+# sprintf("c(%s)", paste0("'", gsub(pattern = "'", replacement = "\\\\'", x = levels(cis_2020_acm_df$RVAUTO20_RECODE)), "'", collapse = ", "))
 ```
 
 A continuación se muestran a los individuos en diferentes planos factoriales.
@@ -558,6 +546,115 @@ for (i in seq(numDims_to_show-1)) {
   print(gg_plot_MCA_rows(dimX = i, dimY = i+1))
 }
 ```
+
+## k-vecinos de *EQUO Berdeak*
+
+```{r}
+# Find rows coordinates in factorial space
+# type = c("standard", "principal", "symmetric", "rowprincipal", "colprincipal", "symbiplot", "rowgab", "colgab", "rowgreen", "colgreen")
+aux_tbl <- ca::cacoord(cis_2020_ca_opi01, type = "standard", dim = c(1:numDim), cols = FALSE, rows = TRUE)
+# Append rows coordinates to data.frame
+cis_2020_acm_df <- cbind.data.frame(cis_2020_acm_df, aux_tbl)
+```
+
+
+RANN: Fast Nearest Neighbour Search (Wraps ANN Library) Using L2 Metric
+
+```{r}
+require(RANN)
+# Save individuals coordinates
+individuals_space_df <- cis_2020_acm_df[, c(paste0("Dim", 1:numDim))]
+
+# Select individuals from "Berdeak" or "Otro partido" and create dataframe with that group
+EB_points_df <- individuals_space_df[EB_rows,]
+# Nearest Neighbour Search
+EB_points_neighb <- RANN::nn2(data = individuals_space_df, query = EB_points_df, k = 10)
+
+# Put those groups in a vector
+EB_points_neighb_idx <- c()
+for(i in EB_points_neighb$nn.idx) {
+  EB_points_neighb_idx <- c(EB_points_neighb_idx, i)
+}
+EB_points_neighb_idx <- unique(EB_points_neighb_idx)
+# Select only neighbours
+EB_points_neighb_idx <- EB_points_neighb_idx[!(EB_points_neighb_idx %in% EB_rows)]
+# Create column with neighbours
+# levels(cis_2020_acm_df$RVAUTO20_RECODE)
+cis_2020_acm_df$P20_NEIGH <- cis_2020_acm_df$RVAUTO20_RECODE
+
+# Create new neighbours level and recode from "Otro partido" to "EQUO Berdeak"
+aux_idx <- which(levels(cis_2020_acm_df$P20_NEIGH) == 'EQUO Berdeak')
+
+neighbours_lbl <- 'Cercanos EB'
+levels(cis_2020_acm_df$P20_NEIGH) <- c(levels(cis_2020_acm_df$P20_NEIGH)[1:(aux_idx)], neighbours_lbl, levels(cis_2020_acm_df$P20_NEIGH)[-(1:aux_idx)])
+
+# ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI
+
+# ESTAN MAL RECODIFICADOS!!!!!!!!!!!!!!!
+
+# ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI
+
+
+# Rename neighbours
+cis_2020_acm_df$P20_NEIGH[EB_points_neighb_idx] <- neighbours_lbl
+
+pander(cis_2020_acm_df %>% dplyr::count(P20_NEIGH, .drop=FALSE), caption = "Votos en 2020 y vecinos cercanos a EQUO Berdeak")
+
+# pander(cis_2020_acm_df %>% dplyr::count(RVAUTO20_RECODE, .drop=FALSE), caption = "Votos en 2020")
+```
+
+```{r}
+# Plot selected points a its neighbours
+gg_plot_neighbours <- function(dimX = 1, dimY = 2){
+
+  my_title <- "Individuos Cercanos a Equo-Berdeak en 2020"
+  row_coord_df <- cbind.data.frame(cis_2020_acm_df[,paste0("Dim",dimX)],
+                                 cis_2020_acm_df[,paste0("Dim",dimY)],
+                                 rownames(cis_2020_acm_df),
+                                 cis_2020_acm_df$P20_NEIGH_GRUPO)
+  
+  colnames(row_coord_df) <- c("dimX", "dimY", "name", "P20_NEIGH_GRUPO")
+
+  require(ggplot2)
+  require(ggrepel)
+  # Se crea el objeto con el grafico
+  gg_obj <- ggplot(row_coord_df, aes(x=dimX, y=dimY, color=P20_NEIGH_GRUPO)) +
+    geom_point() + geom_rug() +
+    # xlim(-2.6, 3.5) + ylim(-2.1,3.8)+
+    geom_text_repel(aes(label=name),hjust=0, vjust=0,size=3.3, max.overlaps = 20) +
+    # scale_colour_brewer(palette = "Set1") +
+    geom_vline(xintercept = 0) + geom_hline(yintercept = 0) + 
+    ggtitle(my_title) +
+    xlab(paste("Dimension ", dimX, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimX], digits = 1) , "% )", sep = "")) +
+    ylab(paste("Dimension ", dimY, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimY], digits = 1) , "% )", sep = "")) +
+    # levels(cis_2020_acm_df$P20_NEIGH_GRUPO)
+    scale_color_manual(breaks = c("PP+C's", "PSE-EE-PSOE", 
+                                  "EAJ-PNV", "EH Bildu", 
+                                  "PACMA", "VOX", 
+                                  "Elkarrekin Podemos", 
+                                  "Voto nulo", "EQUO Berdeak", "Cercanos EB", 
+                                  "En blanco", "No votó/abstención", "No recuerda", "N.C."),
+                       values=c("cyan", "red", 
+                                "navajowhite", "navajowhite",
+                                "navajowhite3", "cyan", 
+                                "magenta", 
+                                "yellow", "darkgreen", "limegreen",
+                                "yellow", "yellow", "yellow", "yellow"))
+  
+  return(gg_obj)
+}
+```
+
+Se muestran a todos los vecinos de *EQUO Berdeak* en diferentes planos factoriales.
+
+```{r plot_neigbours}
+gg_plot_neighbours(dimX = 1, dimY = 2)
+gg_plot_neighbours(dimX = 2, dimY = 3)
+gg_plot_neighbours(dimX = 3, dimY = 4)
+gg_plot_neighbours(dimX = 4, dimY = 5)
+gg_plot_neighbours(dimX = 5, dimY = 6)
+```
+
 
 
 
@@ -574,12 +671,6 @@ for (i in seq(numDims_to_show-1)) {
 Se muestra la división cluster por el método *Ward.D* o también conocido como *"pérdida de inercia mínima"*.
 
 ```{r}
-# Find rows coordinates in factorial space
-# type = c("standard", "principal", "symmetric", "rowprincipal", "colprincipal", "symbiplot", "rowgab", "colgab", "rowgreen", "colgreen")
-aux_tbl <- ca::cacoord(cis_2020_ca_opi01, type = "standard", dim = c(1:numDim), cols = FALSE, rows = TRUE)
-# Append rows coordinates to data.frame
-cis_2020_acm_df <- cbind.data.frame(cis_2020_acm_df, aux_tbl)
-
 formula_all_dims <- as.formula(paste("~-1 +", paste0("Dim",1:numDim, collapse = "+")))
 # Distancia euclidea al cuadrado entre los elementos de la matriz
 dist_individuos <- stats::dist(model.matrix(formula_all_dims, cis_2020_acm_df))^2
@@ -840,106 +931,6 @@ grid.arrange(
                         c(2, 2))
 )
 
-```
-
-
-RANN: Fast Nearest Neighbour Search (Wraps ANN Library) Using L2 Metric
-
-```{r}
-require(RANN)
-# Save individuals coordinates
-individuals_space_df <- cis_2020_acm_df[, c(paste0("Dim", 1:numDim))]
-
-# Select individuals from "Berdeak" or "Otro partido"
-# levels(cis_2020_acm_df$P20)
-EB_rows_b <- which(cis_2020_acm_df$P20 %in% "Berdeak")
-# levels(cis_2020_acm_df$RVAUTO20)
-EB_rows_o <- which(cis_2020_acm_df$RVAUTO20 %in% "Otro partido")
-EB_rows <- unique(c(EB_rows_b, EB_rows_o))
-# create dataframe with that group
-EB_points_df <- individuals_space_df[EB_rows,]
-# Nearest Neighbour Search
-EB_points_neighb <- RANN::nn2(data = individuals_space_df, query = EB_points_df, k = 10)
-
-# Put those groups in a vector
-EB_points_neighb_idx <- c()
-for(i in EB_points_neighb$nn.idx) {
-  EB_points_neighb_idx <- c(EB_points_neighb_idx, i)
-}
-EB_points_neighb_idx <- unique(EB_points_neighb_idx)
-# Select only neighbours
-EB_points_neighb_idx <- EB_points_neighb_idx[!(EB_points_neighb_idx %in% EB_rows)]
-# Create column with neighbours
-# levels(cis_2020_acm_df$RVAUTO20)
-cis_2020_acm_df$P20_NEIGH <- cis_2020_acm_df$RVAUTO20
-
-# Create new neighbours level and recode from "Otro partido" to "EQUO Berdeak"
-aux_idx <- which(levels(cis_2020_acm_df$P20_NEIGH) == 'Otro partido')
-recodes_str <- sprintf("c(%s) = 'EQUO Berdeak'",
-                       paste0("'", levels(cis_2020_acm_df$P20_NEIGH)[aux_idx], "'", collapse = ", "))
-neighbours_lbl <- 'Cercanos EB'
-# Recode
-cis_2020_acm_df$P20_NEIGH_GRUPO <- car::recode(var = cis_2020_acm_df$P20_NEIGH, 
-                                    recodes = recodes_str,
-                                    levels = c(levels(cis_2020_acm_df$P20_NEIGH)[1:(aux_idx-1)], 'EQUO Berdeak', neighbours_lbl, levels(cis_2020_acm_df$P20_NEIGH)[-(1:aux_idx)]))
-# Rename neighbours
-cis_2020_acm_df$P20_NEIGH_GRUPO[EB_points_neighb_idx] <- neighbours_lbl #levels(cis_2020_acm_df$P20_NEIGH_GRUPO)[aux_idx+1]
-
-pander(cis_2020_acm_df %>% dplyr::count(P20_NEIGH_GRUPO, .drop=FALSE), caption = "Votos en 2020 y vecinos cercanos a EQUO Berdeak")
-
-pander(cis_2020_acm_df %>% dplyr::count(RVAUTO20, .drop=FALSE), caption = "Votos en 2020")
-```
-
-```{r}
-# Plot selected points a its neighbours
-gg_plot_neighbours <- function(dimX = 1, dimY = 2){
-
-  my_title <- "Individuos Cercanos a Equo-Berdeak en 2020"
-  row_coord_df <- cbind.data.frame(cis_2020_acm_df[,paste0("Dim",dimX)],
-                                 cis_2020_acm_df[,paste0("Dim",dimY)],
-                                 rownames(cis_2020_acm_df),
-                                 cis_2020_acm_df$P20_NEIGH_GRUPO)
-  
-  colnames(row_coord_df) <- c("dimX", "dimY", "name", "P20_NEIGH_GRUPO")
-
-  require(ggplot2)
-  require(ggrepel)
-  # Se crea el objeto con el grafico
-  gg_obj <- ggplot(row_coord_df, aes(x=dimX, y=dimY, color=P20_NEIGH_GRUPO)) +
-    geom_point() + geom_rug() +
-    # xlim(-2.6, 3.5) + ylim(-2.1,3.8)+
-    geom_text_repel(aes(label=name),hjust=0, vjust=0,size=3.3, max.overlaps = 20) +
-    # scale_colour_brewer(palette = "Set1") +
-    geom_vline(xintercept = 0) + geom_hline(yintercept = 0) + 
-    ggtitle(my_title) +
-    xlab(paste("Dimension ", dimX, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimX], digits = 1) , "% )", sep = "")) +
-    ylab(paste("Dimension ", dimY, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimY], digits = 1) , "% )", sep = "")) +
-    # levels(cis_2020_acm_df$P20_NEIGH_GRUPO)
-    scale_color_manual(breaks = c("PP+C's", "PSE-EE-PSOE", 
-                                  "EAJ-PNV", "EH Bildu", 
-                                  "PACMA", "VOX", 
-                                  "Elkarrekin Podemos", 
-                                  "Voto nulo", "EQUO Berdeak", "Cercanos EB", 
-                                  "En blanco", "No votó/abstención", "No recuerda", "N.C."),
-                       values=c("cyan", "red", 
-                                "navajowhite", "navajowhite",
-                                "navajowhite3", "cyan", 
-                                "magenta", 
-                                "yellow", "darkgreen", "limegreen",
-                                "yellow", "yellow", "yellow", "yellow"))
-  
-  return(gg_obj)
-}
-```
-
-Se muestran a todos los vecinos de *EQUO Berdeak* en diferentes planos factoriales.
-
-```{r plot_neigbours}
-gg_plot_neighbours(dimX = 1, dimY = 2)
-gg_plot_neighbours(dimX = 2, dimY = 3)
-gg_plot_neighbours(dimX = 3, dimY = 4)
-gg_plot_neighbours(dimX = 4, dimY = 5)
-gg_plot_neighbours(dimX = 5, dimY = 6)
 ```
 
 
