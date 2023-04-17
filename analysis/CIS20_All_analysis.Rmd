@@ -498,16 +498,6 @@ EB_rows <- unique(c(EB_rows_b, EB_rows_o))
 # 2. USAR RVAUTO20_GRUPO COMO VARIABLE SUPLEMENTARIA
 # 3. EN gg_plot_MCA_rows USAR RVAUTO20_GRUPO
 
-# Recode RVAUTO20 in a new column
-# Create recodes parameter
-aux_idx <- which(levels(cis_2020_df$RVAUTO20) == "Otro partido")
-recodes_str <- paste0("c('", paste0(levels(cis_2020_df$RVAUTO20)[aux_idx], collapse = "', '"), "') = 'EQUO Berdeak'")
-cis_2020_df$RVAUTO20_GRUPO <- car::recode(var = cis_2020_df$RVAUTO20,
-                                        recodes = recodes_str,
-                                        levels = gsub(pattern = 'Otro partido', 
-                                                      replacement = 'EQUO Berdeak', 
-                                                      x =levels(cis_2020_df$RVAUTO20)))
-#pander(cis_2020_df %>% dplyr::count(RVAUTO20_GRUPO), .drop=FALSE)
 
 
 
