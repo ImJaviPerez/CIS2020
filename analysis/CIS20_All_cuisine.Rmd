@@ -2951,6 +2951,61 @@ cat(paste0("`", levels(cis_2020_df$RVAUTO20)[aux_idx], "`", collapse = ", "), se
 
 **En este caso no tengo criterio para hacer reagrupaciones. Quedo pendiente de la respuesta que me de JRB.**
 
+La variable `P20` tiene como posibles respuestas: "Los Verdes" y "EQUO". La variable `RVAUTO20` no contiene esas respuestas, que han sido sustituidas por "Otro partido". Se comprueba que apenas existen diferencias entre la pregunta `P20` y `RVAUTO20` respecto a los votos de "Los Verdes" y "EQUO":
+
+```{r}
+# Select individuals from EQUO Berdeak
+EB_rows_b <- which(cis_2020_df$P20 %in%  c("Los Verdes", "EQUO"))
+# levels(cis_2020_acm_df$RVAUTO20)
+EB_rows_o <- which(cis_2020_df$RVAUTO20 %in% "Otro partido")
+
+if (length(EB_rows_o) > length(EB_rows_b)){
+  extra_rows <- which(!(EB_rows_o %in% EB_rows_b))
+  EB_rows_b <- sort(c(EB_rows_b, EB_rows_o[extra_rows]))
+}else{
+  extra_rows <- which(!(EB_rows_b %in% EB_rows_o))
+  EB_rows_o <- sort(c(EB_rows_o, EB_rows_b[extra_rows]))
+}
+# Create EB rows unique and sorted
+EB_rows <- sort(unique(c(EB_rows_b, EB_rows_o)))
+
+aux_tbl <- cbind.data.frame(EB_rows, cis_2020_df$P20[EB_rows_b], cis_2020_df$RVAUTO20[EB_rows_o])
+colnames(aux_tbl) <- c("individuo", "P20", "RVAUTO20")
+
+pander(aux_tbl)
+```
+
+Difieren en 
+```{r echo=FALSE, results='asis'}
+cat(length(extra_rows))
+```
+ elementos, que son: 
+```{r echo=FALSE, results='asis'}
+# ESTAS AQUI
+cat(paste(EB_rows[extra_rows], collapse = ", "), ".", sep = "")
+```
+Se crea una nueva variable `RVAUTO20 RECODIFICADA`:
+```{r}
+# Recode RVAUTO20 in a new column
+# Create recodes parameter
+aux_idx <- which(levels(cis_2020_df$RVAUTO20) == "Otro partido")
+recodes_str <- paste0("c('", paste0(levels(cis_2020_df$RVAUTO20)[aux_idx], collapse = "', '"), "') = 'EQUO Berdeak'")
+cis_2020_df$RVAUTO20_RECODE <- car::recode(var = cis_2020_df$RVAUTO20,
+                                        recodes = recodes_str,
+                                        levels = gsub(pattern = 'Otro partido', 
+                                                      replacement = 'EQUO Berdeak', 
+                                                      x =levels(cis_2020_df$RVAUTO20)))
+pander(cis_2020_df %>% dplyr::count(RVAUTO20_RECODE), .drop=FALSE)
+```
+
+# 3. SE EXCLUYE RVAUTO20
+Se excluye la variable `RVAUTO20` y se deja la nueva agrupación `RVAUTO20_RECODE`.
+```{r}
+excluded_cols <- c(excluded_cols, "RVAUTO20")
+```
+
+
+
 
 
 ### Variable `RVAUTO16`: *Recuerdo de voto en las elecciones autonómicas del País Vasco de 2016 [recodificada]*
