@@ -2984,7 +2984,8 @@ cat(length(extra_rows))
 # ESTAS AQUI
 cat(paste(EB_rows[extra_rows], collapse = ", "), ".", sep = "")
 ```
-Se crea una nueva variable `RVAUTO20 RECODIFICADA`:
+
+Se crea una nueva variable `RVAUTO20_RECODE` donde se reemplaza "*Otro partido*" por "*EQUO Berdeak*":
 ```{r}
 # Recode RVAUTO20 in a new column
 # Create recodes parameter
@@ -2998,8 +2999,7 @@ cis_2020_df$RVAUTO20_RECODE <- car::recode(var = cis_2020_df$RVAUTO20,
 pander(cis_2020_df %>% dplyr::count(RVAUTO20_RECODE), .drop=FALSE)
 ```
 
-# 3. SE EXCLUYE RVAUTO20
-Se excluye la variable `RVAUTO20` y se deja la nueva agrupación `RVAUTO20_RECODE`.
+Se excluye la variable `RVAUTO20` y se deja la nueva recodificación `RVAUTO20_RECODE`.
 ```{r}
 excluded_cols <- c(excluded_cols, "RVAUTO20")
 ```
