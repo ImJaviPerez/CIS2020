@@ -582,25 +582,21 @@ EB_points_neighb_idx <- EB_points_neighb_idx[!(EB_points_neighb_idx %in% EB_rows
 # levels(cis_2020_acm_df$RVAUTO20_RECODE)
 cis_2020_acm_df$P20_NEIGH <- cis_2020_acm_df$RVAUTO20_RECODE
 
-# Create new neighbours level and recode from "Otro partido" to "EQUO Berdeak"
+# Create new neighbours level
 aux_idx <- which(levels(cis_2020_acm_df$P20_NEIGH) == 'EQUO Berdeak')
 
 neighbours_lbl <- 'Cercanos EB'
-levels(cis_2020_acm_df$P20_NEIGH) <- c(levels(cis_2020_acm_df$P20_NEIGH)[1:(aux_idx)], neighbours_lbl, levels(cis_2020_acm_df$P20_NEIGH)[-(1:aux_idx)])
+cis_2020_acm_df$P20_NEIGH <- factor(cis_2020_acm_df$P20_NEIGH, 
+                                    levels = c(levels(cis_2020_acm_df$P20_NEIGH)[1:(aux_idx)],
+                                                   neighbours_lbl,
+                                                   levels(cis_2020_acm_df$P20_NEIGH)[-(1:aux_idx)]))
 
-# ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI
-
-# ESTAN MAL RECODIFICADOS!!!!!!!!!!!!!!!
-
-# ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI
-
+pander(cis_2020_acm_df %>% dplyr::count(P20_NEIGH), .drop=FALSE, caption = "Votos en 2020")
 
 # Rename neighbours
 cis_2020_acm_df$P20_NEIGH[EB_points_neighb_idx] <- neighbours_lbl
 
 pander(cis_2020_acm_df %>% dplyr::count(P20_NEIGH, .drop=FALSE), caption = "Votos en 2020 y vecinos cercanos a EQUO Berdeak")
-
-# pander(cis_2020_acm_df %>% dplyr::count(RVAUTO20_RECODE, .drop=FALSE), caption = "Votos en 2020")
 ```
 
 ```{r}
@@ -611,14 +607,14 @@ gg_plot_neighbours <- function(dimX = 1, dimY = 2){
   row_coord_df <- cbind.data.frame(cis_2020_acm_df[,paste0("Dim",dimX)],
                                  cis_2020_acm_df[,paste0("Dim",dimY)],
                                  rownames(cis_2020_acm_df),
-                                 cis_2020_acm_df$P20_NEIGH_GRUPO)
+                                 cis_2020_acm_df$P20_NEIGH)
   
-  colnames(row_coord_df) <- c("dimX", "dimY", "name", "P20_NEIGH_GRUPO")
+  colnames(row_coord_df) <- c("dimX", "dimY", "name", "P20_NEIGH")
 
   require(ggplot2)
   require(ggrepel)
   # Se crea el objeto con el grafico
-  gg_obj <- ggplot(row_coord_df, aes(x=dimX, y=dimY, color=P20_NEIGH_GRUPO)) +
+  gg_obj <- ggplot(row_coord_df, aes(x=dimX, y=dimY, color=P20_NEIGH)) +
     geom_point() + geom_rug() +
     # xlim(-2.6, 3.5) + ylim(-2.1,3.8)+
     geom_text_repel(aes(label=name),hjust=0, vjust=0,size=3.3, max.overlaps = 20) +
@@ -627,7 +623,7 @@ gg_plot_neighbours <- function(dimX = 1, dimY = 2){
     ggtitle(my_title) +
     xlab(paste("Dimension ", dimX, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimX], digits = 1) , "% )", sep = "")) +
     ylab(paste("Dimension ", dimY, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimY], digits = 1) , "% )", sep = "")) +
-    # levels(cis_2020_acm_df$P20_NEIGH_GRUPO)
+    # levels(cis_2020_acm_df$P20_NEIGH)
     scale_color_manual(breaks = c("PP+C's", "PSE-EE-PSOE", 
                                   "EAJ-PNV", "EH Bildu", 
                                   "PACMA", "VOX", 
@@ -648,11 +644,9 @@ gg_plot_neighbours <- function(dimX = 1, dimY = 2){
 Se muestran a todos los vecinos de *EQUO Berdeak* en diferentes planos factoriales.
 
 ```{r plot_neigbours}
-gg_plot_neighbours(dimX = 1, dimY = 2)
-gg_plot_neighbours(dimX = 2, dimY = 3)
-gg_plot_neighbours(dimX = 3, dimY = 4)
-gg_plot_neighbours(dimX = 4, dimY = 5)
-gg_plot_neighbours(dimX = 5, dimY = 6)
+for (i in seq(numDims_to_show-1)) {
+  print(gg_plot_neighbours(dimX = i, dimY = i+1))
+}
 ```
 
 
@@ -663,26 +657,36 @@ gg_plot_neighbours(dimX = 5, dimY = 6)
 
 ## Decidir el número de cluster y caracterizar estos cluster.
 
+Se toman a todas las personas que dicen haber votado a "EQUO Berdeak" y a todos sus vecinos más cercanos. 
+
+ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    
+
+A PARTIR DE AQUI CREAR UN DF CON LAS FILAS DE LOS VECINOS DE EB:
+
+cis_2020_acm_df[c(EB_rows,EB_rows_extra),]
+
+ESTAS AQUI    ESTAS AQUI    ESTAS AQUI    
+
+
+
 ```{r eval=FALSE}
 ### # Se seleccionan las variables que se van a utilizar
 ### cis_2020_acm_df <- cis_2020_acm_df
 ```
-
 Se muestra la división cluster por el método *Ward.D* o también conocido como *"pérdida de inercia mínima"*.
 
 ```{r}
 formula_all_dims <- as.formula(paste("~-1 +", paste0("Dim",1:numDim, collapse = "+")))
 # Distancia euclidea al cuadrado entre los elementos de la matriz
-dist_individuos <- stats::dist(model.matrix(formula_all_dims, cis_2020_acm_df))^2
+dist_individuos <- stats::dist(model.matrix(formula_all_dims, cis_2020_acm_df[c(EB_rows,EB_rows_extra),]))^2
 HClust.2 <- hclust(dist_individuos , method= "ward.D")
 
-plot(HClust.2, main= "Cluster Dendrograma para individuos", xlab= 
+plot(HClust.2, main= "Cluster Dendrograma para individuos cercanos a EQUO Berdeak", xlab= 
   "Encuestas CIS EQUO", sub="Method=ward.D; Distancia=euclidea al cuadrado")
 ```
 
 Parece que el número de cluster adecuado es XXXX a la vista de las alturas de las ramas del dendograma. Pero al igual que en el análisis de correspondencias simples, aquí  también se puede buscar el número óptimo de clusters (`k`) usando la función `daisy` (Dissimilarity Matrix Calculation) que computa las desigualdades en las distancias entre parejas. En este caso se ha usado la métrica euclídea al cuadrado para ese cálculo. Para obtener el número óptimo de clusters y su composición.
 
- 
 ```{r}
 # Funcion para calcular el k optimo
 # Creamos una funcion para calcular la matriz de distancia dos a dos con los grupos
