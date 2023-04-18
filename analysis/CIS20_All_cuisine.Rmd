@@ -63,7 +63,7 @@ library(log4r)
 # Create a new logger object with create.logger().
 logger <- create.logger()
 # Set the logger's file output.
-logfile(logger) <- 'cis_2020_cuisine.log'
+logfile(logger) <- 'cis_2020_all_cuisine.log'
 # Set the current level of the logger.
 level(logger) <- "DEBUG"
 #level(logger) <- "INFO"
@@ -2956,20 +2956,19 @@ La variable `P20` tiene como posibles respuestas: "Los Verdes" y "EQUO". La vari
 ```{r}
 # Select individuals from EQUO Berdeak
 EB_rows_b <- which(cis_2020_df$P20 %in%  c("Los Verdes", "EQUO"))
-# levels(cis_2020_acm_df$RVAUTO20)
+# Select individuals from "Otro partido"
 EB_rows_o <- which(cis_2020_df$RVAUTO20 %in% "Otro partido")
 
+# Select Berdeak extra rows
 if (length(EB_rows_o) > length(EB_rows_b)){
-  EB_rows_extra <- which(!(EB_rows_o %in% EB_rows_b))
-  EB_rows_b <- sort(c(EB_rows_b, EB_rows_o[EB_rows_extra]))
+  EB_rows_extra <- EB_rows_o[which(!(EB_rows_o %in% EB_rows_b))]
 }else{
-  EB_rows_extra <- which(!(EB_rows_b %in% EB_rows_o))
-  EB_rows_o <- sort(c(EB_rows_o, EB_rows_b[EB_rows_extra]))
+  EB_rows_extra <- EB_rows_b[which(!(EB_rows_b %in% EB_rows_o))]
 }
 # Create EB rows unique and sorted
 EB_rows <- sort(unique(c(EB_rows_b, EB_rows_o)))
 
-aux_tbl <- cbind.data.frame(EB_rows, cis_2020_df$P20[EB_rows_b], cis_2020_df$RVAUTO20[EB_rows_o])
+aux_tbl <- cbind.data.frame(EB_rows, cis_2020_df$P20[EB_rows], cis_2020_df$RVAUTO20[EB_rows])
 colnames(aux_tbl) <- c("individuo", "P20", "RVAUTO20")
 
 pander(aux_tbl)
@@ -2981,7 +2980,7 @@ cat(length(EB_rows_extra))
 ```
  elementos, que son: 
 ```{r echo=FALSE, results='asis'}
-cat(paste(EB_rows[EB_rows_extra], collapse = ", "), ".", sep = "")
+cat(paste(EB_rows_extra, collapse = ", "), ".", sep = "")
 ```
 
 Se crea una nueva variable `RVAUTO20_RECODE` donde se reemplaza "*Otro partido*" por "*EQUO Berdeak*":
@@ -3111,12 +3110,14 @@ cat(Q)
 cis_2020_cuisine_file <- file.path(getwd(), "cis_2020_cuisine_file.RData")
 
 require(log4r)
-log4r::debug(logger, paste("cis_2020_cuisine_file (", cis_2020_cuisine_file, ") exists =", file.exists(cis_2020_cuisine_file)))
+log4r::info(logger, paste("cis_2020_cuisine_file (", cis_2020_cuisine_file, ") exists =", file.exists(cis_2020_cuisine_file)))
 
 # Save every data in an RData file.
 # It will be used later in the Rmd file.
 save(list = ls(), file=cis_2020_cuisine_file)
-log4r::debug(logger, paste("Saved cis_2020_cuisine_file dataset"))
+log4r::info(logger, paste("Saved cis_2020_cuisine_file dataset"))
+info(logger, 'Ending script')
+
 ```
 
 
