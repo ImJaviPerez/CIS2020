@@ -431,17 +431,23 @@ Este lado del eje representa a las personas que ...
 En resumen: Este eje representa a las personas que por un extremo ...
 
 
+https://bookdown.org/yihui/rmarkdown-cookbook/results-asis.html#results-asis
+
+https://bookdown.org/yihui/rmarkdown-cookbook/knit-expand.html
+
+https://bookdown.org/yihui/rmarkdown-cookbook/child-document.html#child-document
+
 
 ```{r next_dims_chapters, echo=FALSE, results='asis'}
 # SHOW NEXT CHAPTERS AN TABLES
 # show next dimensions
 for (i in 2:numDim) {
   # Title ---------------------------------------
-  cat("## Dimension", i, "\n")
+  cat("\n\n## Dimension", i, "\n\n")
   
   # A comment ----------------------------------
-  cat("Se muestran las tablas con las variables más representativas de esta dimensión.")
-  cat("\nEn el **lado positivo del eje** las modalidades mejor representadas son:\n")
+  cat("\nSe muestran las tablas con las variables más representativas de esta dimensión.\n")
+  cat("\nEn el **lado positivo del eje** las modalidades mejor representadas son:\n\n")
   
   # Prepare tables ------------------------------
   # We want to show positive and negative categories of this dimension. And it is possible that only one side explains the wanted percentage, so we have to take extra categories from the other side to show.
@@ -464,7 +470,7 @@ for (i in 2:numDim) {
   ## cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
 
   # A comment -----------------------------------
-  cat("En el **lado negativo del eje** están las \"variables:modalidades\":\n")
+  cat("\nEn el **lado negativo del eje** están las \"variables:modalidades\":\n")
   
   # Show negative categories --------------------
   aux_idx <- which(aux_tbl$k < 0)[1:n_categories_k_negative]
