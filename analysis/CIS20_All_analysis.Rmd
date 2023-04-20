@@ -346,7 +346,7 @@ aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
 
 # Select number of positive categories of table
 n_categories_k_positive <- ifelse(length(which(aux_tbl$k > 0)) < num_categories_to_show, length(which(aux_tbl$k > 0)), num_categories_to_show)
-# Select number of positive categories of table
+# Select number of negative categories of table
 n_categories_k_negative <- ifelse(length(which(aux_tbl$k < 0)) < num_categories_to_show, length(which(aux_tbl$k < 0)), num_categories_to_show)
 ```
 
@@ -437,6 +437,28 @@ https://bookdown.org/yihui/rmarkdown-cookbook/knit-expand.html
 
 https://bookdown.org/yihui/rmarkdown-cookbook/child-document.html#child-document
 
+```{r, echo=FALSE, results='asis'}
+res <- knitr::knit_child('template_chapter_dimensions.Rmd', quiet = TRUE)
+cat(res, sep = '\n')
+```
+
+
+```{r, echo=FALSE, results='asis'}
+src = lapply(c(2:numDim), function(j) {
+  knitr::knit_expand('template_chapter_dimensions.Rmd')
+})
+res = knitr::knit_child(text = unlist(src), quiet = TRUE)
+cat(res, sep = '\n')
+```
+
+
+```{r, echo=FALSE, results='asis'}
+res <- knitr::knit_child('template_chapter_dimensions.Rmd', quiet = TRUE)
+cat(res, sep = '\n')
+```
+
+
+
 
 ```{r next_dims_chapters, echo=FALSE, results='asis'}
 # SHOW NEXT CHAPTERS AN TABLES
@@ -456,7 +478,7 @@ for (i in 2:numDim) {
   
   # Select number of positive categories of table
   n_categories_k_positive <- ifelse(length(which(aux_tbl$k > 0)) < num_categories_to_show, length(which(aux_tbl$k > 0)), num_categories_to_show)
-  # Select number of positive categories of table
+  # Select number of negative categories of table
   n_categories_k_negative <- ifelse(length(which(aux_tbl$k < 0)) < num_categories_to_show, length(which(aux_tbl$k < 0)), num_categories_to_show)
   
   # Show positive categories --------------------
