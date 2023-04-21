@@ -437,7 +437,11 @@ https://bookdown.org/yihui/rmarkdown-cookbook/knit-expand.html
 
 https://bookdown.org/yihui/rmarkdown-cookbook/child-document.html#child-document
 
+
+ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI
+
 ```{r, echo=FALSE, results='asis'}
+# getwd()
 res <- knitr::knit_child('template_chapter_dimensions.Rmd', quiet = TRUE)
 cat(res, sep = '\n')
 ```
@@ -447,7 +451,7 @@ cat(res, sep = '\n')
 src = lapply(c(2:numDim), function(j) {
   knitr::knit_expand('template_chapter_dimensions.Rmd')
 })
-res = knitr::knit_child(text = unlist(src), quiet = TRUE)
+res <- knitr::knit_child(text = unlist(src), quiet = TRUE)
 cat(res, sep = '\n')
 ```
 
