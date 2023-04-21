@@ -433,6 +433,8 @@ En resumen: Este eje representa a las personas que por un extremo ...
 
 https://bookdown.org/yihui/rmarkdown-cookbook/results-asis.html#results-asis
 
+https://bookdown.org/yihui/rmarkdown-cookbook/reuse-chunks.html
+
 https://bookdown.org/yihui/rmarkdown-cookbook/knit-expand.html
 
 https://bookdown.org/yihui/rmarkdown-cookbook/child-document.html#child-document
@@ -440,8 +442,7 @@ https://bookdown.org/yihui/rmarkdown-cookbook/child-document.html#child-document
 
 ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI
 
-
-```{r echo=FALSE, results='asis'}
+```{r section_dimension, echo=FALSE, results='asis'}
 i <- 2
 # Title ---------------------------------------
 cat("\n\n## Dimension", i, "\n")
@@ -575,8 +576,7 @@ pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", 
 
 
 ```{r next_dims_chapters, eval=FALSE, include= FALSE, echo=FALSE, results='asis'}
-# SHOW NEXT CHAPTERS AN TABLES
-# show next dimensions
+# show next dimensions: chapters and tables
 for (i in 2:numDim) {
   # Title ---------------------------------------
   cat("\n\n## Dimension", i, "\n\n")
