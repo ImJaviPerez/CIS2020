@@ -440,8 +440,6 @@ https://bookdown.org/yihui/rmarkdown-cookbook/knit-expand.html
 https://bookdown.org/yihui/rmarkdown-cookbook/child-document.html#child-document
 
 
-ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI
-
 ```{r section_dimension, echo=FALSE, results='asis'}
 i <- 2
 # Title ---------------------------------------
@@ -784,11 +782,6 @@ for (i in seq(numDims_to_show-1)) {
 ```
 
 
-
-
-
-
-
 ## Decidir el número de cluster y caracterizar estos cluster.
 
 Se toman a todas las personas que dicen haber votado a "EQUO Berdeak" y a todos sus vecinos más cercanos. 
@@ -801,12 +794,15 @@ Se muestra la división cluster por el método *Ward.D* o también conocido como
 
 ```{r}
 formula_all_dims <- as.formula(paste("~-1 +", paste0("Dim",1:numDim, collapse = "+")))
+# lista_mtdos <- c("ward.D", "ward.D2", "complete", "single", "average", "mcquitty", "median", "centroid")
+mtdo_usado <- "ward.D2" # "ward.D"
+
 # Distancia euclidea al cuadrado entre los elementos de la matriz
 dist_individuos <- stats::dist(model.matrix(formula_all_dims, EB_neighbourhood_df))^2
-HClust.2 <- hclust(dist_individuos , method= "ward.D")
+HClust_EB <- hclust(dist_individuos , method= mtdo_usado)
 
-plot(HClust.2, main= "Cluster Dendrograma para individuos cercanos a EQUO Berdeak", xlab= 
-  "Encuestas CIS EQUO", sub="Method=ward.D; Distancia=euclidea al cuadrado")
+### plot(HClust_EB, main= "Cluster Dendrograma para individuos cercanos a EQUO Berdeak", xlab= 
+###   "Encuestas CIS EQUO", sub=cat("Method=", mtdo_usado, "; Distancia=euclidea al cuadrado"))
 ```
 
 Parece que el número de cluster adecuado es XXXX a la vista de las alturas de las ramas del dendograma. Pero al igual que en el análisis de correspondencias simples, aquí  también se puede buscar el número óptimo de clusters (`k`) usando la función `daisy` (Dissimilarity Matrix Calculation) que computa las desigualdades en las distancias entre parejas. En este caso se ha usado la métrica euclídea al cuadrado para ese cálculo. Para obtener el número óptimo de clusters y su composición.
@@ -826,31 +822,9 @@ grpdist <- function(X, metrica="gower"){
 ```
 
 
-```{r}
-# Se selecciona el numero optimo de clusters
-# data frame auxialiar
-kt <- data.frame(k=1:nrow(EB_neighbourhood_df), r=0)
-
-mtdo_usado = "ward.D"
-HClust_aux <- hclust(dist_individuos , method= mtdo_usado)
-
-for(i in 2:(nrow(EB_neighbourhood_df)-1)){
-  gr <- cutree(HClust_aux, i)
-  distgr <- grpdist(gr, "gower")
-  # distgr <- grpdist(gr, "euclidean")
-  mt <- cor(dist_individuos, distgr, method="pearson")
-  kt[i,2] <- mt
-  }
-# Calculamos mediante el estadístico de Mantel el número de clusters óptimo:
-cat('\nMétodo: "', mtdo_usado,'". k óptimo = ',k.best <- which.max(kt$r),'\nComposición de los clusters:\n', sep = "")
-
-print(summary(as.factor(cutree(HClust_aux, k = k.best))))
-```
-
-
 ```{r include=FALSE, eval=FALSE}
 # Lista de metodos a testear
-lista_mtdos = c("ward.D", "ward.D2", "complete", "single", "average", "mcquitty", "median", "centroid")
+lista_mtdos <- c("ward.D", "ward.D2", "complete", "single", "average", "mcquitty", "median", "centroid")
 # data frame auxialiar
 kt <- data.frame(k=1:nrow(EB_neighbourhood_df), r=0)
 
@@ -868,33 +842,43 @@ for (mtdo_usado in lista_mtdos)
     kt[i,2] <- mt
     }
   # Calculamos mediante el estadístico de Mantel el número de clusters óptimo:
-  cat('\nMétodo: "', mtdo_usado,'". k óptimo = ',k.best <- which.max(kt$r),'\nComposición de los clusters:\n', sep = "")
+  cat('\nMétodo: "', mtdo_usado,'". k óptimo = ',k_best_aux <- which.max(kt$r),'\nComposición de los clusters:\n', sep = "")
 
-  print(summary(as.factor(cutree(HClust_aux, k = k.best))))
+  print(summary(as.factor(cutree(HClust_aux, k = k_best_aux))))
 }
 ```
 
 
 
 ```{r}
-require("RcmdrMisc")
+## pick colour
+library(RColorBrewer)
+EB_cluster_palette <- brewer.pal(n=num_clusters_acm, "Set2")
+
+EB_cluster_palette <- c("blue", "cyan", "darkgray", "yellow", "brown", "red", "violet")[1:num_clusters_acm]
+
+
+EB_cluster_scale_color <- scale_color_manual(breaks = c(1:num_clusters_acm),
+                       values = EB_cluster_palette)
+
+EB_cluster_fill_color <- scale_fill_manual(breaks = c(1:num_clusters_acm),
+                       values = EB_cluster_palette)
+
+
 
 # Funcion que genera el objeto con la figura
 gg_plot_ACM <- function(hCluter_figura, dimX = 1, dimY = 2, k.optimo=3, titulo = "") {
-  #hCluter_figura <- HClust.2
+  #hCluter_figura <- HClust_EB
 
   # create column name
   C1 <- paste0("Dim", dimX)
   C2 <- paste0("Dim", dimY)
 
-  # Se crea una columna con el numero de cluster asignado a ese coche
-  EB_neighbourhood_df$num_cluster <- assignCluster(model.matrix(formula_all_dims, EB_neighbourhood_df), 
-                                                    EB_neighbourhood_df, cutree(hCluter_figura, k = k.optimo))
-  
   figura <- ggplot(data=EB_neighbourhood_df, aes(x=.data[[C1]], y=.data[[C2]], color=num_cluster)) +
     geom_point() + geom_rug() +
     geom_vline(xintercept = 0) + geom_hline(yintercept = 0) +
     geom_text_repel(aes(label=rownames(EB_neighbourhood_df)),hjust=0, vjust=0, size=3.3) +
+    EB_cluster_scale_color +
     #geom_text(aes(label=rownames(EB_neighbourhood_df)),hjust=0, vjust=0, size=3.3) +
     theme(legend.position="top") + ggtitle(titulo)
   
@@ -902,106 +886,6 @@ gg_plot_ACM <- function(hCluter_figura, dimX = 1, dimY = 2, k.optimo=3, titulo =
 }
 ```
 
-
-```{r include=FALSE, eval=FALSE}
-# Se buscan outliers
-require("RcmdrMisc")
-
-require(gridExtra)
-require(grid)
-require(ggplot2)
-require(lattice)
-
-# Método: "complete". k óptimo = 3
-k_aux <-  k.best
-HClust_aux <- hclust(dist_individuos , method= "complete")
-# Se crea una columna con el numero de cluster asignado a ese coche
-aux_tbl <- EB_neighbourhood_df[,-(1:(ncol(EB_neighbourhood_df)-numDim))]
-aux_tbl$num_cluster <- assignCluster(model.matrix(formula_all_dims, aux_tbl), 
-                                                  aux_tbl, cutree(HClust_aux, k = k_aux))
-
-j <- c()
-for (i in 1:k_aux) {
-  j <- c(j, length(which(aux_tbl$num_cluster == i)))
-  print(paste(i, length(which(aux_tbl$num_cluster == i))))
-}
-outlier_rows <- as.numeric(rownames(aux_tbl)[which(aux_tbl$num_cluster %in% which.min(j))])
-# Outlier rows: 86 751 1393 1412 2343
-cat("Outlier rows:", outlier_rows)
-
-
-g1grob <- ggplotGrob(gg_plot_ACM(HClust_aux, k.optimo = k_aux, titulo = paste("Método complete", k_aux, "clusters")))
-# Se crea el texto que se mostrara con la figura
-# Distribución de los vehículos en cada cluster:
-txt_distrib_clusters <- "Composición de los clusters: "
-distrib_clusters <-  summary(as.factor(cutree(HClust_aux, k = k_aux)))
-for (i in 1:k_aux){
-  txt_distrib_clusters <- paste(txt_distrib_clusters, distrib_clusters[i] )
-}
-texto1 <- textGrob(txt_distrib_clusters, gp=gpar(fontsize=10))
-
-
-
-
-# Se muestran la figuras
-grid.arrange(
-  grobs = list(g1grob, texto1),
-  heights = c(9, 1),
-  layout_matrix = rbind(c(1, 2),
-                        c(3, 4))
-)
-
-```
-
-
-
-```{r include=FALSE, eval=FALSE}
-# Se generan particiones de prueba de 3  y 4 clusters
-require("RcmdrMisc")
-
-require(gridExtra)
-require(grid)
-require(ggplot2)
-require(lattice)
-
-# Método: "ward.D". k óptimo = 3
-k_aux <-  k.best
-HClust_aux <- hclust(dist_individuos , method= "ward.D")
-g1grob <- ggplotGrob(gg_plot_ACM(HClust_aux, k.optimo = k_aux, titulo = paste("Método ward.D.", k_aux, "clusters")))
-# Se crea el texto que se mostrara con la figura
-# Distribución de los vehículos en cada cluster:
-txt_distrib_clusters <- "Composición de los clusters: "
-distrib_clusters <-  summary(as.factor(cutree(HClust.2, k = k_aux)))
-for (i in 1:k_aux){
-  txt_distrib_clusters <- paste(txt_distrib_clusters, distrib_clusters[i] )
-}
-texto1 <- textGrob(txt_distrib_clusters, gp=gpar(fontsize=10))
-
-
-# Método: "ward.D". k óptimo = 4
-k_aux = 6
-HClust_aux <- hclust(dist_individuos , method= "ward.D")
-g2grob <- ggplotGrob(gg_plot_ACM(HClust_aux, k.optimo = k_aux, titulo = paste("Método ward.D.", k_aux, "clusters")))
-# Se crea el texto que se mostrara con la figura
-# Distribución de los vehículos en cada cluster:
-txt_distrib_clusters <- "Composición de los clusters: "
-distrib_clusters <-  summary(as.factor(cutree(HClust.2, k = k_aux)))
-for (i in 1:k_aux){
-  txt_distrib_clusters <- paste(txt_distrib_clusters, distrib_clusters[i] )
-}
-texto2=textGrob(txt_distrib_clusters, gp=gpar(fontsize=10))
-
-
-
-# Se muestran la figuras
-grid.arrange(
-  grobs = list(g1grob, g2grob, texto1, texto2),
-  heights = c(9, 1),
-  layout_matrix = rbind(c(1, 2),
-                        c(3, 4))
-)
-
-```
 
 
 ```{r plot_clusters}
@@ -1012,15 +896,15 @@ require(ggplot2)
 require(lattice)
 
 # La matriz dist_individuos contiene las distancias eclideas al cuadrado.
-#
-# Se toma el metodo mas adecuado
-mtdo_usado_acm = "ward.D"
 
 require(cluster)
 
+# data frame auxiliar
+kt <- data.frame(k=1:nrow(EB_neighbourhood_df), r=0)
+
 # Se elige el numero de clusters optimo
 for(i in 2:(nrow(EB_neighbourhood_df)-1)){
-  gr <- cutree(HClust.2, i)
+  gr <- cutree(HClust_EB, i)
   distgr <- grpdist(gr, "gower")
   mt <- cor(dist_individuos, distgr, method="pearson")
   kt[i,2] <- mt
@@ -1028,40 +912,63 @@ for(i in 2:(nrow(EB_neighbourhood_df)-1)){
 
 num_clusters_acm <- which.max(kt$r)
 
-# Método: "ward.D". k óptimo = 3
-HClust.2 <- hclust(dist_individuos , method = mtdo_usado_acm)
+# Se crea una columna con el numero de cluster asignado a ese individuo
+require(RcmdrMisc)
+EB_neighbourhood_df$num_cluster <- assignCluster(model.matrix(formula_all_dims, EB_neighbourhood_df),
+                                                 EB_neighbourhood_df, 
+                                                 cutree(HClust_EB, k = num_clusters_acm))
 
-# Se crea la figuar
-gg_cluster_ACM <- ggplotGrob(gg_plot_ACM(HClust.2, k.optimo = num_clusters_acm, titulo = paste("Método", mtdo_usado_acm)))
+
+### # Método: "ward.D". k óptimo = 3
+### HClust_EB <- hclust(dist_individuos , method = mtdo_usado)
+
+# Se crea la figura
+### gg_cluster_ACM <- ggplotGrob(gg_plot_ACM(HClust_EB, k.optimo = num_clusters_acm, titulo = paste("Método", mtdo_usado)))
+### gg_cluster_ACM <- gg_plot_ACM(HClust_EB, k.optimo = num_clusters_acm, titulo = paste("Método", mtdo_usado))
+
+gg_cluster_ACM <- gg_plot_ACM(HClust_EB, k.optimo = num_clusters_acm, titulo = "Clusters de individuos cercanos a EQUO Berdeak")
 
 # Se crea el texto que se mostrara con la figura
 # Distribución de los vehículos en cada cluster:
 txt_distrib_clusters <- "Composición de los clusters: "
-distrib_clusters <-  summary(as.factor(cutree(HClust.2, k = num_clusters_acm)))
-for (i in 1:num_clusters_acm){
-  txt_distrib_clusters <- paste(txt_distrib_clusters, distrib_clusters[i] )
-}
-texto1 <- textGrob(txt_distrib_clusters, gp=gpar(fontsize=10))
+distrib_clusters <-  summary(as.factor(cutree(HClust_EB, k = num_clusters_acm)))
+txt_distrib_clusters <- paste0((1:length(distrib_clusters)), ":", distrib_clusters, collapse = ", ")
+
+
+# ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   
+# ASEGURARSE QUE EL COLOR CORRESPONDE CON EL NUMERO DE CLUSTER
+
+
 
 # Dendograma
 require(factoextra)
-gg_dendograma_ACM <- fviz_dend(HClust.2, k=num_clusters_acm,rect = T, show_labels = FALSE)
+gg_dendograma_ACM <- fviz_dend(HClust_EB, k=num_clusters_acm, k_colors = EB_cluster_palette, rect = T, show_labels = FALSE, main = "Cluster Dendrograma para individuos cercanos a EQUO Berdeak", sub = txt_distrib_clusters)
+
+### texto1 <- textGrob(txt_distrib_clusters, gp=gpar(fontsize=10))
 
 ### grid.arrange(gg_cluster_ACM, gg_dendograma_ACM, ncol=2)
 
-# Se muestran la figura
-grid.arrange(
-  grobs = list(gg_cluster_ACM, texto1, gg_dendograma_ACM),
-  heights = c(9, 1),
-  layout_matrix = rbind(c(1, 3),
-                        c(2, 2))
-)
-
+### # Se muestran la figura
+### grid.arrange(
+###   grobs = list(gg_cluster_ACM, texto1, gg_dendograma_ACM),
+###   heights = c(9, 1),
+###   layout_matrix = rbind(c(1, 3),
+###                         c(2, 2))
+### )
 ```
 
 
 
 
+```{r}
+require(pander)
+pander(distrib_clusters, caption = "Distribución de los cluster")
+```
+
+```{r}
+gg_cluster_ACM
+gg_dendograma_ACM
+```
 
 
 
