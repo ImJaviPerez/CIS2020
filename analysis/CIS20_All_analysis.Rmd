@@ -1,5 +1,5 @@
 ---
-title: "CIS 2020"
+title: "CIS 2020 análisis"
 subtitle: "Análisis de datos de todos los partidos"
 author: "ImJaviPerez"
 date: "Diciembre 2022"
@@ -440,31 +440,141 @@ https://bookdown.org/yihui/rmarkdown-cookbook/child-document.html#child-document
 
 ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI
 
-```{r, echo=FALSE, results='asis'}
-# getwd()
-res <- knitr::knit_child('template_chapter_dimensions.Rmd', quiet = TRUE)
-cat(res, sep = '\n')
+
+```{r echo=FALSE, results='asis'}
+i <- 2
+# Title ---------------------------------------
+cat("\n\n## Dimension", i, "\n")
+
+# A comment ----------------------------------
+cat("\nSe muestran las tablas con las variables más representativas de esta dimensión.")
+cat("\nEn el **lado positivo del eje** las modalidades mejor representadas son:\n\n")
+
+# Prepare tables ------------------------------
+# We want to show positive and negative categories of this dimension. And it is possible that only one side explains the wanted percentage, so we have to take extra categories from the other side to show.
+# table with big percentage of eigenvalue
+aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
+
+# Select number of positive categories of table
+n_categories_k_positive <- ifelse(length(which(aux_tbl$k > 0)) < num_categories_to_show, length(which(aux_tbl$k > 0)), num_categories_to_show)
+# Select number of negative categories of table
+n_categories_k_negative <- ifelse(length(which(aux_tbl$k < 0)) < num_categories_to_show, length(which(aux_tbl$k < 0)), num_categories_to_show)
+
+# Show positive categories --------------------
+aux_idx <- which(aux_tbl$k > 0)[1:n_categories_k_positive]
+
+require(pander)
+pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
+
+## Sorted categories
+## str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = n_categories_k_positive))
+## cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
+  
+
+cat("\nEn el **lado negativo del eje** están las \"variables:modalidades\":\n")
+
+# Show negative categories --------------------
+aux_idx <- which(aux_tbl$k < 0)[1:n_categories_k_negative]
+require(pander)
+pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_negative, " modalidades más significativas del eje negativo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
+
+## Sorted categories
+## str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = n_categories_k_negative))
+## cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
 ```
 
 
-```{r, echo=FALSE, results='asis'}
-src = lapply(c(2:numDim), function(j) {
-  knitr::knit_expand('template_chapter_dimensions.Rmd')
-})
-res <- knitr::knit_child(text = unlist(src), quiet = TRUE)
-cat(res, sep = '\n')
+```{r echo=FALSE, results='asis'}
+i <- 3
+# Title ---------------------------------------
+cat("\n\n## Dimension", i, "\n")
+
+# A comment ----------------------------------
+cat("\nSe muestran las tablas con las variables más representativas de esta dimensión.")
+cat("\nEn el **lado positivo del eje** las modalidades mejor representadas son:\n\n")
+
+# Prepare tables ------------------------------
+# We want to show positive and negative categories of this dimension. And it is possible that only one side explains the wanted percentage, so we have to take extra categories from the other side to show.
+# table with big percentage of eigenvalue
+aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
+
+# Select number of positive categories of table
+n_categories_k_positive <- ifelse(length(which(aux_tbl$k > 0)) < num_categories_to_show, length(which(aux_tbl$k > 0)), num_categories_to_show)
+# Select number of negative categories of table
+n_categories_k_negative <- ifelse(length(which(aux_tbl$k < 0)) < num_categories_to_show, length(which(aux_tbl$k < 0)), num_categories_to_show)
+
+# Show positive categories --------------------
+aux_idx <- which(aux_tbl$k > 0)[1:n_categories_k_positive]
+
+require(pander)
+pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
+
+## Sorted categories
+## str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = n_categories_k_positive))
+## cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
+  
+
+cat("\nEn el **lado negativo del eje** están las \"variables:modalidades\":\n")
+
+# Show negative categories --------------------
+aux_idx <- which(aux_tbl$k < 0)[1:n_categories_k_negative]
+require(pander)
+pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_negative, " modalidades más significativas del eje negativo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
+
+## Sorted categories
+## str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = n_categories_k_negative))
+## cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
 ```
 
 
-```{r, echo=FALSE, results='asis'}
-res <- knitr::knit_child('template_chapter_dimensions.Rmd', quiet = TRUE)
-cat(res, sep = '\n')
+
+```{r echo=FALSE, results='asis'}
+i <- 4
+# Title ---------------------------------------
+cat("\n\n## Dimension", i, "\n")
+
+# A comment ----------------------------------
+cat("\nSe muestran las tablas con las variables más representativas de esta dimensión.")
+cat("\nEn el **lado positivo del eje** las modalidades mejor representadas son:\n\n")
+
+# Prepare tables ------------------------------
+# We want to show positive and negative categories of this dimension. And it is possible that only one side explains the wanted percentage, so we have to take extra categories from the other side to show.
+# table with big percentage of eigenvalue
+aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
+
+# Select number of positive categories of table
+n_categories_k_positive <- ifelse(length(which(aux_tbl$k > 0)) < num_categories_to_show, length(which(aux_tbl$k > 0)), num_categories_to_show)
+# Select number of negative categories of table
+n_categories_k_negative <- ifelse(length(which(aux_tbl$k < 0)) < num_categories_to_show, length(which(aux_tbl$k < 0)), num_categories_to_show)
+
+# Show positive categories --------------------
+aux_idx <- which(aux_tbl$k > 0)[1:n_categories_k_positive]
+
+require(pander)
+pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
+
+## Sorted categories
+## str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = n_categories_k_positive))
+## cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
+  
+
+cat("\nEn el **lado negativo del eje** están las \"variables:modalidades\":\n")
+
+# Show negative categories --------------------
+aux_idx <- which(aux_tbl$k < 0)[1:n_categories_k_negative]
+require(pander)
+pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_negative, " modalidades más significativas del eje negativo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
+
+## Sorted categories
+## str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = n_categories_k_negative))
+## cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
 ```
 
 
 
 
-```{r next_dims_chapters, echo=FALSE, results='asis'}
+
+```{r next_dims_chapters, eval=FALSE, include= FALSE, echo=FALSE, results='asis'}
 # SHOW NEXT CHAPTERS AN TABLES
 # show next dimensions
 for (i in 2:numDim) {
