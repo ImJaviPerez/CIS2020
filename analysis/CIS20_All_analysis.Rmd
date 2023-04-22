@@ -849,53 +849,14 @@ for (mtdo_usado in lista_mtdos)
 ```
 
 
-
 ```{r}
-## pick colour
-library(RColorBrewer)
-EB_cluster_palette <- brewer.pal(n=num_clusters_acm, "Set2")
-
-EB_cluster_palette <- c("blue", "cyan", "darkgray", "yellow", "brown", "red", "violet")[1:num_clusters_acm]
-
-
-EB_cluster_scale_color <- scale_color_manual(breaks = c(1:num_clusters_acm),
-                       values = EB_cluster_palette)
-
-EB_cluster_fill_color <- scale_fill_manual(breaks = c(1:num_clusters_acm),
-                       values = EB_cluster_palette)
-
-
-
-# Funcion que genera el objeto con la figura
-gg_plot_ACM <- function(hCluter_figura, dimX = 1, dimY = 2, k.optimo=3, titulo = "") {
-  #hCluter_figura <- HClust_EB
-
-  # create column name
-  C1 <- paste0("Dim", dimX)
-  C2 <- paste0("Dim", dimY)
-
-  figura <- ggplot(data=EB_neighbourhood_df, aes(x=.data[[C1]], y=.data[[C2]], color=num_cluster)) +
-    geom_point() + geom_rug() +
-    geom_vline(xintercept = 0) + geom_hline(yintercept = 0) +
-    geom_text_repel(aes(label=rownames(EB_neighbourhood_df)),hjust=0, vjust=0, size=3.3) +
-    EB_cluster_scale_color +
-    #geom_text(aes(label=rownames(EB_neighbourhood_df)),hjust=0, vjust=0, size=3.3) +
-    theme(legend.position="top") + ggtitle(titulo)
-  
-  return(figura)
-}
-```
-
-
-
-```{r plot_clusters}
 # Se genera el cluster optimo y se representa en el plano
 require(gridExtra)
 require(grid)
 require(ggplot2)
 require(lattice)
 
-# La matriz dist_individuos contiene las distancias eclideas al cuadrado.
+# La matriz dist_individuos contiene las distancias euclideas al cuadrado.
 
 require(cluster)
 
@@ -918,14 +879,60 @@ EB_neighbourhood_df$num_cluster <- assignCluster(model.matrix(formula_all_dims, 
                                                  EB_neighbourhood_df, 
                                                  cutree(HClust_EB, k = num_clusters_acm))
 
+# ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   # ESTAS AQUI   
+## pick colour
+# library(RColorBrewer)
+# EB_cluster_palette <- brewer.pal(n=num_clusters_acm, "Set2")
+EB_cluster_palette <- c("blue", "cyan", "darkgray", "green", "violet", "red", "bisque2", "goldenrod2")[1:num_clusters_acm]
 
-### # Método: "ward.D". k óptimo = 3
-### HClust_EB <- hclust(dist_individuos , method = mtdo_usado)
+recodes_str <- paste0((1:num_clusters_acm), "=", paste0("'", EB_cluster_palette, "'"), collapse = "; ")
+EB_neighbourhood_df$num_cluster_color <- car::recode(var = EB_neighbourhood_df$num_cluster,
+                                        recodes = recodes_str,
+                                        levels = EB_cluster_palette)
+pander(EB_neighbourhood_df %>% dplyr::count(num_cluster_color), .drop=FALSE)
+pander(EB_neighbourhood_df %>% dplyr::count(num_cluster), .drop=FALSE)
+```
 
-# Se crea la figura
-### gg_cluster_ACM <- ggplotGrob(gg_plot_ACM(HClust_EB, k.optimo = num_clusters_acm, titulo = paste("Método", mtdo_usado)))
-### gg_cluster_ACM <- gg_plot_ACM(HClust_EB, k.optimo = num_clusters_acm, titulo = paste("Método", mtdo_usado))
 
+
+```{r}
+
+EB_cluster_scale_color <- scale_color_manual(breaks = c(1:num_clusters_acm),
+                       values = EB_cluster_palette)
+
+### EB_cluster_fill_color <- scale_fill_manual(breaks = c(1:num_clusters_acm),
+###                       values = EB_cluster_palette)
+
+
+
+# Funcion que genera el objeto con la figura
+gg_plot_ACM <- function(hCluter_figura, dimX = 1, dimY = 2, k.optimo=3, titulo = "") {
+  
+  # hCluter_figura <- HClust_EB
+  # dimX = 1
+  # dimY = 2
+  # k.optimo <- 6
+  # titulo = ""
+
+  # create column name
+  C1 <- paste0("Dim", dimX)
+  C2 <- paste0("Dim", dimY)
+
+  figura <- ggplot(data=EB_neighbourhood_df, aes(x=.data[[C1]], y=.data[[C2]], color=num_cluster)) +
+    geom_point() + geom_rug() +
+    geom_vline(xintercept = 0) + geom_hline(yintercept = 0) +
+    geom_text_repel(aes(label=rownames(EB_neighbourhood_df)),hjust=0, vjust=0, size=3.3) +
+    EB_cluster_scale_color +
+    #geom_text(aes(label=rownames(EB_neighbourhood_df)),hjust=0, vjust=0, size=3.3) +
+    theme(legend.position="top") + ggtitle(titulo)
+  
+  return(figura)
+}
+```
+
+
+
+```{r plot_clusters}
 gg_cluster_ACM <- gg_plot_ACM(HClust_EB, k.optimo = num_clusters_acm, titulo = "Clusters de individuos cercanos a EQUO Berdeak")
 
 # Se crea el texto que se mostrara con la figura
@@ -970,6 +977,11 @@ gg_cluster_ACM
 gg_dendograma_ACM
 ```
 
+# Variabilidad de variables categóricas
+
+https://en.wikipedia.org/wiki/Categorical_distribution
+
+https://stats.stackexchange.com/questions/221332/variance-of-a-distribution-of-multi-level-categorical-data
 
 
 ```{r}
