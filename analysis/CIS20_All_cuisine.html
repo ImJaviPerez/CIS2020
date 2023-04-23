@@ -12,7 +12,7 @@
 <meta name="author" content="ImJaviPerez" />
 
 
-<title>CIS 2020</title>
+<title>CIS 2020 cocina</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1620,8 +1620,8 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">CIS 2020</h1>
-<h3 class="subtitle">Cocinando todas las encuestas</h3>
+<h1 class="title toc-ignore">CIS 2020 cocina</h1>
+<h3 class="subtitle">Todas las encuestas</h3>
 <h4 class="author">ImJaviPerez</h4>
 <h4 class="date">Diciembre 2022</h4>
 
@@ -1887,10 +1887,12 @@ líderes políticos</em></a>
 Vasco</em></a></li>
 <li><a href="#variable-participaciong-participación-electoral-en-las-elecciones-generales-de-noviembre-de-2019" id="toc-variable-participaciong-participación-electoral-en-las-elecciones-generales-de-noviembre-de-2019">Variable
 <code>PARTICIPACIONG</code>: <em>Participación electoral en las
-elecciones generales de noviembre de 2019</em></a></li>
+elecciones generales de noviembre de 2019</em></a>
+<ul>
 <li><a href="#variable-recuvotog-recuerdo-de-voto-en-las-elecciones-generales-de-noviembre-de-2019-de-los-votantes" id="toc-variable-recuvotog-recuerdo-de-voto-en-las-elecciones-generales-de-noviembre-de-2019-de-los-votantes">Variable
 <code>RECUVOTOG</code>: <em>Recuerdo de voto en las elecciones generales
 de noviembre de 2019 de los votantes</em></a></li>
+</ul></li>
 <li><a href="#variable-escideol-escala-de-autoubicación-ideológica-1-10" id="toc-variable-escideol-escala-de-autoubicación-ideológica-1-10">Variable
 <code>ESCIDEOL</code>: <em>Escala de autoubicación ideológica
 (1-10)</em></a></li>
@@ -2004,7 +2006,7 @@ library(ca)</code></pre>
 # Create a new logger object with create.logger().
 logger &lt;- create.logger()
 # Set the logger&#39;s file output.
-logfile(logger) &lt;- &#39;cis_2020_cuisine.log&#39;
+logfile(logger) &lt;- &#39;cis_2020_all_cuisine.log&#39;
 # Set the current level of the logger.
 level(logger) &lt;- &quot;DEBUG&quot;
 #level(logger) &lt;- &quot;INFO&quot;
@@ -9173,7 +9175,7 @@ pander(cis_2020_df %&gt;% dplyr::count(P26_1, .drop=FALSE))</code></pre>
 </table>
 <p>Esta pregunta tiene efectivos pequeños en las modalidades:<br />
 <code>No conoce</code>.</p>
-<p>En este caso no se realizaza ninguna reagrupación.</p>
+<p>En este caso no se realiza ninguna reagrupación.</p>
 </div>
 <div id="variable-p26_2-maddalen-iriarte" class="section level4">
 <h4>Variable <code>P26_2</code>: <em>Maddalen Iriarte</em></h4>
@@ -9247,7 +9249,7 @@ pander(cis_2020_df %&gt;% dplyr::count(P26_2, .drop=FALSE))</code></pre>
 </table>
 <p>Esta pregunta tiene efectivos pequeños en las modalidades:<br />
 <code>10 Muy bien</code>.</p>
-<p>En este caso no se realizaza ninguna reagrupación.</p>
+<p>En este caso no se realiza ninguna reagrupación.</p>
 </div>
 <div id="variable-p26_3-idoia-mendia" class="section level4">
 <h4>Variable <code>P26_3</code>: <em>Idoia Mendia</em></h4>
@@ -9979,10 +9981,9 @@ pander(cis_2020_df %&gt;% dplyr::count(PARTICIPACIONG, .drop=FALSE))</code></pre
 <code>N.C.</code>.</p>
 <p><strong>En este caso no tengo criterio para hacer reagrupaciones.
 Quedo pendiente de la respuesta que me de JRB.</strong></p>
-</div>
-<div id="variable-recuvotog-recuerdo-de-voto-en-las-elecciones-generales-de-noviembre-de-2019-de-los-votantes" class="section level3">
-<h3>Variable <code>RECUVOTOG</code>: <em>Recuerdo de voto en las
-elecciones generales de noviembre de 2019 de los votantes</em></h3>
+<div id="variable-recuvotog-recuerdo-de-voto-en-las-elecciones-generales-de-noviembre-de-2019-de-los-votantes" class="section level4">
+<h4>Variable <code>RECUVOTOG</code>: <em>Recuerdo de voto en las
+elecciones generales de noviembre de 2019 de los votantes</em></h4>
 <pre class="r"><code>require(pander)
 pander(cis_2020_df %&gt;% dplyr::count(RECUVOTOG, .drop=FALSE))</code></pre>
 <table style="width:38%;">
@@ -10061,6 +10062,7 @@ pander(cis_2020_df %&gt;% dplyr::count(RECUVOTOG, .drop=FALSE))</code></pre>
 <code>En blanco</code>.</p>
 <p><strong>En este caso no tengo criterio para hacer reagrupaciones.
 Quedo pendiente de la respuesta que me de JRB.</strong></p>
+</div>
 </div>
 <div id="variable-escideol-escala-de-autoubicación-ideológica-1-10" class="section level3">
 <h3>Variable <code>ESCIDEOL</code>: <em>Escala de autoubicación
@@ -11952,11 +11954,8 @@ agrupación <code>CLASESOCIAL_GRUPO</code>.</p>
 <p>Desconozco el significado de las modalidades que tienen la variables
 que van desde <code>IA_I501</code> hasta <code>IA_I537</code>. Por tanto
 las excluyo hasta que tenga un mejor conocimiento de ellas.</p>
-<pre class="r"><code>i &lt;- which(unique(efectivo_peq_df$variable) == &quot;IA_I506&quot;)
-j &lt;- which(unique(efectivo_peq_df$variable) == &quot;IA_I537&quot;)
-### aux_idx &lt;- paste0(unique(efectivo_peq_df$variable)[i:j], collapse = &quot;, &quot;)
-aux_idx &lt;- unique(efectivo_peq_df$variable)[i:j]
-excluded_cols &lt;- c(excluded_cols, aux_idx)</code></pre>
+<pre class="r"><code># list of variables
+excluded_cols &lt;- c(excluded_cols, colnames(cis_2020_df)[startsWith(colnames(cis_2020_df), &#39;IA_I5&#39;)])</code></pre>
 <p><strong>Dejo a criterio de JRB si incluir estas variables o no y cómo
 hacerlo</strong></p>
 </div>
@@ -13153,6 +13152,313 @@ pander(cis_2020_df %&gt;% dplyr::count(RVAUTO20, .drop=FALSE))</code></pre>
 <code>Otro partido</code>.</p>
 <p><strong>En este caso no tengo criterio para hacer reagrupaciones.
 Quedo pendiente de la respuesta que me de JRB.</strong></p>
+<p>La variable <code>P20</code> tiene como posibles respuestas: “Los
+Verdes” y “EQUO”. La variable <code>RVAUTO20</code> no contiene esas
+respuestas, que han sido sustituidas por “Otro partido”. Se comprueba
+que apenas existen diferencias entre la pregunta <code>P20</code> y
+<code>RVAUTO20</code> respecto a los votos de “Los Verdes” y “EQUO”:</p>
+<pre class="r"><code># Select individuals from EQUO Berdeak
+EB_rows_b &lt;- which(cis_2020_df$P20 %in%  c(&quot;Los Verdes&quot;, &quot;EQUO&quot;))
+# Select individuals from &quot;Otro partido&quot;
+EB_rows_o &lt;- which(cis_2020_df$RVAUTO20 %in% &quot;Otro partido&quot;)
+
+# Select Berdeak extra rows
+if (length(EB_rows_o) &gt; length(EB_rows_b)){
+  EB_rows_extra &lt;- EB_rows_o[which(!(EB_rows_o %in% EB_rows_b))]
+}else{
+  EB_rows_extra &lt;- EB_rows_b[which(!(EB_rows_b %in% EB_rows_o))]
+}
+# Create EB rows unique and sorted
+EB_rows &lt;- sort(unique(c(EB_rows_b, EB_rows_o)))
+
+aux_tbl &lt;- cbind.data.frame(EB_rows, cis_2020_df$P20[EB_rows], cis_2020_df$RVAUTO20[EB_rows])
+colnames(aux_tbl) &lt;- c(&quot;individuo&quot;, &quot;P20&quot;, &quot;RVAUTO20&quot;)
+
+pander(aux_tbl)</code></pre>
+<table style="width:65%;">
+<colgroup>
+<col width="16%" />
+<col width="27%" />
+<col width="20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">individuo</th>
+<th align="center">P20</th>
+<th align="center">RVAUTO20</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">22</td>
+<td align="center">EQUO</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="even">
+<td align="center">65</td>
+<td align="center">EQUO</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="odd">
+<td align="center">185</td>
+<td align="center">Los Verdes</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="even">
+<td align="center">206</td>
+<td align="center">Otro partido</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="odd">
+<td align="center">247</td>
+<td align="center">Otro partido</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="even">
+<td align="center">252</td>
+<td align="center">EQUO</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="odd">
+<td align="center">343</td>
+<td align="center">EQUO</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="even">
+<td align="center">354</td>
+<td align="center">EQUO</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="odd">
+<td align="center">367</td>
+<td align="center">EQUO</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="even">
+<td align="center">539</td>
+<td align="center">EQUO</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="odd">
+<td align="center">547</td>
+<td align="center">EQUO</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="even">
+<td align="center">570</td>
+<td align="center">Los Verdes</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="odd">
+<td align="center">621</td>
+<td align="center">EQUO</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="even">
+<td align="center">639</td>
+<td align="center">Otro partido</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="odd">
+<td align="center">647</td>
+<td align="center">EQUO</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="even">
+<td align="center">684</td>
+<td align="center">Otro partido</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="odd">
+<td align="center">732</td>
+<td align="center">Los Verdes</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="even">
+<td align="center">820</td>
+<td align="center">Los Verdes</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="odd">
+<td align="center">868</td>
+<td align="center">Los Verdes</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="even">
+<td align="center">890</td>
+<td align="center">EQUO</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="odd">
+<td align="center">905</td>
+<td align="center">EQUO</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="even">
+<td align="center">921</td>
+<td align="center">EQUO</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="odd">
+<td align="center">1069</td>
+<td align="center">Los Verdes</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="even">
+<td align="center">1071</td>
+<td align="center">EQUO</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="odd">
+<td align="center">1095</td>
+<td align="center">EQUO</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="even">
+<td align="center">1412</td>
+<td align="center">Otro partido</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="odd">
+<td align="center">1480</td>
+<td align="center">Escaños en Blanco</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="even">
+<td align="center">1786</td>
+<td align="center">EQUO</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="odd">
+<td align="center">2017</td>
+<td align="center">Los Verdes</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="even">
+<td align="center">2045</td>
+<td align="center">EQUO</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="odd">
+<td align="center">2285</td>
+<td align="center">EQUO</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="even">
+<td align="center">2305</td>
+<td align="center">Los Verdes</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="odd">
+<td align="center">2315</td>
+<td align="center">EQUO</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="even">
+<td align="center">2376</td>
+<td align="center">Los Verdes</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="odd">
+<td align="center">2650</td>
+<td align="center">Escaños en Blanco</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="even">
+<td align="center">2663</td>
+<td align="center">Otro partido</td>
+<td align="center">Otro partido</td>
+</tr>
+<tr class="odd">
+<td align="center">2755</td>
+<td align="center">Los Verdes</td>
+<td align="center">Otro partido</td>
+</tr>
+</tbody>
+</table>
+<p>Difieren en 8 elementos, que son: 206, 247, 639, 684, 1412, 1480,
+2650, 2663.</p>
+<p>Se crea una nueva variable <code>RVAUTO20_RECODE</code> donde se
+reemplaza “<em>Otro partido</em>” por “<em>EQUO Berdeak</em>”:</p>
+<pre class="r"><code># Recode RVAUTO20 in a new column
+# Create recodes parameter
+aux_idx &lt;- which(levels(cis_2020_df$RVAUTO20) == &quot;Otro partido&quot;)
+recodes_str &lt;- paste0(&quot;c(&#39;&quot;, paste0(levels(cis_2020_df$RVAUTO20)[aux_idx], collapse = &quot;&#39;, &#39;&quot;), &quot;&#39;) = &#39;EQUO Berdeak&#39;&quot;)
+cis_2020_df$RVAUTO20_RECODE &lt;- car::recode(var = cis_2020_df$RVAUTO20,
+                                        recodes = recodes_str,
+                                        levels = gsub(pattern = &#39;Otro partido&#39;, 
+                                                      replacement = &#39;EQUO Berdeak&#39;, 
+                                                      x =levels(cis_2020_df$RVAUTO20)))
+pander(cis_2020_df %&gt;% dplyr::count(RVAUTO20_RECODE), .drop=FALSE)</code></pre>
+<table style="width:38%;">
+<colgroup>
+<col width="29%" />
+<col width="8%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">RVAUTO20_RECODE</th>
+<th align="center">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">PP+C’s</td>
+<td align="center">92</td>
+</tr>
+<tr class="even">
+<td align="center">PSE-EE-PSOE</td>
+<td align="center">285</td>
+</tr>
+<tr class="odd">
+<td align="center">EAJ-PNV</td>
+<td align="center">649</td>
+</tr>
+<tr class="even">
+<td align="center">EH Bildu</td>
+<td align="center">400</td>
+</tr>
+<tr class="odd">
+<td align="center">PACMA</td>
+<td align="center">12</td>
+</tr>
+<tr class="even">
+<td align="center">VOX</td>
+<td align="center">28</td>
+</tr>
+<tr class="odd">
+<td align="center">Elkarrekin Podemos</td>
+<td align="center">229</td>
+</tr>
+<tr class="even">
+<td align="center">Voto nulo</td>
+<td align="center">22</td>
+</tr>
+<tr class="odd">
+<td align="center">EQUO Berdeak</td>
+<td align="center">37</td>
+</tr>
+<tr class="even">
+<td align="center">En blanco</td>
+<td align="center">60</td>
+</tr>
+<tr class="odd">
+<td align="center">No votó/abstención</td>
+<td align="center">579</td>
+</tr>
+<tr class="even">
+<td align="center">No recuerda</td>
+<td align="center">63</td>
+</tr>
+<tr class="odd">
+<td align="center">N.C.</td>
+<td align="center">544</td>
+</tr>
+</tbody>
+</table>
+<p>Se excluye la variable <code>RVAUTO20</code> y se deja la nueva
+recodificación <code>RVAUTO20_RECODE</code>.</p>
+<pre class="r"><code>excluded_cols &lt;- c(excluded_cols, &quot;RVAUTO20&quot;)</code></pre>
 </div>
 <div id="variable-rvauto16-recuerdo-de-voto-en-las-elecciones-autonómicas-del-país-vasco-de-2016-recodificada" class="section level3">
 <h3>Variable <code>RVAUTO16</code>: <em>Recuerdo de voto en las
@@ -13441,6 +13747,11 @@ pander(cis_2020_df %&gt;% dplyr::count(CLASESUB, .drop=FALSE))</code></pre>
 </div>
 <div id="resumen-estadístico.-datos-cualitativos." class="section level2">
 <h2>Resumen estadístico. Datos cualitativos.</h2>
+<pre class="r"><code># Cleaning
+excluded_cols &lt;- unique(excluded_cols)
+# Declare included cols
+included_cols_idx &lt;- which(!(colnames(cis_2020_df) %in% excluded_cols))
+included_cols &lt;- colnames(cis_2020_df)[included_cols_idx]</code></pre>
 <p>O sea que finalmente se va a realizar un ACM con <span class="math inline">\(Q =\)</span> 158 preguntas.</p>
 <pre class="r"><code>### (cis_2020_summ &lt;- summary(cis_2020_df))</code></pre>
 <pre class="r"><code># Save data variables to cis_2020_cuisine_file.RData
@@ -13448,12 +13759,13 @@ pander(cis_2020_df %&gt;% dplyr::count(CLASESUB, .drop=FALSE))</code></pre>
 cis_2020_cuisine_file &lt;- file.path(getwd(), &quot;cis_2020_cuisine_file.RData&quot;)
 
 require(log4r)
-log4r::debug(logger, paste(&quot;cis_2020_cuisine_file (&quot;, cis_2020_cuisine_file, &quot;) exists =&quot;, file.exists(cis_2020_cuisine_file)))
+log4r::info(logger, paste(&quot;cis_2020_cuisine_file (&quot;, cis_2020_cuisine_file, &quot;) exists =&quot;, file.exists(cis_2020_cuisine_file)))
 
 # Save every data in an RData file.
 # It will be used later in the Rmd file.
 save(list = ls(), file=cis_2020_cuisine_file)
-log4r::debug(logger, paste(&quot;Saved cis_2020_cuisine_file dataset&quot;))</code></pre>
+log4r::info(logger, paste(&quot;Saved cis_2020_cuisine_file dataset&quot;))
+info(logger, &#39;Ending script&#39;)</code></pre>
 <hr />
 <div style="page-break-after: always;"></div>
 <hr />
