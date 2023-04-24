@@ -66,18 +66,18 @@ library(RANN)
 ```{r}
 library(log4r)
 # Create a new logger object with create.logger().
-logger <- create.logger()
+logger_analysis <- create.logger()
 # Set the logger's file output.
-logfile(logger) <- 'cis_2020_all_analisis.log'
+logfile(logger_analysis) <- 'cis_2020_all_analisis.log'
 # Set the current level of the logger.
-level(logger) <- "DEBUG"
-# level(logger) <- "INFO"
+level(logger_analysis) <- "DEBUG"
+# level(logger_analysis) <- "INFO"
 # At priority level INFO, a call to debug() won't print anything.
-# debug(logger, 'A Debugging Message')
-info(logger,  'Starting script')
-# warn(logger, 'A Warning Message')
-# error(logger, 'An Error Message')
-# fatal(logger, 'A Fatal Error Message')
+# debug(logger_analysis, 'A Debugging Message')
+info(logger_analysis,  'Starting script')
+# warn(logger_analysis, 'A Warning Message')
+# error(logger_analysis, 'An Error Message')
+# fatal(logger_analysis, 'A Fatal Error Message')
 ```
 
 
@@ -106,9 +106,9 @@ require(log4r)
 cis_2020_cuisine_file <- file.path(getwd(), "cis_2020_cuisine_file.RData")
 if (file.exists(cis_2020_cuisine_file)) {
   load(cis_2020_cuisine_file)
-  log4r::info(logger, paste("cis_2020_cuisine_file (", cis_2020_cuisine_file, ") exists =", file.exists(cis_2020_cuisine_file)))
+  log4r::info(logger_analysis, paste("cis_2020_cuisine_file (", cis_2020_cuisine_file, ") exists =", file.exists(cis_2020_cuisine_file)))
 }else{
-  log4r::error(logger, paste("File", cis_2020_cuisine_file, "DO NOT EXISTS. You must create this file using the script Cuisine.Rmd"))
+  log4r::error(logger_analysis, paste("File", cis_2020_cuisine_file, "DO NOT EXISTS. You must create this file using the script Cuisine.Rmd"))
   stop(paste("File", cis_2020_cuisine_file, "DO NOT EXISTS. You must create this file using the script Cuisine.Rmd"))}
 ```
 
@@ -673,7 +673,7 @@ gg_plot_MCA_rows <- function(dimX = 1, dimY = 2, coord_type = "standard"){
 A continuación se muestran a los individuos en diferentes planos factoriales.
 
 ```{r plot_MCA_rows}
-numDims_to_show <- 3 # numDim
+numDims_to_show <- 4 # numDim
 for (i in seq(numDims_to_show-1)) {
   print(gg_plot_MCA_rows(dimX = i, dimY = i+1))
 }
@@ -872,6 +872,7 @@ for(i in 2:(nrow(EB_neighbourhood_df)-1)){
 }
 
 num_clusters_acm <- which.max(kt$r)
+num_clusters_acm <- 7 ### ATENCION CAMBIAR
 
 # Se crea una columna con el numero de cluster asignado a ese individuo
 require(RcmdrMisc)
@@ -934,8 +935,6 @@ gg_space_cluster <- function(dimX = 1, dimY = 2, k.optimo=3, titulo = "") {
 
 
 ```{r plot_clusters}
-gg_cluster_ACM <- gg_space_cluster(dimX = 1, dimY = 2, k.optimo = num_clusters_acm, titulo = "Clusters de individuos cercanos a EQUO Berdeak")
-
 # Se crea el texto que se mostrara con la figura
 # Distribución de los vehículos en cada cluster:
 distrib_clusters <-  summary(as.factor(cutree(HClust_EB, k = num_clusters_acm)))
@@ -967,8 +966,13 @@ pander(distrib_clusters, caption = "Distribución de los cluster")
 ```
 
 ```{r}
-gg_cluster_ACM
 fviz_dendograma_ACM
+```
+
+```{r}
+for (i in seq(numDims_to_show-1)) {
+  print(gg_space_cluster(dimX = i, dimY = i+1, k.optimo = num_clusters_acm, titulo = "Clusters de individuos cercanos a EQUO Berdeak"))
+}
 ```
 
 # Variabilidad de variables categóricas
@@ -981,9 +985,50 @@ https://www.cienciasinseso.com/medidas-de-dispersion-cualitativas/
 
 https://cran.r-project.org/web/packages/diverse/diverse.pdf
 
+https://cran.r-project.org/web/packages/qualvar/vignettes/wilcox1973.html
+
+
 
 ```{r}
-log4r::info(logger,  'Ending script')
+library(diverse)
+require(diverse)
+
+nrow(EB_neighbourhood_df)
+
+i <- 1
+aux_idx <- which(EB_neighbourhood_df$num_cluster == i)
+aux_tbl <- EB_neighbourhood_df[aux_idx,]
+
+
+borrame <- table(aux_tbl$P3_1)
+
+
+proportions(aux_tbl$P3_1)
+
+diverse::diversity(table(aux_tbl$P3_1))
+
+data(pantheon)
+borrame <- diversity(pantheon)
+
+borrame <- data(geese)
+diversity(geese)
+
+class(geese)
+
+diverse::values(data = table(aux_tbl$P3_1))
+
+diverse::diversity(data = table(aux_tbl$P3_1))
+
+diverse::diversity(diverse::values(data = table(aux_tbl$P3_1)))
+
+
+diverse::values(data = table(aux_tbl$SEXO))
+```
+
+
+
+```{r}
+log4r::info(logger_analysis,  'Ending script')
 ```
 
 
