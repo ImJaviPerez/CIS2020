@@ -995,17 +995,37 @@ require(diverse)
 
 nrow(EB_neighbourhood_df)
 
-i <- 1
+i <- 2
 aux_idx <- which(EB_neighbourhood_df$num_cluster == i)
 aux_tbl <- EB_neighbourhood_df[aux_idx,]
 
 
-borrame <- table(aux_tbl$P3_1)
+table(aux_tbl$P3_1)
+data.frame(t(table(aux_tbl$P3_1)))
 
+
+
+#raw values
+values(data=pantheon)
+values(data = scidat)
+#proportions
+values(data = scidat, norm='p')
+#revealed comparative advantages
+values(data = scidat, norm='rca')
+values(data = scidat, norm='rca', filter=1)
+values(data = scidat, norm='rca', filter=1, binary=TRUE)
+
+diverse::values(aux_tbl$P3_1)
+
+borrame <- table(aux_tbl$P3_1)
+diverse::diversity(borrame)
+
+borrame <- diverse::values(table(aux_tbl$P3_1))
+class(borrame)
 
 proportions(aux_tbl$P3_1)
 
-diverse::diversity(table(aux_tbl$P3_1))
+diverse::diversity(table(aux_tbl$P3_1), category_row = TRUE)
 
 data(pantheon)
 borrame <- diversity(pantheon)
