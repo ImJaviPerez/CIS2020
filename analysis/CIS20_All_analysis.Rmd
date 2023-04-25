@@ -993,56 +993,30 @@ https://cran.r-project.org/web/packages/qualvar/vignettes/wilcox1973.html
 library(diverse)
 require(diverse)
 
-nrow(EB_neighbourhood_df)
+EB_neighbourhood_results_df <- NULL
 
 i <- 2
+# Select every row = individuals from this cluster i
 aux_idx <- which(EB_neighbourhood_df$num_cluster == i)
-aux_tbl <- EB_neighbourhood_df[aux_idx,]
+# Select every variable of this cluster
+aux_tbl_cluster <- EB_neighbourhood_df[aux_idx,]
+
+# Create contingency table of one variable
+aux_tbl_var <- table(aux_tbl_cluster$P3_1)
+# Create three columns dataframe with contingency table
+aux_tbl_var_df <- as.data.frame(rep("P3_1",dim(aux_tbl_var)))
+aux_tbl_var_df[,c(2,3)] <- as.data.frame(aux_tbl_var)
+
+colnames(aux_tbl_var_df) <- c("entity", "category", "value")
+
+if (is.null(EB_neighbourhood_results_df)){
+  EB_neighbourhood_results_df <- rbind.data.frame(EB_neighbourhood_results_df, diverse::diversity(aux_tbl_var_df))
+}else{
+  EB_neighbourhood_results_df <- diverse::diversity(aux_tbl_var_df)
+}
 
 
-table(aux_tbl$P3_1)
-data.frame(t(table(aux_tbl$P3_1)))
-
-
-
-#raw values
-values(data=pantheon)
-values(data = scidat)
-#proportions
-values(data = scidat, norm='p')
-#revealed comparative advantages
-values(data = scidat, norm='rca')
-values(data = scidat, norm='rca', filter=1)
-values(data = scidat, norm='rca', filter=1, binary=TRUE)
-
-diverse::values(aux_tbl$P3_1)
-
-borrame <- table(aux_tbl$P3_1)
-diverse::diversity(borrame)
-
-borrame <- diverse::values(table(aux_tbl$P3_1))
-class(borrame)
-
-proportions(aux_tbl$P3_1)
-
-diverse::diversity(table(aux_tbl$P3_1), category_row = TRUE)
-
-data(pantheon)
-borrame <- diversity(pantheon)
-
-borrame <- data(geese)
-diversity(geese)
-
-class(geese)
-
-diverse::values(data = table(aux_tbl$P3_1))
-
-diverse::diversity(data = table(aux_tbl$P3_1))
-
-diverse::diversity(diverse::values(data = table(aux_tbl$P3_1)))
-
-
-diverse::values(data = table(aux_tbl$SEXO))
+EB_neighbourhood_results_df
 ```
 
 
