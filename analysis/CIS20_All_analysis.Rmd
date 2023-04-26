@@ -975,7 +975,7 @@ for (i in seq(numDims_to_show-1)) {
 }
 ```
 
-# Variabilidad de variables categóricas
+## Variabilidad de variables categóricas
 
 https://en.wikipedia.org/wiki/Categorical_distribution
 
@@ -987,9 +987,10 @@ https://cran.r-project.org/web/packages/diverse/diverse.pdf
 
 https://cran.r-project.org/web/packages/qualvar/vignettes/wilcox1973.html
 
+Queremos saber qué tienen en común los individuos de cada cluster. Para ello se analizan y se buscan  las respuestas que más se repiten dentro de cada cluster. dicho en términos matemáticos: se buscan las respuestas con menor entropía.
 
 
-```{r}
+```{r entropy_calculation}
 library(diverse)
 require(diverse)
 
@@ -998,25 +999,32 @@ EB_neighbourhood_results_df <- NULL
 i <- 2
 # Select every row = individuals from this cluster i
 aux_idx <- which(EB_neighbourhood_df$num_cluster == i)
-# Select every variable of this cluster
+# Select every column (= variable) of this cluster
 aux_tbl_cluster <- EB_neighbourhood_df[aux_idx,]
 
-# Create contingency table of one variable
-aux_tbl_var <- table(aux_tbl_cluster$P3_1)
-# Create three columns dataframe with contingency table
-aux_tbl_var_df <- as.data.frame(rep("P3_1",dim(aux_tbl_var)))
-aux_tbl_var_df[,c(2,3)] <- as.data.frame(aux_tbl_var)
-
-colnames(aux_tbl_var_df) <- c("entity", "category", "value")
-
-if (is.null(EB_neighbourhood_results_df)){
-  EB_neighbourhood_results_df <- rbind.data.frame(EB_neighbourhood_results_df, diverse::diversity(aux_tbl_var_df))
-}else{
-  EB_neighbourhood_results_df <- diverse::diversity(aux_tbl_var_df)
+# Calulate diversity or entropy of every column
+for (j in  included_cols) {
+  
+  # j <- "P14A_11" # included_cols[44]
+  
+  # Create contingency table of one variable
+  aux_tbl_var <- table(aux_tbl_cluster[,j])
+  # Create three columns dataframe with contingency table
+  aux_tbl_var_df <- as.data.frame(rep(j, dim(aux_tbl_var)))
+  aux_tbl_var_df[,c(2,3)] <- as.data.frame(aux_tbl_var)
+  
+  # colnames(aux_tbl_var_df) <- c("entity", "category", "value")
+  
+  if (!is.null(EB_neighbourhood_results_df)){
+    EB_neighbourhood_results_df <- rbind.data.frame(EB_neighbourhood_results_df, 
+                                                    cbind(j, diverse::diversity(aux_tbl_var_df)))
+  }else{
+    EB_neighbourhood_results_df <- cbind.data.frame(j, diverse::diversity(aux_tbl_var_df))
+  }
+  
 }
-
-
-EB_neighbourhood_results_df
+colnames(EB_neighbourhood_results_df) <- c("variable", colnames(EB_neighbourhood_results_df)[-1])
+# EB_neighbourhood_results_df
 ```
 
 
