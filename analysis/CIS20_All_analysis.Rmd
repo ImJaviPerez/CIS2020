@@ -1027,9 +1027,9 @@ for (i in seq(num_clusters_acm)) {
   }
 }
 
-# We do not use rows with no elements <==> variety == 0
-EB_results_out_idx <- which(EB_neighbourhood_results_df$variety == 0)
-# table(EB_neighbourhood_df[which(EB_neighbourhood_df$num_cluster == 1),][,"A0a"])
+# borrame <- table(EB_neighbourhood_df[which(EB_neighbourhood_df$num_cluster == 1),][,"A0a"])
+# borrame_2 <- table(cis_2020_df$A0a)
+# borrame/borrame_2*100
 ```
 
 
@@ -1043,7 +1043,16 @@ Hay diferentes formas de medir la entropía, pero existe correlación entre toda
 
 ```{r}
 library(corrplot)
-corrplot(cor(EB_neighbourhood_results_df[-EB_results_out_idx, c(3:ncol(EB_neighbourhood_results_df))]), type = "upper", method = "number", number.cex = .7, tl.cex = 0.6, tl.col = "black")
+require(corrplot)
+
+# corrplot(cor(EB_neighbourhood_results_df[-EB_results_out_idx, c(3:ncol(EB_neighbourhood_results_df))]), type = "upper", method = "number", number.cex = .7, tl.cex = 0.6, tl.col = "black")
+
+# We do not use rows with no elements <==> variety == 0
+EB_results_out_idx <- which(EB_neighbourhood_results_df$variety == 0)
+
+aux_idx <- !(colnames(EB_neighbourhood_results_df) %in% c("n_cluster", "variable", "variety", "simpson.R", "evenness"))
+
+corrplot(cor(EB_neighbourhood_results_df[-EB_results_out_idx, aux_idx]), type = "upper", method = "number", number.cex = .7, tl.cex = 0.6, tl.col = "black")
 ```
 
 ```{r}
@@ -1061,13 +1070,8 @@ cat(n, ".", sep = "")
 ```
 
 ```{r}
+aux_tbl <- subset(EB_neighbourhood_results_df, n_cluster == n & variety !=0)
 
-# ESTAS AQUI    # ESTAS AQUI    # ESTAS AQUI    # ESTAS AQUI
-
-
-### EB_neighbourhood_results_df$variety[EB_results_out_idx]
-aux_idx <- which(EB_neighbourhood_results_df[-EB_results_out_idx, "n_cluster"] == n)
-aux_tbl <- EB_neighbourhood_results_df[aux_idx,"variety"]
 ```
 
 
