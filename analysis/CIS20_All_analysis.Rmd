@@ -4,14 +4,14 @@ subtitle: "Análisis de datos de todos los partidos"
 author: "ImJaviPerez"
 date: "Diciembre 2022"
 output:
-  pdf_document:
-    number_sections: yes
-    toc: yes
-    toc_depth: 4
   html_document:
     toc: yes
     toc_depth: '4'
     df_print: paged
+  pdf_document:
+    number_sections: yes
+    toc: yes
+    toc_depth: 4
 header-includes:
 - \usepackage{xcolor}
 - \usepackage{framed}
