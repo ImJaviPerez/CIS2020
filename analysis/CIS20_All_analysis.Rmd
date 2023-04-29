@@ -124,8 +124,8 @@ if (file.exists(cis_2020_cuisine_file)) {
   load(cis_2020_cuisine_file)
   log4r::info(logger_analysis, paste("cis_2020_cuisine_file (", cis_2020_cuisine_file, ") exists =", file.exists(cis_2020_cuisine_file)))
 }else{
-  log4r::error(logger_analysis, paste("File", cis_2020_cuisine_file, "DO NOT EXISTS. You must create this file using the script Cuisine.Rmd"))
-  stop(paste("File", cis_2020_cuisine_file, "DO NOT EXISTS. You must create this file using the script Cuisine.Rmd"))}
+  log4r::error(logger_analysis, paste("File", cis_2020_cuisine_file, "DOES NOT EXIST. You must create this file using the script Cuisine.Rmd"))
+  stop(paste("File", cis_2020_cuisine_file, "DOES NOT EXIST. You must create this file using the script Cuisine.Rmd"))}
 ```
 
 ```{r}
@@ -899,6 +899,7 @@ recodes_str <- paste0((1:num_clusters_acm), "=", paste0("'", EB_cluster_palette,
 EB_neighbourhood_df$num_cluster_color <- car::recode(var = EB_neighbourhood_df$num_cluster,
                                         recodes = recodes_str,
                                         levels = EB_cluster_palette)
+require(pander)
 pander(EB_neighbourhood_df %>% dplyr::count(num_cluster_color), .drop=FALSE)
 pander(EB_neighbourhood_df %>% dplyr::count(num_cluster), .drop=FALSE)
 ```
@@ -1140,39 +1141,39 @@ Se muestran las modalidades (o categorías) que más se repiten para el cluster 
 
 ```{r cluster_var_tables, echo=FALSE, results='asis'}
 
-# TODO: CREAR VARIABLE EB_vars_not2see
-#
 # TODO: MOSTRAR ATRIBUTOS PARA TODAS LAS TABLAS: grep(var, pattern = 'P(0-9)')
-#
-# TODO: MOSTRAR NUMERO DE INDIVIDUOS EN CADA CLUSTER
 
+# illustrative_vars
+EB_vars_not2see <- c("IA_APLAZADA", "IA_MODIFICADA", "IA_SUPERVISADA")
 
 for (n in 1:num_clusters_acm) {
+  # Section title
   cat("### Cluster", n, "\n\n")
   
-  # Subset every row=variable of this cluster, n, excluding those with 0 variety
-  aux_tbl <- subset(EB_neighbourhood_normal_results_df, n_cluster == n & variety !=0)
-  # Sort them entropy
-  aux_tbl_sorted <- dplyr::arrange(aux_tbl, entropy)
+  cat(paste("\nEl cluster número", n, "contiene", length(which(EB_neighbourhood_df$num_cluster == n)), "individuos.\n"))
   
-  # Select every row = individuals from this cluster n
-  aux_idx <- which(EB_neighbourhood_df$num_cluster == n)
-  # Select every column (= variable) of this cluster n, with any variety, sorted by entropy
-  aux_tbl_cluster <- EB_neighbourhood_df[aux_idx,]
+  # Subset every row=variable with their entropy of this cluster, n, excluding those with 0 variety
+  aux_tbl_vars_clust_n <- subset(EB_neighbourhood_normal_results_df, n_cluster == n & variety !=0)
+  # Sort them firstly by entropy and seconly by blau.index
+  aux_tbl_vars_clust_n_entrop_sorted <- dplyr::arrange(aux_tbl_vars_clust_n, entropy, blau.index)
+  
+  # Select every column (= variable) of this cluster n
+  aux_tbl_indiv_clust_n <- EB_neighbourhood_df[which(EB_neighbourhood_df$num_cluster == n),]
   
     
   require(dplyr)
   require(pander)
   # pander tries to return a knit_asis class object when run inside knitr, but for loops/vectorized functions this results in incorrect output. The recommended way to solve this is to disable this behavior by setting knitr.auto.asis to FALSE using panderOptions. However, we also need to tell knitr to convert the table on the fly by specifying results='asis' in the chunk options
   panderOptions('knitr.auto.asis', FALSE)
-  aux_idx <- aux_tbl_sorted[which(aux_tbl_sorted$entropy < 0.6), "variable"]
+  aux_idx <- aux_tbl_vars_clust_n_entrop_sorted[which(aux_tbl_vars_clust_n_entrop_sorted$entropy < 0.6), "variable"]
+  aux_idx <- aux_idx[!(aux_idx %in% EB_vars_not2see)]
   for (k in aux_idx) {
     str_aux_1 <- gsub(pattern = "_GRUPO", replacement = "", k)
     str_aux_2 <- paste0("Cluster ", n, 
                         ". Variable `", k, 
                         "`. ", attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == str_aux_1],
-                        ". Entropía = ", round(aux_tbl_sorted$entropy[which(aux_idx == k)], digits = 4) )
-    pander(aux_tbl_cluster %>% dplyr::count(.data[[k]], .drop=FALSE), caption = str_aux_2)
+                        ". Entropía = ", round(aux_tbl_vars_clust_n_entrop_sorted$entropy[which(aux_idx == k)], digits = 4) )
+    pander(aux_tbl_indiv_clust_n %>% dplyr::count(.data[[k]], .drop=FALSE), caption = str_aux_2)
   }
 }
 ```
