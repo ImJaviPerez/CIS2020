@@ -1,0 +1,118 @@
+---
+title: "PRUEBAS. CIS 2020 análisis"
+subtitle: "BORRA ESTE FICHERO"
+author: "ImJaviPerez"
+date: "Diciembre 2022"
+output:
+  html_document:
+    toc: yes
+    toc_depth: '4'
+    df_print: paged
+  pdf_document:
+    number_sections: yes
+    toc: yes
+    toc_depth: 4
+header-includes:
+- \usepackage{xcolor}
+- \usepackage{framed}
+- \usepackage{fancyhdr}
+- \pagestyle{fancy}
+- \fancyhead[RO,RE]{AnálisiS total}
+- \fancyfoot{}
+- \fancyfoot[RE,LO]{Votos 2020}
+- \fancyfoot[LE,RO]{\thepage}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# List of libraries
+library(foreign)
+library(dplyr)
+library(pander)
+library(car)
+library(ca)
+
+library(gridExtra)
+library(grid)
+library(lattice)
+library(ggplot2)
+library(ggrepel)
+
+library(factoextra)
+
+library("RcmdrMisc")
+library(cluster)
+library(RANN)
+
+library(diverse)
+```
+
+
+
+```{r}
+# We have to filter CIS 2020 data previously. It spends a lot of time for it's calculations, thus we have made those calculations in an other script and now we load those results.
+
+cis_2020_analisys_file <- file.path(getwd(), "cis_2020_analisys_file.RData")
+if (file.exists(cis_2020_analisys_file)) {
+  load(cis_2020_analisys_file)
+}else{
+  stop(paste("File", cis_2020_cuisine_file, "DO NOT EXISTS. You must create this file using the script Cuisine.Rmd"))}
+```
+
+
+
+
+```{r cluster_var_tables, echo=FALSE, results='asis'}
+
+# TODO: CREAR VARIABLE EB_vars_not2see
+#
+# TODO: MOSTRAR ATRIBUTOS PARA TODAS LAS TABLAS: grep(var, pattern = 'P(0-9)')
+#
+# TODO: MOSTRAR NUMERO DE INDIVIDUOS EN CADA CLUSTER
+
+
+for (n in 1:num_clusters_acm) {
+  # Section title
+  cat("### Cluster", n, "\n\n")
+  
+    
+  
+  n <-1
+  
+
+  
+  borrame <- which(EB_neighbourhood_df$num_cluster == n)
+  
+  cat(paste("El cluster número", n, "contiene"))
+  
+  # Subset every row=variable of this cluster, n, excluding those with 0 variety
+  aux_tbl <- subset(EB_neighbourhood_normal_results_df, n_cluster == n & variety !=0)
+  # Sort them entropy
+  aux_tbl_sorted <- dplyr::arrange(aux_tbl, entropy)
+  
+  # Select every row = individuals from this cluster n
+  aux_idx <- which(EB_neighbourhood_df$num_cluster == n)
+  # Select every column (= variable) of this cluster n, with any variety, sorted by entropy
+  aux_tbl_cluster <- EB_neighbourhood_df[aux_idx,]
+  
+    
+  require(dplyr)
+  require(pander)
+  # pander tries to return a knit_asis class object when run inside knitr, but for loops/vectorized functions this results in incorrect output. The recommended way to solve this is to disable this behavior by setting knitr.auto.asis to FALSE using panderOptions. However, we also need to tell knitr to convert the table on the fly by specifying results='asis' in the chunk options
+  panderOptions('knitr.auto.asis', FALSE)
+  aux_idx <- aux_tbl_sorted[which(aux_tbl_sorted$entropy < 0.6), "variable"]
+  for (k in aux_idx) {
+    str_aux_1 <- gsub(pattern = "_GRUPO", replacement = "", k)
+    str_aux_2 <- paste0("Cluster ", n, 
+                        ". Variable `", k, 
+                        "`. ", attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == str_aux_1],
+                        ". Entropía = ", round(aux_tbl_sorted$entropy[which(aux_idx == k)], digits = 4) )
+    pander(aux_tbl_cluster %>% dplyr::count(.data[[k]], .drop=FALSE), caption = str_aux_2)
+  }
+}
+```
+
+
