@@ -64,6 +64,44 @@ if (file.exists(cis_2020_analisys_file)) {
 
 
 
+```{r}
+borrame_df <- data.frame(matrix(ncol = 3, nrow = 0))
+colnames(borrame_df) <- c("variety", "blau", "entropy")
+
+i <- 1
+
+# Select every row = individuals from this cluster i
+aux_idx <- which(EB_neighbourhood_df$num_cluster == i)
+# Select every column (= variable) of this cluster
+aux_tbl_cluster <- EB_neighbourhood_df[aux_idx,]
+  
+
+
+
+# Create contingency table of one variable
+j <- "P16A_95"
+
+
+(aux_tbl_var <- base::table(aux_tbl_cluster[,j], useNA = "no"))
+
+# Create three columns dataframe with contingency table
+aux_tbl_var_df <- as.data.frame(rep(j, dim(aux_tbl_var)))
+aux_tbl_var_df[,c(2,3)] <- as.data.frame(aux_tbl_var)
+# colnames(aux_tbl_var_df) <- c("entity", "category", "value")
+    
+    
+borrame_df[nrow(borrame_df)+1,] <- diverse::diversity(aux_tbl_var_df, type = c("variety", "blau", "entropy"))
+```
+
+
+```{r}
+attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == "P11_9"]
+attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == "P12_9"]
+attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == "P24_7"]
+```
+
+
+
 
 ```{r cluster_var_tables, echo=FALSE, results='asis'}
 
