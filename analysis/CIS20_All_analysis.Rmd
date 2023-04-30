@@ -63,6 +63,8 @@ library(cluster)
 library(RANN)
 
 library(diverse)
+library(corrplot)
+
 ```
 
 ```{r}
@@ -448,144 +450,63 @@ En resumen: Este eje representa a las personas que por un extremo ...
 
 
 ```{r section_dimension, echo=FALSE, results='asis'}
+# Generar automaticamente por programa el resto de capitulos
 
-# TODO: Generar automaticamente por programa el resto de capitulos
-
-i <- 2
-# Title ---------------------------------------
-cat("\n\n## Dimension", i, "\n")
-
-# A comment ----------------------------------
-cat("\nSe muestran las tablas con las variables más representativas de esta dimensión.")
-cat("\nEn el **lado positivo del eje** las modalidades mejor representadas son:\n\n")
-
-# Prepare tables ------------------------------
-# We want to show positive and negative categories of this dimension. And it is possible that only one side explains the wanted percentage, so we have to take extra categories from the other side to show.
-# table with big percentage of eigenvalue
-aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
-
-# Select number of positive categories of table
-n_categories_k_positive <- ifelse(length(which(aux_tbl$k > 0)) < num_categories_to_show, length(which(aux_tbl$k > 0)), num_categories_to_show)
-# Select number of negative categories of table
-n_categories_k_negative <- ifelse(length(which(aux_tbl$k < 0)) < num_categories_to_show, length(which(aux_tbl$k < 0)), num_categories_to_show)
-
-# Show positive categories --------------------
-aux_idx <- which(aux_tbl$k > 0)[1:n_categories_k_positive]
-
-require(pander)
-pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
-
-## Sorted categories
-## str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = n_categories_k_positive))
-## cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
+for (i in 2:numDim) {
+  # Title ---------------------------------------
+  cat("\n\n## Dimension", i, "\n")
   
-
-cat("\nEn el **lado negativo del eje** están las \"variables:modalidades\":\n")
-
-# Show negative categories --------------------
-aux_idx <- which(aux_tbl$k < 0)[1:n_categories_k_negative]
-require(pander)
-pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_negative, " modalidades más significativas del eje negativo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
-
-## Sorted categories
-## str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = n_categories_k_negative))
-## cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
+  # A comment ----------------------------------
+  cat("\nSe muestran las tablas con las variables más representativas de esta dimensión.")
+  cat("\nEn el **lado positivo del eje** las modalidades mejor representadas son:\n\n")
+  
+  # Prepare tables ------------------------------
+  # We want to show positive and negative categories of this dimension. And it is possible that only one side explains the wanted percentage, so we have to take extra categories from the other side to show.
+  # table with big percentage of eigenvalue
+  aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
+  
+  # Select number of positive categories of table
+  n_categories_k_positive <- ifelse(length(which(aux_tbl$k > 0)) < num_categories_to_show, length(which(aux_tbl$k > 0)), num_categories_to_show)
+  # Select number of negative categories of table
+  n_categories_k_negative <- ifelse(length(which(aux_tbl$k < 0)) < num_categories_to_show, length(which(aux_tbl$k < 0)), num_categories_to_show)
+  
+  # Show positive categories --------------------
+  aux_idx <- which(aux_tbl$k > 0)[1:n_categories_k_positive]
+  
+  require(dplyr)
+  require(pander)
+  # pander tries to return a knit_asis class object when run inside knitr, but for loops/vectorized functions this results in incorrect output. The recommended way to solve this is to disable this behavior by setting knitr.auto.asis to FALSE using panderOptions. However, we also need to tell knitr to convert the table on the fly by specifying results='asis' in the chunk options
+  panderOptions('knitr.auto.asis', FALSE)
+  pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
+  
+  ## Sorted categories
+  ## str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = n_categories_k_positive))
+  ## cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
+    
+  
+  cat("\nEn el **lado negativo del eje** están las \"variables:modalidades\":\n")
+  
+  # Show negative categories --------------------
+  aux_idx <- which(aux_tbl$k < 0)[1:n_categories_k_negative]
+  require(pander)
+  pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_negative, " modalidades más significativas del eje negativo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
+  
+  ## Sorted categories
+  ## str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = n_categories_k_negative))
+  ## cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
+}
 ```
 
 
-```{r echo=FALSE, results='asis'}
-i <- 3
-# Title ---------------------------------------
-cat("\n\n## Dimension", i, "\n")
-
-# A comment ----------------------------------
-cat("\nSe muestran las tablas con las variables más representativas de esta dimensión.")
-cat("\nEn el **lado positivo del eje** las modalidades mejor representadas son:\n\n")
-
-# Prepare tables ------------------------------
-# We want to show positive and negative categories of this dimension. And it is possible that only one side explains the wanted percentage, so we have to take extra categories from the other side to show.
-# table with big percentage of eigenvalue
-aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
-
-# Select number of positive categories of table
-n_categories_k_positive <- ifelse(length(which(aux_tbl$k > 0)) < num_categories_to_show, length(which(aux_tbl$k > 0)), num_categories_to_show)
-# Select number of negative categories of table
-n_categories_k_negative <- ifelse(length(which(aux_tbl$k < 0)) < num_categories_to_show, length(which(aux_tbl$k < 0)), num_categories_to_show)
-
-# Show positive categories --------------------
-aux_idx <- which(aux_tbl$k > 0)[1:n_categories_k_positive]
-
-require(pander)
-pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
-
-## Sorted categories
-## str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = n_categories_k_positive))
-## cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
-  
-
-cat("\nEn el **lado negativo del eje** están las \"variables:modalidades\":\n")
-
-# Show negative categories --------------------
-aux_idx <- which(aux_tbl$k < 0)[1:n_categories_k_negative]
-require(pander)
-pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_negative, " modalidades más significativas del eje negativo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
-
-## Sorted categories
-## str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = n_categories_k_negative))
-## cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
+```{r}
+numDims_to_show <- numDim # numDim
 ```
-
-
-
-```{r echo=FALSE, results='asis'}
-i <- 4
-# Title ---------------------------------------
-cat("\n\n## Dimension", i, "\n")
-
-# A comment ----------------------------------
-cat("\nSe muestran las tablas con las variables más representativas de esta dimensión.")
-cat("\nEn el **lado positivo del eje** las modalidades mejor representadas son:\n\n")
-
-# Prepare tables ------------------------------
-# We want to show positive and negative categories of this dimension. And it is possible that only one side explains the wanted percentage, so we have to take extra categories from the other side to show.
-# table with big percentage of eigenvalue
-aux_tbl <- factor_categories(cis_2020_ca_opi01_factor, i, percet_eigenvalue)
-
-# Select number of positive categories of table
-n_categories_k_positive <- ifelse(length(which(aux_tbl$k > 0)) < num_categories_to_show, length(which(aux_tbl$k > 0)), num_categories_to_show)
-# Select number of negative categories of table
-n_categories_k_negative <- ifelse(length(which(aux_tbl$k < 0)) < num_categories_to_show, length(which(aux_tbl$k < 0)), num_categories_to_show)
-
-# Show positive categories --------------------
-aux_idx <- which(aux_tbl$k > 0)[1:n_categories_k_positive]
-
-require(pander)
-pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_positive, " modalidades más significativas del eje positivo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
-
-## Sorted categories
-## str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k > 0)], n = n_categories_k_positive))
-## cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
-  
-
-cat("\nEn el **lado negativo del eje** están las \"variables:modalidades\":\n")
-
-# Show negative categories --------------------
-aux_idx <- which(aux_tbl$k < 0)[1:n_categories_k_negative]
-require(pander)
-pander(aux_tbl[aux_idx,], caption = paste0("Dimensión ", i, ". Contiene las ", n_categories_k_negative, " modalidades más significativas del eje negativo que abarcan el ", round(100 * sum(aux_tbl$ctr[aux_idx])/sum(cis_2020_ca_opi01_factor[,paste0("ctr",i)], na.rm = TRUE)), " % de la dimensión."))
-
-## Sorted categories
-## str_aux_1 <- sort(head(aux_tbl$`Variable:modalidad`[which(aux_tbl$k < 0)], n = n_categories_k_negative))
-## cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
-```
-
-
 
 
 
 ```{r next_dims_chapters, eval=FALSE, include= FALSE, echo=FALSE, results='asis'}
 # show next dimensions: chapters and tables
-for (i in 2:numDim) {
+for (i in 2:numDims_to_show) {
   # Title ---------------------------------------
   cat("\n\n## Dimension", i, "\n\n")
   
@@ -683,7 +604,6 @@ gg_plot_MCA_rows <- function(dimX = 1, dimY = 2, coord_type = "standard"){
 A continuación se muestran a los individuos en diferentes planos factoriales.
 
 ```{r plot_MCA_rows}
-numDims_to_show <- 4 # numDim
 for (i in seq(numDims_to_show-1)) {
   print(gg_plot_MCA_rows(dimX = i, dimY = i+1))
 }
@@ -1032,10 +952,6 @@ for (i in seq(num_clusters_acm)) {
     EB_neighbourhood_results_df[nrow(EB_neighbourhood_results_df)+1, ] <- cbind(i, j, diverse::diversity(aux_tbl_var_df))
   }
 }
-
-# borrame <- base::table(EB_neighbourhood_df[which(EB_neighbourhood_df$num_cluster == 1),][,"A0a"])
-# borrame_2 <- base::table(cis_2020_df$A0a)
-# borrame/borrame_2*100
 ```
 
 
@@ -1064,9 +980,6 @@ Vamos a utilizar dos índices que son parecidos entre sí. hay que normalizarlos
 
 
 ```{r normalized_variety_calculation}
-
-# TODO: USAR LOS NA PARA CALCULAR ENTROPIA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 require(diverse)
 # Dataframe with 3 calculations
 EB_neighbourhood_normal_results_df <- data.frame(matrix(ncol = 5, nrow = 0))
@@ -1085,6 +998,7 @@ for (i in seq(num_clusters_acm)) {
     h_max <- log(k_categories)
     
     # Create contingency table of one variable
+    # aux_tbl_var <- base::table(aux_tbl_cluster[,j], useNA = "ifany")
     aux_tbl_var <- base::table(aux_tbl_cluster[,j], useNA = "no")
     # Create three columns dataframe with contingency table
     aux_tbl_var_df <- as.data.frame(rep(j, dim(aux_tbl_var)))
@@ -1103,11 +1017,16 @@ for (i in seq(num_clusters_acm)) {
 Se muestra la correlación entre ambos índices:
 
 ```{r}
+require(corrplot)
+# Columns to calculate correlation
+aux_idx <- !(colnames(EB_neighbourhood_normal_results_df) %in% c("n_cluster", "variable", "variety"))
 # We do not use rows with no elements <==> variety == 0
 EB_results_out_idx <- which(EB_neighbourhood_normal_results_df$variety == 0)
-
-aux_idx <- !(colnames(EB_neighbourhood_normal_results_df) %in% c("n_cluster", "variable", "variety"))
-corrplot(cor(EB_neighbourhood_normal_results_df[-EB_results_out_idx, aux_idx]), type = "upper", method = "number", number.cex = 1.7, tl.cex = 1.0, tl.col = "black")
+if (length(EB_results_out_idx) == 0){
+  corrplot(cor(EB_neighbourhood_normal_results_df[, aux_idx]), type = "upper", method = "number", number.cex = 1.7, tl.cex = 1.0, tl.col = "black")
+}else{
+  corrplot(cor(EB_neighbourhood_normal_results_df[-EB_results_out_idx, aux_idx]), type = "upper", method = "number", number.cex = 1.7, tl.cex = 1.0, tl.col = "black")
+}
 ```
 
 
@@ -1168,7 +1087,7 @@ log4r::info(logger_analysis,  'Ending script')
 
 # Apendice
 
-# Elegir índice de diversidad:
+## Elegir índice de diversidad:
 
 https://diposit.ub.edu/dspace/bitstream/2445/45784/1/623311.pdf
 
@@ -1195,7 +1114,24 @@ holds. It reflects both the distances between group members and the dominance of
 Diversity as separation conceptualizes the member’s differences in position or disagreement in opinion toward a global attribute.
 
  - The widely used measures of diversity as separation are standard deviation (SD) and mean Euclidean distance (D).
- 
+
+
+## Atributos de cada variable
+
+
+```{r echo=FALSE, results='asis'}
+
+# TODO: CORREGIR BUG: SE MUESTRA "NULL"
+
+cat("\n")
+for (i in grep(pattern = "_GRUPO|_RECODE", x = colnames(cis_2020_df), value = TRUE, invert = TRUE)) {
+  str_aux_2 <- paste0(" \n - ", i, 
+                      ": ", attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == i])
+  print(cat(str_aux_2))
+}
+```
+
+
 
 ***
 
