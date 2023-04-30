@@ -64,82 +64,15 @@ if (file.exists(cis_2020_analisys_file)) {
 
 
 
-```{r}
-borrame_df <- data.frame(matrix(ncol = 3, nrow = 0))
-colnames(borrame_df) <- c("variety", "blau", "entropy")
 
-i <- 1
-
-# Select every row = individuals from this cluster i
-aux_idx <- which(EB_neighbourhood_df$num_cluster == i)
-# Select every column (= variable) of this cluster
-aux_tbl_cluster <- EB_neighbourhood_df[aux_idx,]
-  
-
-
-
-# Create contingency table of one variable
-j <- "P16A_95"
-
-
-(aux_tbl_var <- base::table(aux_tbl_cluster[,j], useNA = "no"))
-
-# Create three columns dataframe with contingency table
-aux_tbl_var_df <- as.data.frame(rep(j, dim(aux_tbl_var)))
-aux_tbl_var_df[,c(2,3)] <- as.data.frame(aux_tbl_var)
-# colnames(aux_tbl_var_df) <- c("entity", "category", "value")
-    
-    
-borrame_df[nrow(borrame_df)+1,] <- diverse::diversity(aux_tbl_var_df, type = c("variety", "blau", "entropy"))
-```
-
-
-```{r}
-attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == "P11_9"]
-attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == "P12_9"]
-attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == "P24_7"]
-```
-
-
-
-
-```{r cluster_var_tables, echo=FALSE, results='asis'}
-
-# TODO: MOSTRAR ATRIBUTOS PARA TODAS LAS TABLAS: grep(var, pattern = 'P(0-9)')
-
-# illustrative_vars
-EB_vars_not2see <- c("IA_APLAZADA", "IA_MODIFICADA", "IA_SUPERVISADA")
-
-for (n in 1:num_clusters_acm) {
-  # Section title
-  cat("### Cluster", n, "\n\n")
-  
-  cat(paste("\nEl cluster número", n, "contiene", length(which(EB_neighbourhood_df$num_cluster == n)), "individuos.\n"))
-  
-  # Subset every row=variable with their entropy of this cluster, n, excluding those with 0 variety
-  aux_tbl_vars_clust_n <- subset(EB_neighbourhood_normal_results_df, n_cluster == n & variety !=0)
-  # Sort them firstly by entropy and seconly by blau.index
-  aux_tbl_vars_clust_n_entrop_sorted <- dplyr::arrange(aux_tbl_vars_clust_n, entropy, blau.index)
-  
-  # Select every column (= variable) of this cluster n
-  aux_tbl_indiv_clust_n <- EB_neighbourhood_df[which(EB_neighbourhood_df$num_cluster == n),]
-  
-    
-  require(dplyr)
-  require(pander)
-  # pander tries to return a knit_asis class object when run inside knitr, but for loops/vectorized functions this results in incorrect output. The recommended way to solve this is to disable this behavior by setting knitr.auto.asis to FALSE using panderOptions. However, we also need to tell knitr to convert the table on the fly by specifying results='asis' in the chunk options
-  panderOptions('knitr.auto.asis', FALSE)
-  aux_idx <- aux_tbl_vars_clust_n_entrop_sorted[which(aux_tbl_vars_clust_n_entrop_sorted$entropy < 0.6), "variable"]
-  aux_idx <- aux_idx[!(aux_idx %in% EB_vars_not2see)]
-  for (k in aux_idx) {
-    str_aux_1 <- gsub(pattern = "_GRUPO", replacement = "", k)
-    str_aux_2 <- paste0("Cluster ", n, 
-                        ". Variable `", k, 
-                        "`. ", attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == str_aux_1],
-                        ". Entropía = ", round(aux_tbl_vars_clust_n_entrop_sorted$entropy[which(aux_idx == k)], digits = 4) )
-    pander(aux_tbl_indiv_clust_n %>% dplyr::count(.data[[k]], .drop=FALSE), caption = str_aux_2)
-  }
+```{r echo=FALSE, results='asis'}
+cat("\n")
+for (i in grep(pattern = "_GRUPO|_RECODE", x = colnames(cis_2020_df), value = TRUE, invert = TRUE)) {
+  str_aux_2 <- paste0(" \n - ", i, 
+                      ": ", attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == i])
+  print(cat(str_aux_2))
 }
 ```
+
 
 
