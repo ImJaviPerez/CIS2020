@@ -1077,7 +1077,7 @@ for (n in 1:num_clusters_acm) {
     scale_fill_manual_RVAUTO20_RECODE) + 
     theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
   
-  cat("\n**Atributos más importantes de este cluster.**\n")
+  cat("\n\n**Atributos más importantes de este cluster.**\n")
   
   # Subset every row=variable with their entropy of this cluster, n, excluding those with 0 variety
   aux_tbl_vars_clust_n <- subset(EB_neighbourhood_normal_results_df, n_cluster == n & variety !=0)
