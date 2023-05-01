@@ -64,13 +64,100 @@ if (file.exists(cis_2020_analisys_file)) {
 
 
 
+```{r}
+require(ggplot2)
+# RVAUTO20_RECODE color codes
+scale_color_manual_RVAUTO20_RECODE <- scale_color_manual(breaks = c('PP+C\'s', 'PSE-EE-PSOE', 
+                                  'EAJ-PNV', 'EH Bildu', 
+                                  'PACMA', 'VOX', 
+                                  'Elkarrekin Podemos', 
+                                  'Voto nulo', 
+                                  'EQUO Berdeak', # 'Otro partido', 
+                                  'En blanco', 'No votó/abstención', 'No recuerda', 'N.C.'),
+                        values=c("cyan", "orangered", 
+                                 "navajowhite", "navajowhite", 
+                                 "navajowhite3", "cyan3",
+                                 "darkorchid1", 
+                                 "yellow", 
+                                 "darkgreen", 
+                                 "yellow", "yellow", "yellow", "yellow"))
 
-```{r echo=FALSE, results='asis'}
-cat("\n")
-for (i in grep(pattern = "_GRUPO|_RECODE", x = colnames(cis_2020_df), value = TRUE, invert = TRUE)) {
-  str_aux_2 <- paste0(" \n - ", i, 
-                      ": ", attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == i])
-  print(cat(str_aux_2))
+scale_fill_manual_RVAUTO20_RECODE <- scale_fill_manual(breaks = c('PP+C\'s', 'PSE-EE-PSOE', 
+                                  'EAJ-PNV', 'EH Bildu', 
+                                  'PACMA', 'VOX', 
+                                  'Elkarrekin Podemos', 
+                                  'Voto nulo', 
+                                  'EQUO Berdeak', # 'Otro partido', 
+                                  'En blanco', 'No votó/abstención', 'No recuerda', 'N.C.'),
+                        values=c("cyan", "orangered", 
+                                 "navajowhite", "navajowhite", 
+                                 "navajowhite3", "cyan3",
+                                 "darkorchid1", 
+                                 "yellow", 
+                                 "darkgreen", 
+                                 "yellow", "yellow", "yellow", "yellow"))
+
+```
+
+
+
+
+```{r cluster_var_tables, echo=FALSE, results='asis'}
+
+# TODO: MOSTRAR ATRIBUTOS PARA TODAS LAS TABLAS: grep(var, pattern = 'P(0-9)')
+
+
+# Show section with comments an tables by program
+#
+# Mostrar los resultados de todos los clusters de manera automatizada, por programa
+#
+# illustrative_vars
+EB_vars_not2see <- c("IA_APLAZADA", "IA_MODIFICADA", "IA_SUPERVISADA")
+
+for (n in 1:num_clusters_acm) {
+  # Section title
+  cat("### Cluster", n, "\n\n")
+  
+  cat(paste("\nEl cluster número", n, "contiene", length(which(EB_neighbourhood_df$num_cluster == n)), "individuos.\n"))
+  
+  # Select every column (= variable) of this cluster n
+  aux_tbl_indiv_clust_n <- EB_neighbourhood_df[which(EB_neighbourhood_df$num_cluster == n),]
+  require(pander)
+  panderOptions('knitr.auto.asis', FALSE)
+  # pander tries to return a knit_asis class object when run inside knitr, but for loops/vectorized functions this results in incorrect output. The recommended way to solve this is to disable this behavior by setting knitr.auto.asis to FALSE using panderOptions. However, we also need to tell knitr to convert the table on the fly by specifying results='asis' in the chunk options
+  
+  # Show contingency table with RVAUTO20_RECODE
+  require(dplyr)
+  str_aux_2 <- paste0("Cluster ", n, ". Votos en 2020 `")
+  pander(aux_tbl_indiv_clust_n %>% dplyr::count(RVAUTO20_RECODE, .drop=FALSE), caption = str_aux_2)
+  
+  
+  require(ggplot2)
+  aux_tbl <- aux_tbl_indiv_clust_n %>% dplyr::count(EDAD_GRUPO, RVAUTO20_RECODE, .drop=FALSE)
+  # Stacked barplot with multiple groups
+  print(ggplot(data=aux_tbl, aes(x=EDAD_GRUPO, y=n, fill=RVAUTO20_RECODE)) +
+    geom_bar(stat="identity") +
+    scale_fill_manual_RVAUTO20_RECODE) + 
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+  
+  cat("\n**Atributos más importantes de este cluster.**\n")
+  
+  # Subset every row=variable with their entropy of this cluster, n, excluding those with 0 variety
+  aux_tbl_vars_clust_n <- subset(EB_neighbourhood_normal_results_df, n_cluster == n & variety !=0)
+  # Sort them firstly by entropy and seconly by blau.index
+  aux_tbl_vars_clust_n_entrop_sorted <- dplyr::arrange(aux_tbl_vars_clust_n, entropy, blau.index)
+  
+    
+  aux_idx <- aux_tbl_vars_clust_n_entrop_sorted[which(aux_tbl_vars_clust_n_entrop_sorted$entropy < 0.6), "variable"]
+  aux_idx <- aux_idx[!(aux_idx %in% EB_vars_not2see)]
+  for (k in aux_idx) {
+    str_aux_1 <- gsub(pattern = "_GRUPO", replacement = "", k)
+    str_aux_2 <- paste0("Cluster ", n, 
+                        ". Variable `", k, 
+                        "`. ", attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == str_aux_1],
+                        ". Entropía = ", round(aux_tbl_vars_clust_n_entrop_sorted$entropy[which(aux_idx == k)], digits = 4) )
+    pander(aux_tbl_indiv_clust_n %>% dplyr::count(.data[[k]], .drop=FALSE), caption = str_aux_2)
+  }
 }
 ```
 
