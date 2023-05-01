@@ -449,10 +449,15 @@ Este lado del eje representa a las personas que ...
 En resumen: Este eje representa a las personas que por un extremo ...
 
 
+```{r}
+numDims_to_show <- numDim # numDim
+```
+
+
 ```{r section_dimension, echo=FALSE, results='asis'}
 # Generar automaticamente por programa el resto de capitulos
 
-for (i in 2:numDim) {
+for (i in 2:numDims_to_show) {
   # Title ---------------------------------------
   cat("\n\n## Dimension", i, "\n")
   
@@ -496,12 +501,6 @@ for (i in 2:numDim) {
   ## cat(paste0("`", str_aux_1, "`", collapse = ", "), sep = "")
 }
 ```
-
-
-```{r}
-numDims_to_show <- numDim # numDim
-```
-
 
 
 ```{r next_dims_chapters, eval=FALSE, include= FALSE, echo=FALSE, results='asis'}
@@ -555,37 +554,25 @@ for (i in 2:numDims_to_show) {
 
 ```{r}
 require(ggplot2)
+RVAUTO20_RECODE_breaks <- c('PP+C\'s', 'PSE-EE-PSOE', 
+                                  'EAJ-PNV', 'EH Bildu', 
+                                  'PACMA', 'VOX', 
+                                  'Elkarrekin Podemos', 
+                                  'Voto nulo', 
+                                  'EQUO Berdeak',
+                                  'En blanco', 'No votó/abstención', 'No recuerda', 'N.C.')
+RVAUTO20_RECODE_values <- c("cyan", "orangered", 
+                                 "navajowhite", "navajowhite", 
+                                 "navajowhite3", "cyan3",
+                                 "darkorchid1", 
+                                 "yellow", 
+                                 "darkgreen", 
+                                 "yellow", "yellow", "yellow", "yellow")
+
+
 # RVAUTO20_RECODE color codes
-scale_color_manual_RVAUTO20_RECODE <- scale_color_manual(breaks = c('PP+C\'s', 'PSE-EE-PSOE', 
-                                  'EAJ-PNV', 'EH Bildu', 
-                                  'PACMA', 'VOX', 
-                                  'Elkarrekin Podemos', 
-                                  'Voto nulo', 
-                                  'EQUO Berdeak', # 'Otro partido', 
-                                  'En blanco', 'No votó/abstención', 'No recuerda', 'N.C.'),
-                        values=c("cyan", "orangered", 
-                                 "navajowhite", "navajowhite", 
-                                 "navajowhite3", "cyan3",
-                                 "darkorchid1", 
-                                 "yellow", 
-                                 "darkgreen", 
-                                 "yellow", "yellow", "yellow", "yellow"))
-
-scale_fill_manual_RVAUTO20_RECODE <- scale_fill_manual(breaks = c('PP+C\'s', 'PSE-EE-PSOE', 
-                                  'EAJ-PNV', 'EH Bildu', 
-                                  'PACMA', 'VOX', 
-                                  'Elkarrekin Podemos', 
-                                  'Voto nulo', 
-                                  'EQUO Berdeak', # 'Otro partido', 
-                                  'En blanco', 'No votó/abstención', 'No recuerda', 'N.C.'),
-                        values=c("cyan", "orangered", 
-                                 "navajowhite", "navajowhite", 
-                                 "navajowhite3", "cyan3",
-                                 "darkorchid1", 
-                                 "yellow", 
-                                 "darkgreen", 
-                                 "yellow", "yellow", "yellow", "yellow"))
-
+scale_color_manual_RVAUTO20_RECODE <- scale_color_manual(breaks = RVAUTO20_RECODE_breaks, values = RVAUTO20_RECODE_values)
+scale_fill_manual_RVAUTO20_RECODE <- scale_fill_manual(breaks = RVAUTO20_RECODE_breaks, values = RVAUTO20_RECODE_values)
 ```
 
 
@@ -617,7 +604,7 @@ gg_plot_MCA_rows <- function(dimX = 1, dimY = 2, coord_type = "standard"){
     ggtitle(my_title) +
     xlab(paste("Dimension ", dimX, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimX], digits = 1) , "% )", sep = "")) +
     ylab(paste("Dimension ", dimY, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimY], digits = 1) , "% )", sep = "")) +
-    # labs(color = "Votos 2020") +
+    labs(color = "Votos 2020") +
     scale_color_manual_RVAUTO20_RECODE
 }
 # Replace ' character with escape character \\'
@@ -685,6 +672,15 @@ pander(cis_2020_acm_df %>% dplyr::count(P20_NEIGH, .drop=FALSE), caption = "Voto
 ```
 
 ```{r}
+aux_idx <- which(RVAUTO20_RECODE_breaks == "EQUO Berdeak")
+
+scale_color_manual_P20_NEIGH <- scale_color_manual(name = neighbours_lbl,
+                                                   breaks = c(RVAUTO20_RECODE_breaks[1:aux_idx], neighbours_lbl, RVAUTO20_RECODE_breaks[-(1:aux_idx)]),
+                                                   values = c(RVAUTO20_RECODE_values[1:aux_idx], "green2", RVAUTO20_RECODE_values[-(1:aux_idx)]))
+
+
+
+
 # Plot selected points a its neighbours
 gg_plot_neighbours <- function(dimX = 1, dimY = 2){
 
@@ -709,7 +705,7 @@ gg_plot_neighbours <- function(dimX = 1, dimY = 2){
     xlab(paste("Dimension ", dimX, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimX], digits = 1) , "% )", sep = "")) +
     ylab(paste("Dimension ", dimY, " (", round(100 * cis_2020_ca_opi01$inertia.e[dimY], digits = 1) , "% )", sep = "")) +
     # levels(cis_2020_acm_df$P20_NEIGH)
-    scale_color_manual_RVAUTO20_RECODE
+    scale_color_manual_P20_NEIGH
   
   return(gg_obj)
 }
