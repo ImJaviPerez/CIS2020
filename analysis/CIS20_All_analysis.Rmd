@@ -1134,11 +1134,10 @@ Diversity as separation conceptualizes the member’s differences in position or
 ## Atributos de cada variable
 
 
-```{r echo=FALSE, results='asis'}
+```{r variables_attrib, echo=FALSE, results='asis'}
 cat("\n")
 for (i in grep(pattern = "_GRUPO|_RECODE", x = colnames(cis_2020_df), value = TRUE, invert = TRUE)) {
-  str_aux_2 <- paste0(" \n - ", i, 
-                      ": ", attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == i])
+  str_aux_2 <- paste0(" \n - ", i, ": ", attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == i])
   cat(str_aux_2)
 }
 ```
@@ -1161,7 +1160,9 @@ log4r::info(logger_analysis, paste("cis_2020_analisys_file (", cis_2020_analisys
 
 # Save every data in an RData file.
 # It will be used later in the Rmd file.
-save(list = ls(), file=cis_2020_analisys_file)
+# save(list = ls(), file=cis_2020_analisys_file)
+save(list = grep(pattern = "aux", x = ls(), value = TRUE, invert = TRUE), file=cis_2020_analisys_file)
+
 log4r::info(logger_analysis, paste("Saved cis_2020_analisys_file dataset"))
 info(logger_analysis, 'Ending script')
 ```
