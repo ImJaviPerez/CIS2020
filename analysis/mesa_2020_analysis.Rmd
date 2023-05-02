@@ -90,13 +90,34 @@ library(openxlsx)
 require(openxlsx)
 MESA_XLSX <- "../data/MD3293/Analisis Datos Voto Berdeak EQUO 2023.xlsx"
 MESA_XLSX <- "../data/mesas_2020.xlsx"
-mesa20_df <- openxlsx::read.xlsx(xlsxFile = MESA_XLSX, sheet = "Votos Mesa")
+mesa20_df <- openxlsx::read.xlsx(xlsxFile = MESA_XLSX, sheet = "Votos Mesa", cols = c("A":"EE"))
 
 library(readxl)
 require(readxl)
 
-mesa20_df2 <- readxl::read_xlsx(path = MESA_XLSX, sheet = "Votos Mesa")
+mesa20_df2 <- readxl::read_xlsx(path = MESA_XLSX, sheet = "Votos Mesa", range = "A1:EE3539")
+mesa20_df2 <- readxl::read_xlsx(path = MESA_XLSX, sheet = "Votos Mesa", range = cell_cols("A:W", "Y:AT", "AV:BK"))
+mesa20_df2 <- readxl::read_xlsx(path = MESA_XLSX, 
+                                sheet = "Votos Mesa", 
+                                range = cell_cols(c(cellranger::letter_to_num("A"):cellranger::letter_to_num("W"),
+                                                  cellranger::letter_to_num("Y"):cellranger::letter_to_num("AT"), 
+                                                  cellranger::letter_to_num("AV"):cellranger::letter_to_num("BK"))))
 
+XLS_empty_cols <- c(cellranger::letter_to_num("X"),
+                    cellranger::letter_to_num("AU"),
+                    cellranger::letter_to_num("BL"),
+                    cellranger::letter_to_num("CD"),
+                    cellranger::letter_to_num("CW"),
+                    cellranger::letter_to_num("DO"))
+XLS_info_cols <- c(cellranger::letter_to_num("A"):cellranger::letter_to_num("EE"))
+library(dplyr)
+require(dplyr)
+XLS_info_cols <- XLS_info_cols[!(XLS_info_cols %in% XLS_empty_cols)]
+
+
+
+
+cellranger::letter_to_num("EE")
 
 colnames(mesa20_df)
 colnames(mesa20_df2)
