@@ -51,7 +51,8 @@ use_git_config(user.name = "ImJaviPerez", user.email = "ImJaviPerez@gmail.com")
 
 ```{r}
 # List of libraries
-library(readxl)
+library(openxlsx)
+library(dplyr)
 ```
 
 ```{r}
@@ -86,22 +87,12 @@ info(logger_mesa, 'Starting script')
 
 ```{r}
 # Load data from XLSX file
-library(openxlsx)
 require(openxlsx)
-MESA_XLSX <- "../data/MD3293/Analisis Datos Voto Berdeak EQUO 2023.xlsx"
+## MESA_XLSX <- "../data/MD3293/Analisis\\ Datos\\ Voto\\ Berdeak\\ EQUO\\ 2023.xlsx"
 MESA_XLSX <- "../data/mesas_2020.xlsx"
-mesa20_df <- openxlsx::read.xlsx(xlsxFile = MESA_XLSX, sheet = "Votos Mesa", cols = c("A":"EE"))
 
-library(readxl)
-require(readxl)
+aux_tbl <- openxlsx::read.xlsx(xlsxFile = MESA_XLSX, sheet = "Votos Mesa")
 
-mesa20_df2 <- readxl::read_xlsx(path = MESA_XLSX, sheet = "Votos Mesa", range = "A1:EE3539")
-mesa20_df2 <- readxl::read_xlsx(path = MESA_XLSX, sheet = "Votos Mesa", range = cell_cols("A:W", "Y:AT", "AV:BK"))
-mesa20_df2 <- readxl::read_xlsx(path = MESA_XLSX, 
-                                sheet = "Votos Mesa", 
-                                range = cell_cols(c(cellranger::letter_to_num("A"):cellranger::letter_to_num("W"),
-                                                  cellranger::letter_to_num("Y"):cellranger::letter_to_num("AT"), 
-                                                  cellranger::letter_to_num("AV"):cellranger::letter_to_num("BK"))))
 
 XLS_empty_cols <- c(cellranger::letter_to_num("X"),
                     cellranger::letter_to_num("AU"),
@@ -110,21 +101,46 @@ XLS_empty_cols <- c(cellranger::letter_to_num("X"),
                     cellranger::letter_to_num("CW"),
                     cellranger::letter_to_num("DO"))
 XLS_info_cols <- c(cellranger::letter_to_num("A"):cellranger::letter_to_num("EE"))
-library(dplyr)
 require(dplyr)
 XLS_info_cols <- XLS_info_cols[!(XLS_info_cols %in% XLS_empty_cols)]
+```
 
 
+Número de columnas con información: 
+```{r echo=FALSE, results='asis'}
+cat(length(XLS_info_cols), ".", sep = "")
+```
 
+```{r}
+# rename columns
+# Get colnames and first row
+aux_str <- paste0(colnames(aux_tbl), ".", aux_tbl[1,])
+# Replace 2 dots by nothing
+aux_str <- gsub(pattern = "\\.\\.", replacement = "", x=aux_str)
+# Replace blanks with underscores
+aux_str <- gsub(pattern = " ", replacement = "_", x=aux_str)
+# Replace ' with nothing
+aux_str <- gsub(pattern = "\\'", replacement = "", x=aux_str)
 
-cellranger::letter_to_num("EE")
+if (length(aux_str[duplicated(aux_str)]) != 0){
+  stop("Columnas con nombre duplicado")
+}
+# Create new dataframe
+mesa_votos_df <- aux_tbl[-1,]
+# Rename columns
+colnames(mesa_votos_df) <- aux_str
 
-colnames(mesa20_df)
-colnames(mesa20_df2)
-
+# TODO: COLUMNAS 1:7 Y columnas terminan en "MESA: son factor. RESTO SON numeric
 
 ```
 
+```{r}
+# Create dataframe with results
+mesa_results_df <- mesa_votos_df[,1:7]
+
+class(mesa_votos_df$`AUT2020.EQUO_BERDEAK-VERDES`)
+mesa_votos_df$`AUT2020.EQUO_BERDEAK-VERDES`/mesa_votos_df$AUT2020.Censo
+```
 
 
 
