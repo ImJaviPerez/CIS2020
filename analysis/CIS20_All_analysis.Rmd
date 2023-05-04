@@ -515,13 +515,13 @@ RVAUTO20_RECODE_breaks <- c('PP+C\'s', 'PSE-EE-PSOE',
                                   'Voto nulo', 
                                   'EQUO Berdeak',
                                   'En blanco', 'No votó/abstención', 'No recuerda', 'N.C.')
-RVAUTO20_RECODE_values <- c("cyan", "orangered", 
-                                 "navajowhite", "navajowhite3", 
+RVAUTO20_RECODE_values <- c("cyan", "red3", 
+                                 "darkseagreen1", "orangered", 
                                  "navajowhite4", "cyan3",
                                  "darkorchid1", 
                                  "yellow", 
                                  "darkgreen", 
-                                 "yellow", "yellow", "yellow", "yellow3")
+                                 "yellow", "yellow", "yellow", "gray40")
 
 
 # RVAUTO20_RECODE color codes
@@ -630,16 +630,40 @@ gg_plot_EB <- function(dimX = 1, dimY = 2){
 }
 ```
 
-
-ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI
-
-
 Se muestran a todos los vecinos de *EQUO Berdeak* en diferentes planos factoriales.
 
 ```{r plot_equo}
 for (i in seq(numDims_to_show-1)) {
   print(gg_plot_EB(dimX = i, dimY = i+1))
 }
+```
+
+## Outliers *EQUO Berdeak*
+
+Se buscan individuos que se alejan *demasiado* de la media que se podrían interpretar como personas que realmente votan a *EQUO Berdeak* pero que están alejados de sus posturas, o bien como encuestas erroneas, o en el peor de los casos individuos que no han dicho la verdad al ser encuestados.
+
+
+
+ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI
+
+```{r}
+# Save EB individuals
+EB_df <- cis_2020_acm_df[EB_rows,]
+formula_all_dims <- as.formula(paste("~-1 +", paste0("Dim",1:numDim, collapse = "+")))
+# Distancia euclidea al cuadrado entre los elementos de la matriz
+dist_indiv_EB <- stats::dist(model.matrix(formula_all_dims, EB_df), method = "euclidean")
+
+cosa <- as.matrix(dist_indiv_EB)
+
+dim(cosa)
+class(cosa)
+
+mean(dist_indiv_EB)
+sd(dist_indiv_EB)
+mean(dist_indiv_EB)
+sd(cosa)
+barplot(cosa)
+
 ```
 
 
@@ -733,14 +757,13 @@ for (i in seq(numDims_to_show-1)) {
 
 Se toman a todas las personas que dicen haber votado a "EQUO Berdeak" y a todos sus vecinos más cercanos. 
 ```{r}
-# Save EB individuals and threre neigbours
+# Save EB individuals and there neigbours
 EB_neighbourhood_df <- cis_2020_acm_df[c(EB_rows, EB_neighb_idx),]
 ```
 
 Se muestra la división cluster por el método *Ward.D* o también conocido como *"pérdida de inercia mínima"*.
 
 ```{r}
-formula_all_dims <- as.formula(paste("~-1 +", paste0("Dim",1:numDim, collapse = "+")))
 # lista_mtdos <- c("ward.D", "ward.D2", "complete", "single", "average", "mcquitty", "median", "centroid")
 mtdo_usado <- "ward.D2" # "ward.D"
 
@@ -758,6 +781,7 @@ se puede buscar el número óptimo de clusters (`k`) usando la función `daisy` 
 # Funcion para calcular el k optimo
 # Creamos una funcion para calcular la matriz de distancia dos a dos con los grupos
 # daisy: Compute all the pairwise dissimilarities (distances) between observations in the data set.
+# https://www.rpubs.com/dvallslanaquera/clustering
 grpdist <- function(X, metrica="gower"){
   # metrica = "euclidean", "gower"
   # Se carga la libreria "cluster"
