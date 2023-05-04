@@ -646,40 +646,55 @@ for (i in seq(numDims_to_show-1)) {
 Se buscan individuos que se alejan *demasiado* de la media que se podrían interpretar como personas que realmente votan a *EQUO Berdeak* pero que están alejados de sus posturas, o bien como encuestas erroneas, o en el peor de los casos individuos que no han dicho la verdad al ser encuestados.
 
 
-
-ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI
-
 ```{r}
 # Save EB individuals
 EB_df <- cis_2020_acm_df[EB_rows,]
-# We look for the center of the population
-
-which(colnames(EB_df) %in% c(paste0("Dim", 1:numDim)))
-
-cosa <- scale(x=EB_df$dim[, c(which(colnames(EB_df) %in% c(paste0("Dim", 1:numDim))))], center = TRUE, scale = FALSE)
-
-EB_df$
-
-
+EB_centered_df <- subset(x = EB_df, select = c(paste0("Dim", 1:numDim)))
+# We look for a centered population
+EB_centered_df <- as.data.frame(scale(x=EB_centered_df, center = TRUE, scale = FALSE))
+# Calculate distance from the center
 formula_all_dims <- as.formula(paste("~-1 +", paste0("Dim",1:numDim, collapse = "+")))
 # Distancia euclidea al cuadrado entre los elementos de la matriz
-dist_indiv_EB <- stats::dist(model.matrix(formula_all_dims, EB_df), method = "euclidean")
+EB_dist_centered <- stats::dist(model.matrix(formula_all_dims, EB_centered_df), method = "euclidean")
+# Convert into a vector
+EB_dist_vect_centered <- as.vector(EB_dist_centered)
 
-cosa <- as.matrix(dist_indiv_EB)
+EB_dist_vect_centered_df <- as.data.frame(EB_dist_vect_centered)
+colnames(EB_dist_vect_centered_df) <- "Distancia"
+require(ggplot2)
+ggplot(data=EB_dist_vect_centered_df, aes(x=Distancia)) + 
+  geom_boxplot()
+```
 
-dim(cosa)
-class(cosa)
-
-mean(dist_indiv_EB)
-sd(dist_indiv_EB)
-mean(dist_indiv_EB)
-sd(cosa)
-barplot(cosa)
-
+```{r}
+ggplot(EB_dist_vect_centered_df, aes(x=Distancia)) + 
+  geom_histogram(color="black", fill="white", bins=12)
 ```
 
 
-ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI
+Distancias de los outliers:
+
+```{r}
+outliers_idx <-which(EB_dist_vect_centered_df$Distancia > (mean(EB_dist_vect_centered_df$Distancia) + 2.8*sd(EB_dist_vect_centered_df$Distancia)))
+EB_dist_vect_centered_df$Distancia[outliers_idx]
+```
+
+Outliers: Números de elemento en la matriz triangular de distancias:
+```{r}
+outliers_idx
+```
+
+
+
+```{r}
+summary(EB_dist_vect_centered)
+```
+
+
+## Clusters de los votantes de *EQUO Berdeak*
+
+
+  ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
 
 
 
