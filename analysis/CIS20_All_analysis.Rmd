@@ -652,6 +652,15 @@ ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI
 ```{r}
 # Save EB individuals
 EB_df <- cis_2020_acm_df[EB_rows,]
+# We look for the center of the population
+
+which(colnames(EB_df) %in% c(paste0("Dim", 1:numDim)))
+
+cosa <- scale(x=EB_df$dim[, c(which(colnames(EB_df) %in% c(paste0("Dim", 1:numDim))))], center = TRUE, scale = FALSE)
+
+EB_df$
+
+
 formula_all_dims <- as.formula(paste("~-1 +", paste0("Dim",1:numDim, collapse = "+")))
 # Distancia euclidea al cuadrado entre los elementos de la matriz
 dist_indiv_EB <- stats::dist(model.matrix(formula_all_dims, EB_df), method = "euclidean")
