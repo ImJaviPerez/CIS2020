@@ -100,9 +100,12 @@ info(logger_analysis,  'Starting script')
 ```
 
 
-```{r}
+```{r eval=FALSE}
 # GitHub connection
 # http://destio.us.es/calvo/asignaturas/ge_esco/tutorialusargitgithubrstudio/UsarGitGithubconRStudio.html
+#
+library(gitcreds)
+gitcreds::gitcreds_set()
 ```
 
 
