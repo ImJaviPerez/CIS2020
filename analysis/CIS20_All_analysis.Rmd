@@ -876,6 +876,11 @@ cat(rownames(EB_df)[outliers_2_idx])
 EB_df <- EB_df[-outliers_2_idx,]
 ```
 
+```{r}
+# erase outlier from list
+EB_rows <- EB_rows[-outliers_2_idx]
+```
+
 
 ```{r}
 # lista_mtdos <- c("ward.D", "ward.D2", "complete", "single", "average", "mcquitty", "median", "centroid")
@@ -1107,7 +1112,7 @@ EB_vars_not2see <- c("IA_APLAZADA", "IA_MODIFICADA", "IA_SUPERVISADA", "IA_C2_GR
 
 for (n in 1:num_clusters_EB) {
   # Section title
-  cat("### Cluster", n, "\n\n")
+  cat("#### Cluster", n, "\n\n")
   
   cat(paste("\nEl cluster número", n, "contiene", length(which(EB_df$num_cluster == n)), "individuos.\n"))
   
@@ -1151,11 +1156,6 @@ for (n in 1:num_clusters_EB) {
   }
 }
 ```
-
-
-
-
-ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
 
 Atributos más importantes de este cluster
 
@@ -1610,7 +1610,7 @@ Diversity as variety conceptualizes categorical differences across the relevant 
  - Blau’s values are not validly comparable if the number of categories is not identical across diversity variables. Nevertheless, researchers have asserted that comparisons between variables with a dissimilar number of categories still make sense, as long as larger number of categories contributes to greater diversity
  $$B_{max} = \frac{k-1}{k}$$
  
- - IQV However, the index B can be normalized by dividing it by its maximum. This controls for the number of categories, and gives the Index of Qualitative Variation (IQV; Agresti & Agresti, 1978). Blau’s index and IQV can be used interchangeably when comparing variables with the same number of categories because they are highly similar measures and only differ in scale. if Blau’s index and IQV are multiplied by $n/(n − 1)$, the estimators obtained are unbiased.
+ - IQV However, the index B can be normalized by dividing it by its maximum. This controls for the number of categories, and gives the Index of Qualitative Variation (IQV; Agresti & Agresti, 1978). Blau’s index and IQV can be used interchangeably when comparing variables with the same number of categories because they are highly similar measures and only differ in scale. if Blau’s index and IQV are multiplied by $n/(n-1)$, the estimators obtained are unbiased.
 
 **Disparity Indexes**
 
@@ -1636,6 +1636,23 @@ cat("\n")
 for (i in grep(pattern = "_GRUPO|_RECODE", x = colnames(cis_2020_df), value = TRUE, invert = TRUE)) {
   str_aux_2 <- paste0(" \n - ", i, ": ", attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == i])
   cat(str_aux_2)
+}
+```
+
+
+```{r export_neigbours_entropy2XLS}
+# EB_neighbourhood_normal_results_df
+
+neigbours_entropy2XLS_df <- data.frame(matrix(ncol = num_clusters_acm+3, nrow = 0))
+colnames(neigbours_entropy2XLS_df) <- c("Pregunta", paste0("Cluster", 1:num_clusters_acm), "Suma entropía", "Título")
+
+neigbours_entropy2XLS_df$Pregunta 
+for (i in seq(num_clusters_acm)) {
+  
+  # ESTAS AQUI    # ESTAS AQUI    # ESTAS AQUI    # ESTAS AQUI  
+  
+  # EB_neighbourhood_normal_results_df
+  
 }
 ```
 
