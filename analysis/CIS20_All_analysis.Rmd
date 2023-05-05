@@ -699,26 +699,182 @@ summary(EB_centered_df$Distancia)
 
 ### Clusters y outliers
 
-
-  ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
-  
 ```{r}
-borrame <- 3
+# lista_mtdos <- c("ward.D", "ward.D2", "complete", "single", "average", "mcquitty", "median", "centroid")
+mtdo_usado <- "ward.D2" # "ward.D"
+formula_all_dims <- as.formula(paste("~-1 +", paste0("Dim",1:numDim, collapse = "+")))
+# Distancia euclidea al cuadrado entre los elementos de la matriz
+dist_indiv_EB <- stats::dist(model.matrix(formula_all_dims, EB_df))^2
+HClust_EB <- hclust(dist_indiv_EB , method= mtdo_usado)
 ```
 
-```{r reuse_this, eval=FALSE}
-borrame * 3
-```
-  
+se puede buscar el número óptimo de clusters (`k`) usando la función `daisy` (Dissimilarity Matrix Calculation) que computa las desigualdades en las distancias entre parejas. En este caso para obtener el número óptimo de clusters y su composición se ha usado la métrica euclídea al cuadrado para computar las distancias.
+
 ```{r}
-borrame <- 5
+# Funcion para calcular el k optimo
+# Creamos una funcion para calcular la matriz de distancia dos a dos con los grupos
+# daisy: Compute all the pairwise dissimilarities (distances) between observations in the data set.
+# https://www.rpubs.com/dvallslanaquera/clustering
+grpdist <- function(X, metrica="gower"){
+  # metrica = "euclidean", "gower"
+  # Se carga la libreria "cluster"
+  require(cluster)
+  gr <- as.data.frame(as.factor(X))
+  distgr <- daisy(gr, metrica)
+  distgr
+  }
 ```
 
 
-```{r reuse_this, eval=TRUE}
-# <<reuse_this>>
+
+```{r}
+# Se genera el cluster optimo y se representa en el plano
+require(gridExtra)
+require(grid)
+require(ggplot2)
+require(lattice)
+
+# La matriz dist_indiv_EB contiene las distancias euclideas al cuadrado.
+
+require(cluster)
+
+# data frame auxiliar
+kt <- data.frame(k=1:nrow(EB_df), r=0)
+
+# Se elige el numero de clusters optimo
+for(i in 2:(nrow(EB_df)-1)){
+  gr <- cutree(HClust_EB, i)
+  distgr <- grpdist(gr, "gower")
+  mt <- cor(dist_indiv_EB, distgr, method="pearson")
+  kt[i,2] <- mt
+}
+
+num_clusters_EB <- which.max(kt$r)
+### num_clusters_EB <- num_clusters_EB + 1 ### ATENCION CAMBIAR
+
+# Se crea una columna con el numero de cluster asignado a ese individuo
+require(RcmdrMisc)
+EB_df$num_cluster <- assignCluster(model.matrix(formula_all_dims, EB_df),
+                                                 EB_df, 
+                                                 cutree(HClust_EB, k = num_clusters_EB))
+
+## pick colour
+# library(RColorBrewer)
+# EB_cluster_palette <- brewer.pal(n=num_clusters_EB, "Set2")
+EB_cluster_palette <- c("blue", "cyan", "darkgray", "green", "violet", "red", "bisque2", "goldenrod2")[1:num_clusters_EB]
+
+recodes_str <- paste0((1:num_clusters_EB), "=", paste0("'", EB_cluster_palette, "'"), collapse = "; ")
+require(pander)
+require(dplyr)
+pander(EB_df %>% dplyr::count(num_cluster), .drop=FALSE)
 ```
 
+```{r}
+
+EB_cluster_scale_color <- scale_color_manual(name = "Clusters",
+                                             breaks = c(1:num_clusters_EB),
+                                             values = EB_cluster_palette)
+
+### EB_cluster_fill_color <- scale_fill_manual(breaks = c(1:num_clusters_EB),
+###                       values = EB_cluster_palette)
+
+
+
+# Funcion que muestra los individuos en un plano factorial con las dimensiones (dimX, dimY) y colorea los clusters
+gg_space_cluster <- function(dimX = 1, dimY = 2, k.optimo=3, titulo = "") {
+  
+  # dimX = 1
+  # dimY = 2
+  # k.optimo <- 6
+  # titulo = ""
+
+  # create column name
+  C1 <- paste0("Dim", dimX)
+  C2 <- paste0("Dim", dimY)
+
+  figura <- ggplot(data=EB_df, aes(x=.data[[C1]], y=.data[[C2]], color=num_cluster)) +
+    geom_point() + geom_rug() +
+    geom_vline(xintercept = 0) + geom_hline(yintercept = 0) +
+    geom_text_repel(aes(label=rownames(EB_df)),hjust=0, vjust=0, size=3.3) +
+    EB_cluster_scale_color +
+    #geom_text(aes(label=rownames(EB_df)),hjust=0, vjust=0, size=3.3) +
+    theme(legend.position="top") + ggtitle(titulo)
+  
+  return(figura)
+}
+```
+
+
+
+```{r plot_clusters01}
+# Se crea el texto que se mostrara con la figura
+# Distribución de los vehículos en cada cluster:
+distrib_clusters <-  summary(as.factor(cutree(HClust_EB, k = num_clusters_EB)))
+txt_distrib_clusters <- paste0((1:length(distrib_clusters)), ":", distrib_clusters, collapse = ", ")
+txt_distrib_clusters_rev <- paste0((length(distrib_clusters):1), ":", rev(distrib_clusters), collapse = ", ")
+
+txt_distrib_clusters_colors <- paste0((1:length(distrib_clusters)), ":", EB_cluster_palette, collapse = ", ")
+
+
+# Dendograma
+#
+# TODO: poner una legend en el dendograma para mostrar numero de cluster y sus color
+#
+require(factoextra)
+fviz_dendograma_ACM <- fviz_dend(HClust_EB, 
+                               k = num_clusters_EB, 
+                               # k_colors = EB_cluster_palette,
+                               k_colors = rev(EB_cluster_palette), # reverse colors!!!!
+                               rect = TRUE, 
+                               show_labels = TRUE, 
+                               # main = "Cluster Dendrograma para individuos cercanos a EQUO Berdeak", 
+                               main = txt_distrib_clusters_rev, 
+                               sub = txt_distrib_clusters)
+```
+
+
+
+
+```{r}
+require(pander)
+pander(distrib_clusters, caption = "Distribución de los cluster")
+```
+
+```{r}
+fviz_dendograma_ACM
+```
+
+```{r}
+for (i in seq(numDims_to_show-1)) {
+  print(gg_space_cluster(dimX = i, dimY = i+1, k.optimo = num_clusters_EB, titulo = "Clusters de individuos cercanos a EQUO Berdeak"))
+}
+```
+
+El cluster número 
+```{r echo=FALSE, results='asis'}
+EB_outlier_cluster <- which.min(distrib_clusters)
+cat(EB_outlier_cluster)
+```
+ tiene 
+```{r echo=FALSE, results='asis'}
+cat(distrib_clusters[EB_outlier_cluster])
+```
+ elemento que corresponde con la encuesta número:
+```{r echo=FALSE, results='asis'}
+outliers_2_idx <- which(EB_df$num_cluster == EB_outlier_cluster)
+EB_outliers_rowname <- rownames(EB_df)[outliers_2_idx]
+cat(rownames(EB_df)[outliers_2_idx])
+```
+ 
+. Parace que siempre está aislado del resto. Existe la posibilidad de que este individuo no haya dicho la verdad en su encuesta. Lo eliminamos y repetimos el análisis cluster.
+
+
+
+### Clusters, segundo intento
+
+```{r}
+EB_df <- EB_df[-outliers_2_idx,]
+```
 
 
 ```{r}
@@ -787,11 +943,9 @@ EB_cluster_palette <- c("blue", "cyan", "darkgray", "green", "violet", "red", "b
 
 recodes_str <- paste0((1:num_clusters_EB), "=", paste0("'", EB_cluster_palette, "'"), collapse = "; ")
 require(pander)
+require(dplyr)
 pander(EB_df %>% dplyr::count(num_cluster), .drop=FALSE)
 ```
-
-
-
 
 ```{r}
 
@@ -830,7 +984,7 @@ gg_space_cluster <- function(dimX = 1, dimY = 2, k.optimo=3, titulo = "") {
 
 
 
-```{r plot_clusters}
+```{r plot_clusters02}
 # Se crea el texto que se mostrara con la figura
 # Distribución de los vehículos en cada cluster:
 distrib_clusters <-  summary(as.factor(cutree(HClust_EB, k = num_clusters_EB)))
@@ -874,11 +1028,136 @@ for (i in seq(numDims_to_show-1)) {
 }
 ```
 
+### Caracteristicas de cada cluster de *EQUO Berdeak*
+
+Variabilidad de variables categóricas
+
+https://en.wikipedia.org/wiki/Categorical_distribution
+
+https://stats.stackexchange.com/questions/221332/variance-of-a-distribution-of-multi-level-categorical-data
+
+https://www.cienciasinseso.com/medidas-de-dispersion-cualitativas/
+
+https://cran.r-project.org/web/packages/diverse/diverse.pdf
+
+https://cran.r-project.org/web/packages/qualvar/vignettes/wilcox1973.html
+
+
+Queremos saber qué tienen en común los individuos de cada cluster. Para ello se analizan y se buscan  las respuestas que más se repiten dentro de cada cluster. dicho en términos matemáticos: se buscan las respuestas con menor entropía.
+
+
+Hay diferentes formas de medir la diversidad o entropía (https://diposit.ub.edu/dspace/bitstream/2445/45784/1/623311.pdf), pero existe correlación entre todas ellas (https://cran.r-project.org/web/packages/diverse/diverse.pdf): Con estas se cuantifican la *separación*, *variedad* y *disparidad*:
+
+Vamos a utilizar dos índices que son parecidos entre sí. hay que normalizarlos para que no dependan del número de categorías ni del número de individuos de cada cluster. Para ello hay que dividir entre el máximo valor de cada variable. Sabiendo que $k$ es el número de categorías de una variable y que $n$ es el número de individuos de un cluster:
+  
+  - Índice de Gini-Simpson (también llamado índice de Blau).
+  $$B_{max}=\frac{k-1}{k}$$
+  - Entropía o índice de Techman
+  $$H_{max}=\ln{k}$$
+
+
+```{r normalized_variety_calculation_EB}
+require(diverse)
+# Dataframe with 3 calculations
+EB_normal_results_df <- data.frame(matrix(ncol = 5, nrow = 0))
+colnames(EB_normal_results_df) <- c("n_cluster", "variable", "variety", "blau.index", "entropy")
+
+for (i in seq(num_clusters_EB)) {
+  # Select every row = individuals from this cluster i
+  aux_idx <- which(EB_df$num_cluster == i)
+  # Select every column (= variable) of this cluster
+  aux_tbl_cluster <- EB_df[aux_idx,]
+  
+  # Calculate diversity or entropy of every column
+  for (j in  included_cols) {
+    k_categories <- nlevels(EB_df[,j])
+    b_max <- (k_categories-1)/k_categories
+    h_max <- log(k_categories)
+    
+    # Create contingency table of one variable
+    # aux_tbl_var <- base::table(aux_tbl_cluster[,j], useNA = "ifany")
+    aux_tbl_var <- base::table(aux_tbl_cluster[,j], useNA = "no")
+    # Create three columns dataframe with contingency table
+    aux_tbl_var_df <- as.data.frame(rep(j, dim(aux_tbl_var)))
+    aux_tbl_var_df[,c(2,3)] <- as.data.frame(aux_tbl_var)
+    # colnames(aux_tbl_var_df) <- c("entity", "category", "value")
+    
+    #Calculation of diversity indexes
+    EB_normal_results_df[nrow(EB_normal_results_df)+1, ] <- cbind(i, j, diverse::diversity(aux_tbl_var_df, type =c("variety", "blau", "entropy")))
+    # Normalize indexes
+    EB_normal_results_df$blau.index[nrow(EB_normal_results_df)] <- EB_normal_results_df$blau.index[nrow(EB_normal_results_df)]/b_max
+    EB_normal_results_df$entropy[nrow(EB_normal_results_df)] <- EB_normal_results_df$entropy[nrow(EB_normal_results_df)]/h_max
+  }
+}
+```
 
 
 
-HASTA AQUI   -------------------------------------------------------------
+```{r cluster_var_tables_EB, echo=FALSE, results='asis'}
 
+# TODO: MOSTRAR ATRIBUTOS PARA TODAS LAS TABLAS: grep(var, pattern = 'P(0-9)')
+
+
+# Show section with comments an tables by program
+#
+# Mostrar los resultados de todos los clusters de manera automatizada, por programa
+#
+# illustrative_vars
+EB_vars_not2see <- c("IA_APLAZADA", "IA_MODIFICADA", "IA_SUPERVISADA", "IA_C2_GRUPO")
+
+for (n in 1:num_clusters_EB) {
+  # Section title
+  cat("### Cluster", n, "\n\n")
+  
+  cat(paste("\nEl cluster número", n, "contiene", length(which(EB_df$num_cluster == n)), "individuos.\n"))
+  
+  # Select every column (= variable) of this cluster n
+  aux_tbl_indiv_clust_n <- EB_df[which(EB_df$num_cluster == n),]
+  require(pander)
+  panderOptions('knitr.auto.asis', FALSE)
+  # pander tries to return a knit_asis class object when run inside knitr, but for loops/vectorized functions this results in incorrect output. The recommended way to solve this is to disable this behavior by setting knitr.auto.asis to FALSE using panderOptions. However, we also need to tell knitr to convert the table on the fly by specifying results='asis' in the chunk options
+  
+  # Show contingency table with RVAUTO20_RECODE
+  require(dplyr)
+  str_aux_2 <- paste0("Cluster ", n, ". Votos en 2020 `")
+  pander(aux_tbl_indiv_clust_n %>% dplyr::count(RVAUTO20_RECODE, .drop=FALSE), caption = str_aux_2)
+  
+  
+  ### require(ggplot2)
+  ### aux_tbl <- aux_tbl_indiv_clust_n %>% dplyr::count(EDAD_GRUPO, RVAUTO20_RECODE, .drop=FALSE)
+  ### # Stacked barplot with multiple groups
+  ### print(ggplot(data=aux_tbl, aes(x=EDAD_GRUPO, y=n, fill=RVAUTO20_RECODE)) +
+  ###   geom_bar(stat="identity") +
+  ###   scale_fill_manual_RVAUTO20_RECODE) + 
+  ###   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+  
+  cat("\n\n**Atributos más importantes de este cluster.**\n")
+  
+  # Subset every row=variable with their entropy of this cluster, n, excluding those with 0 variety
+  aux_tbl_vars_clust_n <- subset(EB_normal_results_df, n_cluster == n & variety !=0)
+  # Sort them firstly by entropy and seconly by blau.index
+  aux_tbl_vars_clust_n_entrop_sorted <- dplyr::arrange(aux_tbl_vars_clust_n, entropy, blau.index)
+  
+    
+  aux_idx <- aux_tbl_vars_clust_n_entrop_sorted[which(aux_tbl_vars_clust_n_entrop_sorted$entropy < 0.6), "variable"]
+  aux_idx <- aux_idx[!(aux_idx %in% EB_vars_not2see)]
+  for (k in aux_idx) {
+    str_aux_1 <- gsub(pattern = "_GRUPO", replacement = "", k)
+    str_aux_2 <- paste0("Cluster ", n, 
+                        ". Variable `", k, 
+                        "`. ", attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == str_aux_1],
+                        ". Entropía = ", round(aux_tbl_vars_clust_n_entrop_sorted$entropy[which(aux_idx == k)], digits = 4) )
+    pander(aux_tbl_indiv_clust_n %>% dplyr::count(.data[[k]], .drop=FALSE), caption = str_aux_2)
+  }
+}
+```
+
+
+
+
+ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
+
+Atributos más importantes de este cluster
 
 
 ## k-vecinos de *EQUO Berdeak*
@@ -1111,7 +1390,7 @@ gg_space_cluster <- function(dimX = 1, dimY = 2, k.optimo=3, titulo = "") {
 
 
 
-```{r plot_clusters}
+```{r plot_clusters03}
 # Se crea el texto que se mostrara con la figura
 # Distribución de los vehículos en cada cluster:
 distrib_clusters <-  summary(as.factor(cutree(HClust_neigh_EB, k = num_clusters_acm)))
@@ -1155,18 +1434,6 @@ for (i in seq(numDims_to_show-1)) {
 }
 ```
 
-## Variabilidad de variables categóricas
-
-https://en.wikipedia.org/wiki/Categorical_distribution
-
-https://stats.stackexchange.com/questions/221332/variance-of-a-distribution-of-multi-level-categorical-data
-
-https://www.cienciasinseso.com/medidas-de-dispersion-cualitativas/
-
-https://cran.r-project.org/web/packages/diverse/diverse.pdf
-
-https://cran.r-project.org/web/packages/qualvar/vignettes/wilcox1973.html
-
 Queremos saber qué tienen en común los individuos de cada cluster. Para ello se analizan y se buscan  las respuestas que más se repiten dentro de cada cluster. dicho en términos matemáticos: se buscan las respuestas con menor entropía.
 
 
@@ -1202,8 +1469,6 @@ for (i in seq(num_clusters_acm)) {
 ```
 
 
-Hay diferentes formas de medir la diversidad o entropía (https://diposit.ub.edu/dspace/bitstream/2445/45784/1/623311.pdf), pero existe correlación entre todas ellas (https://cran.r-project.org/web/packages/diverse/diverse.pdf): Con estas se cuantifican la *separación*, *variedad* y *disparidad*:
-
 ```{r eval=FALSE, echo=FALSE}
 library(corrplot)
 require(corrplot)
@@ -1217,13 +1482,6 @@ aux_idx <- !(colnames(EB_neighbourhood_results_df) %in% c("n_cluster", "variable
 
 corrplot(cor(EB_neighbourhood_results_df[-EB_results_out_idx, aux_idx]), type = "upper", method = "number", number.cex = .7, tl.cex = 0.6, tl.col = "black")
 ```
-
-Vamos a utilizar dos índices que son parecidos entre sí. hay que normalizarlos para que no dependan del número de categorías ni del número de individuos de cada cluster. Para ello hay que dividir entre el máximo valor de cada variable. Sabiendo que $k$ es el número de categorías de una variable y que $n$ es el número de individuos de un cluster:
-  
-  - Índice de Gini-Simpson (también llamado índice de Blau).
-  $$B_{max}=\frac{k-1}{k}$$
-  - Entropía o índice de Techman
-  $$H_{max}=\ln{k}$$
 
 
 ```{r normalized_variety_calculation}
@@ -1288,7 +1546,7 @@ if (length(EB_results_out_idx) == 0){
 # Mostrar los resultados de todos los clusters de manera automatizada, por programa
 #
 # illustrative_vars
-EB_vars_not2see <- c("IA_APLAZADA", "IA_MODIFICADA", "IA_SUPERVISADA")
+EB_vars_not2see <- c("IA_APLAZADA", "IA_MODIFICADA", "IA_SUPERVISADA", "IA_C2_GRUPO")
 
 for (n in 1:num_clusters_acm) {
   # Section title
