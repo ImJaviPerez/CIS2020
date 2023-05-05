@@ -697,13 +697,187 @@ summary(EB_centered_df$Distancia)
 
 ## Clusters de los votantes de *EQUO Berdeak*
 
+### Clusters y outliers
+
 
   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
   
 ```{r}
-# hclust()
+borrame <- 3
 ```
 
+```{r reuse_this, eval=FALSE}
+borrame * 3
+```
+  
+```{r}
+borrame <- 5
+```
+
+
+```{r reuse_this, eval=TRUE}
+# <<reuse_this>>
+```
+
+
+
+```{r}
+# lista_mtdos <- c("ward.D", "ward.D2", "complete", "single", "average", "mcquitty", "median", "centroid")
+mtdo_usado <- "ward.D2" # "ward.D"
+formula_all_dims <- as.formula(paste("~-1 +", paste0("Dim",1:numDim, collapse = "+")))
+# Distancia euclidea al cuadrado entre los elementos de la matriz
+dist_indiv_EB <- stats::dist(model.matrix(formula_all_dims, EB_df))^2
+HClust_EB <- hclust(dist_indiv_EB , method= mtdo_usado)
+```
+
+se puede buscar el número óptimo de clusters (`k`) usando la función `daisy` (Dissimilarity Matrix Calculation) que computa las desigualdades en las distancias entre parejas. En este caso para obtener el número óptimo de clusters y su composición se ha usado la métrica euclídea al cuadrado para computar las distancias.
+
+```{r}
+# Funcion para calcular el k optimo
+# Creamos una funcion para calcular la matriz de distancia dos a dos con los grupos
+# daisy: Compute all the pairwise dissimilarities (distances) between observations in the data set.
+# https://www.rpubs.com/dvallslanaquera/clustering
+grpdist <- function(X, metrica="gower"){
+  # metrica = "euclidean", "gower"
+  # Se carga la libreria "cluster"
+  require(cluster)
+  gr <- as.data.frame(as.factor(X))
+  distgr <- daisy(gr, metrica)
+  distgr
+  }
+```
+
+
+
+```{r}
+# Se genera el cluster optimo y se representa en el plano
+require(gridExtra)
+require(grid)
+require(ggplot2)
+require(lattice)
+
+# La matriz dist_indiv_EB contiene las distancias euclideas al cuadrado.
+
+require(cluster)
+
+# data frame auxiliar
+kt <- data.frame(k=1:nrow(EB_df), r=0)
+
+# Se elige el numero de clusters optimo
+for(i in 2:(nrow(EB_df)-1)){
+  gr <- cutree(HClust_EB, i)
+  distgr <- grpdist(gr, "gower")
+  mt <- cor(dist_indiv_EB, distgr, method="pearson")
+  kt[i,2] <- mt
+}
+
+num_clusters_EB <- which.max(kt$r)
+### num_clusters_EB <- num_clusters_EB + 1 ### ATENCION CAMBIAR
+
+# Se crea una columna con el numero de cluster asignado a ese individuo
+require(RcmdrMisc)
+EB_df$num_cluster <- assignCluster(model.matrix(formula_all_dims, EB_df),
+                                                 EB_df, 
+                                                 cutree(HClust_EB, k = num_clusters_EB))
+
+## pick colour
+# library(RColorBrewer)
+# EB_cluster_palette <- brewer.pal(n=num_clusters_EB, "Set2")
+EB_cluster_palette <- c("blue", "cyan", "darkgray", "green", "violet", "red", "bisque2", "goldenrod2")[1:num_clusters_EB]
+
+recodes_str <- paste0((1:num_clusters_EB), "=", paste0("'", EB_cluster_palette, "'"), collapse = "; ")
+require(pander)
+pander(EB_df %>% dplyr::count(num_cluster), .drop=FALSE)
+```
+
+
+
+
+```{r}
+
+EB_cluster_scale_color <- scale_color_manual(name = "Clusters",
+                                             breaks = c(1:num_clusters_EB),
+                                             values = EB_cluster_palette)
+
+### EB_cluster_fill_color <- scale_fill_manual(breaks = c(1:num_clusters_EB),
+###                       values = EB_cluster_palette)
+
+
+
+# Funcion que muestra los individuos en un plano factorial con las dimensiones (dimX, dimY) y colorea los clusters
+gg_space_cluster <- function(dimX = 1, dimY = 2, k.optimo=3, titulo = "") {
+  
+  # dimX = 1
+  # dimY = 2
+  # k.optimo <- 6
+  # titulo = ""
+
+  # create column name
+  C1 <- paste0("Dim", dimX)
+  C2 <- paste0("Dim", dimY)
+
+  figura <- ggplot(data=EB_df, aes(x=.data[[C1]], y=.data[[C2]], color=num_cluster)) +
+    geom_point() + geom_rug() +
+    geom_vline(xintercept = 0) + geom_hline(yintercept = 0) +
+    geom_text_repel(aes(label=rownames(EB_df)),hjust=0, vjust=0, size=3.3) +
+    EB_cluster_scale_color +
+    #geom_text(aes(label=rownames(EB_df)),hjust=0, vjust=0, size=3.3) +
+    theme(legend.position="top") + ggtitle(titulo)
+  
+  return(figura)
+}
+```
+
+
+
+```{r plot_clusters}
+# Se crea el texto que se mostrara con la figura
+# Distribución de los vehículos en cada cluster:
+distrib_clusters <-  summary(as.factor(cutree(HClust_EB, k = num_clusters_EB)))
+txt_distrib_clusters <- paste0((1:length(distrib_clusters)), ":", distrib_clusters, collapse = ", ")
+txt_distrib_clusters_rev <- paste0((length(distrib_clusters):1), ":", rev(distrib_clusters), collapse = ", ")
+
+txt_distrib_clusters_colors <- paste0((1:length(distrib_clusters)), ":", EB_cluster_palette, collapse = ", ")
+
+
+# Dendograma
+#
+# TODO: poner una legend en el dendograma para mostrar numero de cluster y sus color
+#
+require(factoextra)
+fviz_dendograma_ACM <- fviz_dend(HClust_EB, 
+                               k = num_clusters_EB, 
+                               # k_colors = EB_cluster_palette,
+                               k_colors = rev(EB_cluster_palette), # reverse colors!!!!
+                               rect = TRUE, 
+                               show_labels = TRUE, 
+                               # main = "Cluster Dendrograma para individuos cercanos a EQUO Berdeak", 
+                               main = txt_distrib_clusters_rev, 
+                               sub = txt_distrib_clusters)
+```
+
+
+
+
+```{r}
+require(pander)
+pander(distrib_clusters, caption = "Distribución de los cluster")
+```
+
+```{r}
+fviz_dendograma_ACM
+```
+
+```{r}
+for (i in seq(numDims_to_show-1)) {
+  print(gg_space_cluster(dimX = i, dimY = i+1, k.optimo = num_clusters_EB, titulo = "Clusters de individuos cercanos a EQUO Berdeak"))
+}
+```
+
+
+
+
+HASTA AQUI   -------------------------------------------------------------
 
 
 
@@ -813,7 +987,7 @@ HClust_neigh_EB <- hclust(dist_indiv_neigh_EB , method= mtdo_usado)
 
 se puede buscar el número óptimo de clusters (`k`) usando la función `daisy` (Dissimilarity Matrix Calculation) que computa las desigualdades en las distancias entre parejas. En este caso para obtener el número óptimo de clusters y su composición se ha usado la métrica euclídea al cuadrado para computar las distancias.
 
-```{r}
+```{r eval=FALSE}
 # Funcion para calcular el k optimo
 # Creamos una funcion para calcular la matriz de distancia dos a dos con los grupos
 # daisy: Compute all the pairwise dissimilarities (distances) between observations in the data set.
@@ -879,7 +1053,7 @@ for(i in 2:(nrow(EB_neighbourhood_df)-1)){
 }
 
 num_clusters_acm <- which.max(kt$r)
-num_clusters_acm <- 7 ### ATENCION CAMBIAR
+num_clusters_acm <- num_clusters_acm + 1 ### ATENCION CAMBIAR
 
 # Se crea una columna con el numero de cluster asignado a ese individuo
 require(RcmdrMisc)
@@ -893,11 +1067,7 @@ EB_neighbourhood_df$num_cluster <- assignCluster(model.matrix(formula_all_dims, 
 EB_cluster_palette <- c("blue", "cyan", "darkgray", "green", "violet", "red", "bisque2", "goldenrod2")[1:num_clusters_acm]
 
 recodes_str <- paste0((1:num_clusters_acm), "=", paste0("'", EB_cluster_palette, "'"), collapse = "; ")
-EB_neighbourhood_df$num_cluster_color <- car::recode(var = EB_neighbourhood_df$num_cluster,
-                                        recodes = recodes_str,
-                                        levels = EB_cluster_palette)
 require(pander)
-pander(EB_neighbourhood_df %>% dplyr::count(num_cluster_color), .drop=FALSE)
 pander(EB_neighbourhood_df %>% dplyr::count(num_cluster), .drop=FALSE)
 ```
 
