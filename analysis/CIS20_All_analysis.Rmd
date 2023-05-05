@@ -649,45 +649,49 @@ Se buscan individuos que se alejan *demasiado* de la media que se podrían inter
 ```{r}
 # Save EB individuals
 EB_df <- cis_2020_acm_df[EB_rows,]
-EB_centered_df <- subset(x = EB_df, select = c(paste0("Dim", 1:numDim)))
+aux_tbl <- subset(x = EB_df, select = c(paste0("Dim", 1:numDim)))
 # We look for a centered population
-EB_centered_df <- as.data.frame(scale(x=EB_centered_df, center = TRUE, scale = FALSE))
-# Calculate distance from the center
-formula_all_dims <- as.formula(paste("~-1 +", paste0("Dim",1:numDim, collapse = "+")))
-# Distancia euclidea al cuadrado entre los elementos de la matriz
-EB_dist_centered <- stats::dist(model.matrix(formula_all_dims, EB_centered_df), method = "euclidean")
-# Convert into a vector
-EB_dist_vect_centered <- as.vector(EB_dist_centered)
+EB_centered_df <- as.data.frame(scale(x=aux_tbl, center = TRUE, scale = FALSE))
+# Calculate distance from the center = norm of a vector
+EB_centered_df$Distancia <- 0
+for (i in 1:nrow(EB_centered_df)) {
+  EB_centered_df$Distancia[i] <- norm(x = EB_centered_df[i,], type = "2")
+}
 
-EB_dist_vect_centered_df <- as.data.frame(EB_dist_vect_centered)
-colnames(EB_dist_vect_centered_df) <- "Distancia"
+
 require(ggplot2)
-ggplot(data=EB_dist_vect_centered_df, aes(x=Distancia)) + 
-  geom_boxplot()
-```
+gg_EB_boxplot <- ggplot(data=EB_centered_df, aes(x=Distancia)) + 
+  geom_boxplot() +
+  theme(axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
 
-```{r}
-ggplot(EB_dist_vect_centered_df, aes(x=Distancia)) + 
-  geom_histogram(color="black", fill="white", bins=12)
-```
+gg_EB_histogram <- ggplot(EB_centered_df, aes(x=Distancia)) + 
+  geom_histogram(color="black", fill="white", bins=10) +
+  scale_y_continuous(breaks = seq(0, 12, by=2))
 
-
-Distancias de los outliers:
-
-```{r}
-outliers_idx <-which(EB_dist_vect_centered_df$Distancia > (mean(EB_dist_vect_centered_df$Distancia) + 2.8*sd(EB_dist_vect_centered_df$Distancia)))
-EB_dist_vect_centered_df$Distancia[outliers_idx]
-```
-
-Outliers: Números de elemento en la matriz triangular de distancias:
-```{r}
-outliers_idx
+library(gridExtra)
+require(gridExtra)
+grid.arrange(gg_EB_boxplot, gg_EB_histogram, ncol=2)
 ```
 
 
+Distancias de los outliers que están más allá del 95% de la media del grupo:
 
 ```{r}
-summary(EB_dist_vect_centered)
+outliers_idx <-which(EB_centered_df$Distancia > (mean(EB_centered_df$Distancia) + 2*sd(EB_centered_df$Distancia)))
+EB_centered_df$Distancia[outliers_idx]
+```
+
+Outliers. Número de encuesta:
+```{r}
+rownames(EB_centered_df[outliers_idx,])
+```
+
+
+
+```{r}
+summary(EB_centered_df$Distancia)
 ```
 
 
@@ -695,6 +699,11 @@ summary(EB_dist_vect_centered)
 
 
   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   ESTAS AQUI   
+  
+```{r}
+# hclust()
+```
+
 
 
 
@@ -793,7 +802,7 @@ Se muestra la división cluster por el método *Ward.D* o también conocido como
 ```{r}
 # lista_mtdos <- c("ward.D", "ward.D2", "complete", "single", "average", "mcquitty", "median", "centroid")
 mtdo_usado <- "ward.D2" # "ward.D"
-
+formula_all_dims <- as.formula(paste("~-1 +", paste0("Dim",1:numDim, collapse = "+")))
 # Distancia euclidea al cuadrado entre los elementos de la matriz
 dist_indiv_neigh_EB <- stats::dist(model.matrix(formula_all_dims, EB_neighbourhood_df))^2
 HClust_neigh_EB <- hclust(dist_indiv_neigh_EB , method= mtdo_usado)
