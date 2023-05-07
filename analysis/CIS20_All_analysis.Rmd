@@ -1641,7 +1641,7 @@ for (i in grep(pattern = "_GRUPO|_RECODE", x = colnames(cis_2020_df), value = TR
 
 
 ```{r export_neigbours_entropy2XLS}
-# Get indidexes of first cluster
+# Get indexes of first cluster
 aux_idx <- which(EB_neighbourhood_normal_results_df$n_cluster == 1)
 
 neigbours_entropy2XLS_df <- data.frame(matrix(ncol = num_clusters_acm+3, nrow = length(aux_idx)))
@@ -1654,7 +1654,7 @@ for (i in seq(num_clusters_acm)) {
   aux_idx <- which(EB_neighbourhood_normal_results_df$n_cluster == i)
   neigbours_entropy2XLS_df[,1+i] <- EB_neighbourhood_normal_results_df[aux_idx, "entropy"]
 }
-
+# sum entropy and get attributes
 for (i in seq(nrow(neigbours_entropy2XLS_df))) {
   # Sum entropy
   neigbours_entropy2XLS_df$`Suma entropía`[i] <- sum(neigbours_entropy2XLS_df[i,c(seq(num_clusters_acm)+1)])
@@ -1664,23 +1664,117 @@ for (i in seq(nrow(neigbours_entropy2XLS_df))) {
 }
 # Save dataframe to an excel file
 require(openxlsx)
-str_aux_2 <- "EB_kvecinos_entropia.xlsx"
-openxlsx::write.xlsx(x=neigbours_entropy2XLS_df, file = str_aux_2, sheetName = "kVecinos")
-# Add num persons per cluster
-wb <- loadWorkbook(str_aux_2)
+EB_entropia_XLS <- "EB_entropia.xlsx"
+if (file.exists(EB_entropia_XLS)){
+  log4r::debug(logger_analysis, paste("Ya existe el fichero", EB_entropia_XLS))
+  ### EB_wb <- openxlsx::loadWorkbook(EB_entropia_XLS)
+
+}else{
+  log4r::debug(logger_analysis, paste("No existía el fichero", EB_entropia_XLS))
+  ### EB_wb <- openxlsx::createWorkbook()
+}
+# Create new workbook
+EB_wb <- openxlsx::createWorkbook()
+# Add sheet entropia
+openxlsx::addWorksheet(wb=EB_wb, sheetName = "kVecinos")
+openxlsx::writeData(wb=EB_wb, sheet="kVecinos", x=neigbours_entropy2XLS_df)
+#
+# Add sheet num persons per cluster
 aux_tbl <- data.frame(matrix(ncol = 1+num_clusters_acm, nrow = 1))
 colnames(aux_tbl) <- c("", paste0("Cluster", 1:num_clusters_acm))
-aux_tbl [,] <- c("Num individuos por cluster", distrib_clusters)
+aux_tbl [1,] <- c("Num individuos por cluster", distrib_clusters)
 #
-addWorksheet(wb,"Num_por_cluster")
-writeData(wb,"Num_por_cluster", aux_tbl)
+openxlsx::addWorksheet(wb=EB_wb, sheetName = "Num_por_cluster")
+openxlsx::writeData(wb=EB_wb, sheet="Num_por_cluster", x=aux_tbl)
 #
+# Add sheet Entrevistas CIS
 aux_tbl <- cbind.data.frame(rownames(EB_neighbourhood_df) ,EB_neighbourhood_df)
 colnames(aux_tbl)[1] <- "ID entrevista"
-addWorksheet(wb,"Entrevistas")
-writeData(wb,"Entrevistas", aux_tbl)
+openxlsx::addWorksheet(wb=EB_wb, sheetName = "Entrevistas")
+openxlsx::writeData(wb=EB_wb, sheet="Entrevistas", x=aux_tbl)
 #
-saveWorkbook(wb, str_aux_2, overwrite = TRUE)
+# Save and close workbook
+openxlsx::saveWorkbook(wb=EB_wb, EB_entropia_XLS, overwrite = TRUE)
+
+
+```
+
+
+
+```{r export_EB_entropy2XLS, eval=FALSE}
+
+# ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI     
+# TODO: PONER LOS VECINOS Y LOS EB EN UN SOLO EXCEL
+
+aux_tbl <- data.frame(mydf = c(EB_neighbourhood_normal_results_df, EB_normal_results_df),
+                      numClusters = c(num_clusters_acm, num_clusters_EB),
+                      titleEntropia = c("Entropía kVecinos EB", "Entropía EB"),
+                      titleNumIndivPerCluster = c("Num kVecinos", "Num EB"),
+                      titleEncuestasCIS = c("Encuestas kVecinos", "Encuestas EB"))
+#Define the file name that will be deleted
+fn <- "foo.txt"
+#Check its existence
+if (file.exists(fn)) {
+  #Delete file if it exists
+  file.remove(fn)
+}
+# ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI     
+
+
+# Get indexes of first cluster
+aux_idx <- which(EB_neighbourhood_normal_results_df$n_cluster == 1)
+
+neigbours_entropy2XLS_df <- data.frame(matrix(ncol = num_clusters_acm+3, nrow = length(aux_idx)))
+colnames(neigbours_entropy2XLS_df) <- c("Pregunta", paste0("Cluster", 1:num_clusters_acm), "Suma entropía", "Título")
+# Get variable names
+neigbours_entropy2XLS_df$Pregunta <- EB_neighbourhood_normal_results_df$variable[aux_idx]
+
+# Get clusters entropy
+for (i in seq(num_clusters_acm)) {
+  aux_idx <- which(EB_neighbourhood_normal_results_df$n_cluster == i)
+  neigbours_entropy2XLS_df[,1+i] <- EB_neighbourhood_normal_results_df[aux_idx, "entropy"]
+}
+# sum entropy and get attributes
+for (i in seq(nrow(neigbours_entropy2XLS_df))) {
+  # Sum entropy
+  neigbours_entropy2XLS_df$`Suma entropía`[i] <- sum(neigbours_entropy2XLS_df[i,c(seq(num_clusters_acm)+1)])
+  # Get variables attributes
+  str_aux_1 <- gsub(pattern = "_GRUPO|_RECODE", replacement = "", x= neigbours_entropy2XLS_df$Pregunta[i])
+  neigbours_entropy2XLS_df$Título[i] <- attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == str_aux_1]
+}
+# Save dataframe to an excel file
+require(openxlsx)
+EB_entropia_XLS <- "EB_entropia.xlsx"
+if (file.exists(EB_entropia_XLS)){
+  log4r::debug(logger_analysis, paste("Ya existe el fichero", EB_entropia_XLS))
+  ### EB_wb <- openxlsx::loadWorkbook(EB_entropia_XLS)
+}else{
+  log4r::debug(logger_analysis, paste("No existía el fichero", EB_entropia_XLS))
+  ### EB_wb <- openxlsx::createWorkbook()
+}
+# Create new workbook
+EB_wb <- openxlsx::createWorkbook()
+# Add sheet entropia
+openxlsx::addWorksheet(wb=EB_wb, sheetName = "kVecinos")
+openxlsx::writeData(wb=EB_wb, sheet="kVecinos", x=neigbours_entropy2XLS_df)
+#
+# Add sheet num persons per cluster
+aux_tbl <- data.frame(matrix(ncol = 1+num_clusters_acm, nrow = 1))
+colnames(aux_tbl) <- c("", paste0("Cluster", 1:num_clusters_acm))
+aux_tbl [1,] <- c("Num individuos por cluster", distrib_clusters)
+#
+openxlsx::addWorksheet(wb=EB_wb, sheetName = "Num_por_cluster")
+openxlsx::writeData(wb=EB_wb, sheet="Num_por_cluster", x=aux_tbl)
+#
+# Add sheet Entrevistas CIS
+aux_tbl <- cbind.data.frame(rownames(EB_neighbourhood_df) ,EB_neighbourhood_df)
+colnames(aux_tbl)[1] <- "ID entrevista"
+openxlsx::addWorksheet(wb=EB_wb, sheetName = "Entrevistas")
+openxlsx::writeData(wb=EB_wb, sheet="Entrevistas", x=aux_tbl)
+#
+# Save and close workbook
+openxlsx::saveWorkbook(wb=EB_wb, EB_entropia_XLS, overwrite = TRUE)
+
 ```
 
 
