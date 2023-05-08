@@ -1632,10 +1632,13 @@ Diversity as separation conceptualizes the member’s differences in position or
 
 
 ```{r variables_attrib, echo=FALSE, results='asis'}
+preguntas_atributos <- data.frame(matrix(ncol = 2, nrow = 0))
+colnames(preguntas_atributos) <- c("Pregunta", "Título")
 cat("\n")
 for (i in grep(pattern = "_GRUPO|_RECODE", x = colnames(cis_2020_df), value = TRUE, invert = TRUE)) {
   str_aux_2 <- paste0(" \n - ", i, ": ", attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == i])
   cat(str_aux_2)
+  preguntas_atributos[nrow(preguntas_atributos)+1,] <- rbind(i, attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == i])
 }
 ```
 
@@ -1715,10 +1718,6 @@ if (file.exists(EB_entropia_XLS)) {
 }else{
   log4r::debug(logger_analysis, paste("Fichero:", EB_entropia_XLS, "no existe"))
 }
-
-
-
-# ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI     
 #
 # 1st: Retrive info about EB neighbours
 # Get indexes of first cluster
@@ -1817,6 +1816,11 @@ colnames(aux_tbl)[1] <- "ID entrevista"
 openxlsx::addWorksheet(wb=EB_wb, sheetName = "Entrevistas_EB")
 openxlsx::writeData(wb=EB_wb, sheet="Entrevistas_EB", x=aux_tbl)
 #
+# Add sheet with questions and explanations
+openxlsx::addWorksheet(wb=EB_wb, sheetName = "Preguntas")
+openxlsx::writeData(wb=EB_wb, sheet="Preguntas", x=preguntas_atributos)
+
+
 # Save and close workbook
 openxlsx::saveWorkbook(wb=EB_wb, EB_entropia_XLS, overwrite = TRUE)
 
