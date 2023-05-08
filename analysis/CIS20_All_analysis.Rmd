@@ -809,11 +809,11 @@ gg_space_cluster <- function(dimX = 1, dimY = 2, k.optimo=3, titulo = "") {
 ```{r plot_clusters01}
 # Se crea el texto que se mostrara con la figura
 # Distribución de los vehículos en cada cluster:
-distrib_clusters <-  summary(as.factor(cutree(HClust_EB, k = num_clusters_EB)))
-txt_distrib_clusters <- paste0((1:length(distrib_clusters)), ":", distrib_clusters, collapse = ", ")
-txt_distrib_clusters_rev <- paste0((length(distrib_clusters):1), ":", rev(distrib_clusters), collapse = ", ")
+distrib_clusters_EB <-  summary(as.factor(cutree(HClust_EB, k = num_clusters_EB)))
+txt_distrib_clusters_EB <- paste0((1:length(distrib_clusters_EB)), ":", distrib_clusters_EB, collapse = ", ")
+txt_distrib_clusters_EB_rev <- paste0((length(distrib_clusters_EB):1), ":", rev(distrib_clusters_EB), collapse = ", ")
 
-txt_distrib_clusters_colors <- paste0((1:length(distrib_clusters)), ":", EB_cluster_palette, collapse = ", ")
+txt_distrib_clusters_EB_colors <- paste0((1:length(distrib_clusters_EB)), ":", EB_cluster_palette, collapse = ", ")
 
 
 # Dendograma
@@ -828,8 +828,8 @@ fviz_dendograma_ACM <- fviz_dend(HClust_EB,
                                rect = TRUE, 
                                show_labels = TRUE, 
                                # main = "Cluster Dendrograma para individuos cercanos a EQUO Berdeak", 
-                               main = txt_distrib_clusters_rev, 
-                               sub = txt_distrib_clusters)
+                               main = txt_distrib_clusters_EB_rev, 
+                               sub = txt_distrib_clusters_EB)
 ```
 
 
@@ -837,7 +837,7 @@ fviz_dendograma_ACM <- fviz_dend(HClust_EB,
 
 ```{r}
 require(pander)
-pander(distrib_clusters, caption = "Distribución de los cluster")
+pander(distrib_clusters_EB, caption = "Distribución de los cluster")
 ```
 
 ```{r}
@@ -852,12 +852,12 @@ for (i in seq(numDims_to_show-1)) {
 
 El cluster número 
 ```{r echo=FALSE, results='asis'}
-EB_outlier_cluster <- which.min(distrib_clusters)
+EB_outlier_cluster <- which.min(distrib_clusters_EB)
 cat(EB_outlier_cluster)
 ```
  tiene 
 ```{r echo=FALSE, results='asis'}
-cat(distrib_clusters[EB_outlier_cluster])
+cat(distrib_clusters_EB[EB_outlier_cluster])
 ```
  elemento que corresponde con la encuesta número:
 ```{r echo=FALSE, results='asis'}
@@ -992,11 +992,11 @@ gg_space_cluster <- function(dimX = 1, dimY = 2, k.optimo=3, titulo = "") {
 ```{r plot_clusters02}
 # Se crea el texto que se mostrara con la figura
 # Distribución de los vehículos en cada cluster:
-distrib_clusters <-  summary(as.factor(cutree(HClust_EB, k = num_clusters_EB)))
-txt_distrib_clusters <- paste0((1:length(distrib_clusters)), ":", distrib_clusters, collapse = ", ")
-txt_distrib_clusters_rev <- paste0((length(distrib_clusters):1), ":", rev(distrib_clusters), collapse = ", ")
+distrib_clusters_EB <-  summary(as.factor(cutree(HClust_EB, k = num_clusters_EB)))
+txt_distrib_clusters_EB <- paste0((1:length(distrib_clusters_EB)), ":", distrib_clusters_EB, collapse = ", ")
+txt_distrib_clusters_EB_rev <- paste0((length(distrib_clusters_EB):1), ":", rev(distrib_clusters_EB), collapse = ", ")
 
-txt_distrib_clusters_colors <- paste0((1:length(distrib_clusters)), ":", EB_cluster_palette, collapse = ", ")
+txt_distrib_clusters_EB_colors <- paste0((1:length(distrib_clusters_EB)), ":", EB_cluster_palette, collapse = ", ")
 
 
 # Dendograma
@@ -1011,8 +1011,8 @@ fviz_dendograma_ACM <- fviz_dend(HClust_EB,
                                rect = TRUE, 
                                show_labels = TRUE, 
                                # main = "Cluster Dendrograma para individuos cercanos a EQUO Berdeak", 
-                               main = txt_distrib_clusters_rev, 
-                               sub = txt_distrib_clusters)
+                               main = txt_distrib_clusters_EB_rev, 
+                               sub = txt_distrib_clusters_EB)
 ```
 
 
@@ -1020,7 +1020,7 @@ fviz_dendograma_ACM <- fviz_dend(HClust_EB,
 
 ```{r}
 require(pander)
-pander(distrib_clusters, caption = "Distribución de los cluster")
+pander(distrib_clusters_EB, caption = "Distribución de los cluster")
 ```
 
 ```{r}
@@ -1393,11 +1393,11 @@ gg_space_cluster <- function(dimX = 1, dimY = 2, k.optimo=3, titulo = "") {
 ```{r plot_clusters03}
 # Se crea el texto que se mostrara con la figura
 # Distribución de los vehículos en cada cluster:
-distrib_clusters <-  summary(as.factor(cutree(HClust_neigh_EB, k = num_clusters_acm)))
-txt_distrib_clusters <- paste0((1:length(distrib_clusters)), ":", distrib_clusters, collapse = ", ")
-txt_distrib_clusters_rev <- paste0((length(distrib_clusters):1), ":", rev(distrib_clusters), collapse = ", ")
+distrib_clusters_neighbourhood <-  summary(as.factor(cutree(HClust_neigh_EB, k = num_clusters_acm)))
+txt_distrib_clusters_neighbourhood <- paste0((1:length(distrib_clusters_neighbourhood)), ":", distrib_clusters_neighbourhood, collapse = ", ")
+txt_distrib_clusters_neighbourhood_rev <- paste0((length(distrib_clusters_neighbourhood):1), ":", rev(distrib_clusters_neighbourhood), collapse = ", ")
 
-txt_distrib_clusters_colors <- paste0((1:length(distrib_clusters)), ":", EB_cluster_palette, collapse = ", ")
+txt_distrib_clusters_neighbourhood_colors <- paste0((1:length(distrib_clusters_neighbourhood)), ":", EB_cluster_palette, collapse = ", ")
 
 
 # Dendograma
@@ -1412,8 +1412,8 @@ fviz_dendograma_ACM <- fviz_dend(HClust_neigh_EB,
                                rect = TRUE, 
                                show_labels = TRUE, 
                                # main = "Cluster Dendrograma para individuos cercanos a EQUO Berdeak", 
-                               main = txt_distrib_clusters_rev, 
-                               sub = txt_distrib_clusters)
+                               main = txt_distrib_clusters_neighbourhood_rev, 
+                               sub = txt_distrib_clusters_neighbourhood)
 ```
 
 
@@ -1421,7 +1421,7 @@ fviz_dendograma_ACM <- fviz_dend(HClust_neigh_EB,
 
 ```{r}
 require(pander)
-pander(distrib_clusters, caption = "Distribución de los cluster")
+pander(distrib_clusters_neighbourhood, caption = "Distribución de los cluster")
 ```
 
 ```{r}
@@ -1640,7 +1640,7 @@ for (i in grep(pattern = "_GRUPO|_RECODE", x = colnames(cis_2020_df), value = TR
 ```
 
 
-```{r export_neigbours_entropy2XLS}
+```{r export_neigbours_entropy2XLS, eval=FALSE}
 # Get indexes of first cluster
 aux_idx <- which(EB_neighbourhood_normal_results_df$n_cluster == 1)
 
@@ -1701,34 +1701,34 @@ openxlsx::saveWorkbook(wb=EB_wb, EB_entropia_XLS, overwrite = TRUE)
 
 
 
-```{r export_EB_entropy2XLS, eval=FALSE}
-
-# ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI     
-# TODO: PONER LOS VECINOS Y LOS EB EN UN SOLO EXCEL
-
-aux_tbl <- data.frame(mydf = c(EB_neighbourhood_normal_results_df, EB_normal_results_df),
-                      numClusters = c(num_clusters_acm, num_clusters_EB),
-                      titleEntropia = c("Entropía kVecinos EB", "Entropía EB"),
-                      titleNumIndivPerCluster = c("Num kVecinos", "Num EB"),
-                      titleEncuestasCIS = c("Encuestas kVecinos", "Encuestas EB"))
+```{r export_EB_entropy2XLS}
 #Define the file name that will be deleted
-fn <- "foo.txt"
+EB_entropia_XLS <- "EB_entropia.xlsx"
 #Check its existence
-if (file.exists(fn)) {
+if (file.exists(EB_entropia_XLS)) {
   #Delete file if it exists
-  file.remove(fn)
+  if (file.remove(EB_entropia_XLS)){
+    log4r::debug(logger_analysis, paste("Fichero:", EB_entropia_XLS, "correctamente eliminado"))
+  }else{
+    log4r::error(logger_analysis, paste("ERROR: NO SE PUDO ELIMINAR EL FICHERO:", EB_entropia_XLS ))
+  }
+}else{
+  log4r::debug(logger_analysis, paste("Fichero:", EB_entropia_XLS, "no existe"))
 }
+
+
+
 # ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI     # ESTAS AQUI     
-
-
+#
+# 1st: Retrive info about EB neighbours
 # Get indexes of first cluster
 aux_idx <- which(EB_neighbourhood_normal_results_df$n_cluster == 1)
-
+# Create entropy dataframe
 neigbours_entropy2XLS_df <- data.frame(matrix(ncol = num_clusters_acm+3, nrow = length(aux_idx)))
 colnames(neigbours_entropy2XLS_df) <- c("Pregunta", paste0("Cluster", 1:num_clusters_acm), "Suma entropía", "Título")
+
 # Get variable names
 neigbours_entropy2XLS_df$Pregunta <- EB_neighbourhood_normal_results_df$variable[aux_idx]
-
 # Get clusters entropy
 for (i in seq(num_clusters_acm)) {
   aux_idx <- which(EB_neighbourhood_normal_results_df$n_cluster == i)
@@ -1742,18 +1742,43 @@ for (i in seq(nrow(neigbours_entropy2XLS_df))) {
   str_aux_1 <- gsub(pattern = "_GRUPO|_RECODE", replacement = "", x= neigbours_entropy2XLS_df$Pregunta[i])
   neigbours_entropy2XLS_df$Título[i] <- attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == str_aux_1]
 }
+#
+# 2nd: Retrive info about EB along
+# Get indexes of first cluster
+aux_idx <- which(EB_normal_results_df$n_cluster == 1)
+# Create entropy dataframe
+EB_entropy2XLS_df <- data.frame(matrix(ncol = num_clusters_EB+3, nrow = length(aux_idx)))
+colnames(EB_entropy2XLS_df) <- c("Pregunta", paste0("Cluster", 1:num_clusters_EB), "Suma entropía", "Título")
+
+# Get variable names
+EB_entropy2XLS_df$Pregunta <- EB_normal_results_df$variable[aux_idx]
+# Get clusters entropy
+for (i in seq(num_clusters_EB)) {
+  aux_idx <- which(EB_normal_results_df$n_cluster == i)
+  EB_entropy2XLS_df[,1+i] <- EB_normal_results_df[aux_idx, "entropy"]
+}
+# sum entropy and get attributes
+for (i in seq(nrow(EB_entropy2XLS_df))) {
+  # Sum entropy
+  EB_entropy2XLS_df$`Suma entropía`[i] <- sum(EB_entropy2XLS_df[i,c(seq(num_clusters_EB)+1)])
+  # Get variables attributes
+  str_aux_1 <- gsub(pattern = "_GRUPO|_RECODE", replacement = "", x= EB_entropy2XLS_df$Pregunta[i])
+  EB_entropy2XLS_df$Título[i] <- attributes(cis_2020_df)$variable.labels[colnames(cis_2020_df) == str_aux_1]
+}
+
 # Save dataframe to an excel file
 require(openxlsx)
-EB_entropia_XLS <- "EB_entropia.xlsx"
 if (file.exists(EB_entropia_XLS)){
-  log4r::debug(logger_analysis, paste("Ya existe el fichero", EB_entropia_XLS))
+  log4r::error(logger_analysis, paste("Aun existe el fichero", EB_entropia_XLS))
   ### EB_wb <- openxlsx::loadWorkbook(EB_entropia_XLS)
 }else{
-  log4r::debug(logger_analysis, paste("No existía el fichero", EB_entropia_XLS))
+  log4r::debug(logger_analysis, paste("Fichero:", EB_entropia_XLS, "no existe. OK"))
   ### EB_wb <- openxlsx::createWorkbook()
 }
 # Create new workbook
 EB_wb <- openxlsx::createWorkbook()
+#
+# 1st: Save neigbours entropy to XLS
 # Add sheet entropia
 openxlsx::addWorksheet(wb=EB_wb, sheetName = "kVecinos")
 openxlsx::writeData(wb=EB_wb, sheet="kVecinos", x=neigbours_entropy2XLS_df)
@@ -1761,16 +1786,36 @@ openxlsx::writeData(wb=EB_wb, sheet="kVecinos", x=neigbours_entropy2XLS_df)
 # Add sheet num persons per cluster
 aux_tbl <- data.frame(matrix(ncol = 1+num_clusters_acm, nrow = 1))
 colnames(aux_tbl) <- c("", paste0("Cluster", 1:num_clusters_acm))
-aux_tbl [1,] <- c("Num individuos por cluster", distrib_clusters)
+aux_tbl [1,] <- c("Num individuos por cluster", distrib_clusters_neighbourhood)
 #
-openxlsx::addWorksheet(wb=EB_wb, sheetName = "Num_por_cluster")
-openxlsx::writeData(wb=EB_wb, sheet="Num_por_cluster", x=aux_tbl)
+openxlsx::addWorksheet(wb=EB_wb, sheetName = "Num_por_cluster_kVecinos")
+openxlsx::writeData(wb=EB_wb, sheet="Num_por_cluster_kVecinos", x=aux_tbl)
 #
 # Add sheet Entrevistas CIS
 aux_tbl <- cbind.data.frame(rownames(EB_neighbourhood_df) ,EB_neighbourhood_df)
 colnames(aux_tbl)[1] <- "ID entrevista"
-openxlsx::addWorksheet(wb=EB_wb, sheetName = "Entrevistas")
-openxlsx::writeData(wb=EB_wb, sheet="Entrevistas", x=aux_tbl)
+openxlsx::addWorksheet(wb=EB_wb, sheetName = "Entrevistas_kVecinos")
+openxlsx::writeData(wb=EB_wb, sheet="Entrevistas_kVecinos", x=aux_tbl)
+#
+#
+# 2st: Save EB entropy to XLS
+# Add sheet entropia
+openxlsx::addWorksheet(wb=EB_wb, sheetName = "EB")
+openxlsx::writeData(wb=EB_wb, sheet="EB", x=EB_entropy2XLS_df)
+#
+# Add sheet num persons per cluster
+aux_tbl <- data.frame(matrix(ncol = 1+num_clusters_EB, nrow = 1))
+colnames(aux_tbl) <- c("", paste0("Cluster", 1:num_clusters_EB))
+aux_tbl [1,] <- c("Num individuos por cluster", distrib_clusters_EB)
+#
+openxlsx::addWorksheet(wb=EB_wb, sheetName = "Num_por_cluster_EB")
+openxlsx::writeData(wb=EB_wb, sheet="Num_por_cluster_EB", x=aux_tbl)
+#
+# Add sheet Entrevistas CIS
+aux_tbl <- cbind.data.frame(rownames(EB_df) ,EB_df)
+colnames(aux_tbl)[1] <- "ID entrevista"
+openxlsx::addWorksheet(wb=EB_wb, sheetName = "Entrevistas_EB")
+openxlsx::writeData(wb=EB_wb, sheet="Entrevistas_EB", x=aux_tbl)
 #
 # Save and close workbook
 openxlsx::saveWorkbook(wb=EB_wb, EB_entropia_XLS, overwrite = TRUE)
