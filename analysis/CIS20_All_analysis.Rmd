@@ -1851,8 +1851,14 @@ openxlsx::writeData(wb=EB_wb, sheet="kVecinos", x=neigbours_similarity2XLS_df)
 #
 # Add sheet num persons per cluster
 aux_tbl <- data.frame(matrix(ncol = 1+num_clusters_acm, nrow = 1))
-colnames(aux_tbl) <- c("", paste0("Cluster", 1:num_clusters_acm))
-aux_tbl [1,] <- c("Num individuos por cluster", distrib_clusters_neighbourhood)
+colnames(aux_tbl) <- c("_", paste0("Cluster", 1:num_clusters_acm))
+# If we do:
+# aux_tbl [1,] <- c("Num individuos por cluster", distrib_clusters_neighbourhood)
+# We get character instead of numeric
+aux_tbl [1,1] <- "Num individuos por cluster"
+for (i in seq(from = 2, length.out = length(distrib_clusters_neighbourhood))) {
+  aux_tbl[1, i] <- distrib_clusters_neighbourhood[i-1]
+}
 #
 openxlsx::addWorksheet(wb=EB_wb, sheetName = "Num_por_cluster_kVecinos")
 openxlsx::writeData(wb=EB_wb, sheet="Num_por_cluster_kVecinos", x=aux_tbl)
@@ -1872,7 +1878,13 @@ openxlsx::writeData(wb=EB_wb, sheet="EB", x=EB_similarity2XLS_df)
 # Add sheet num persons per cluster
 aux_tbl <- data.frame(matrix(ncol = 1+num_clusters_EB, nrow = 1))
 colnames(aux_tbl) <- c("", paste0("Cluster", 1:num_clusters_EB))
-aux_tbl [1,] <- c("Num individuos por cluster", distrib_clusters_EB)
+# If we do:
+# aux_tbl [1,] <- c("Num individuos por cluster", distrib_clusters_EB)
+# We get character instead of numeric
+aux_tbl [1,1] <- "Num individuos por cluster"
+for (i in seq(from = 2, length.out = length(distrib_clusters_EB))) {
+  aux_tbl[1, i] <- distrib_clusters_EB[i-1]
+}
 #
 openxlsx::addWorksheet(wb=EB_wb, sheetName = "Num_por_cluster_EB")
 openxlsx::writeData(wb=EB_wb, sheet="Num_por_cluster_EB", x=aux_tbl)
